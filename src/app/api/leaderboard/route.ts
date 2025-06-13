@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/lib/database/supabase';
 
+// configure edge runtime
+export const runtime = 'edge';
+
 // define types for our data
 type ColorModel = 'RGB' | 'CIELAB' | 'CIECAM02-UCS' | 'Oklab';
 
