@@ -2,79 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Background from '@/components/layout/Background';
-
-// types for leaderboard data
-interface ColorModelStats {
-  model: string;
-  totalTests: number;
-  accuracy: number;
-  avgTime: number;
-}
-
-interface BaseColorStats {
-  color: number[];
-  totalTests: number;
-  accuracy: number;
-  avgTime: number;
-}
-
-interface RoundData {
-  level: number;
-  base_color: number[];
-  changed_color: number[];
-  color_model: string;
-  changed_position: number[];
-  click_position: number[];
-  click_coords: number[];
-  time: number;
-  correct: boolean;
-}
-
-interface DeviceInfo {
-  language: string;
-  platform: string;
-  is_mobile: boolean;
-  user_agent: string;
-  color_depth: number;
-  pixel_ratio: number;
-  screen_width: number;
-  screen_height: number;
-}
-
-interface SessionStats {
-  session_id: string;
-  player_id: string;
-  saved_at: string;
-  total_time: number;
-  final_level: number;
-  rounds: RoundData[];
-  device_info: DeviceInfo;
-}
-
-interface UserStats {
-  player_id: string;
-  totalTests: number;
-  accuracy: number;
-  avgTime: number;
-  rank: number;
-  sessions: SessionStats[];
-  bestLevel: number;
-  totalPlayTime: number;
-  deviceType: string;
-}
-
-interface LeaderboardData {
-  colorModels: ColorModelStats[];
-  baseColors: BaseColorStats[];
-  users: UserStats[];
-  sessions: SessionStats[];
-  generalStats: {
-    totalGames: number;
-    totalPlayTime: number;
-    totalPlayers: number;
-    averageAccuracy: number;
-  };
-}
+import { LeaderboardData } from './leaderboard';
 
 export default function LeaderboardPage() {
   const [data, setData] = useState<LeaderboardData | null>(null);
@@ -153,7 +81,8 @@ export default function LeaderboardPage() {
 
         {/* Color Models Section */}
         <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30">
-          <h2 className="text-2xl font-bold mb-6 text-center text-white">Color Model Performance</h2>
+          <h2 className="text-2xl font-bold mb-2 text-center text-white">Color Model Performance</h2>
+          <p className="text-sm text-gray-400 text-center mb-6">shows how well each color model performs in identifying colors</p>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-700">
               <thead>
@@ -166,7 +95,9 @@ export default function LeaderboardPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-700">
-                {data?.colorModels.map((model, index) => (
+                {data?.colorModels
+                  .sort((a, b) => (b.accuracy || 0) - (a.accuracy || 0))
+                  .map((model, index) => (
                   <tr key={model.model} className="hover:bg-gray-700/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400">{index + 1}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{model.model}</td>
@@ -182,7 +113,8 @@ export default function LeaderboardPage() {
 
         {/* Base Colors Section */}
         <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30">
-          <h2 className="text-2xl font-bold mb-6 text-center text-white">Top Performing Colors</h2>
+          <h2 className="text-2xl font-bold mb-2 text-center text-white">Top Performing Colors</h2>
+          <p className="text-sm text-gray-400 text-center mb-6">displays the most accurately identified colors across all tests</p>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-700">
               <thead>
@@ -220,7 +152,8 @@ export default function LeaderboardPage() {
 
         {/* Users Section */}
         <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30">
-          <h2 className="text-2xl font-bold mb-6 text-center text-white">Top Users</h2>
+          <h2 className="text-2xl font-bold mb-2 text-center text-white">Top Users</h2>
+          <p className="text-sm text-gray-400 text-center mb-6">ranks players based on their performance and achievements</p>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-700">
               <thead>
@@ -259,7 +192,8 @@ export default function LeaderboardPage() {
 
         {/* Recent Sessions Section */}
         <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30">
-          <h2 className="text-2xl font-bold mb-6 text-center text-white">Recent Sessions</h2>
+          <h2 className="text-2xl font-bold mb-2 text-center text-white">Recent Sessions</h2>
+          <p className="text-sm text-gray-400 text-center mb-6">shows the latest gameplay sessions from all players</p>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-700">
               <thead>
