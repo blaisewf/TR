@@ -14,13 +14,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://example.com'), // TODO: replace with the actual domain
+  metadataBase: new URL('https://trcolors.vercel.app/'), // TODO: replace with the actual domain
   title: "Color Perception Experiment | Interactive Color Study",
-  description: "Participate in a large-scale study on color perception and help researchers better understand how individuals perceive colors differently. Your input contributes to advancing scientific knowledge in vision and color science. The study is brief, engaging, and open to all.",
+  description: "Participate in a large-scale study on color perception and help researchers better understand how individuals perceive colors differently.",
   keywords: "color perception, color experiment, color science, color models, RGB, CIELAB, Oklab, CIECAM02-UCS, interactive study, color vision test",
   openGraph: {
     title: "Color Perception Experiment | Interactive Color Study",
-    description: "🔬 Participate in a large-scale study on color perception and help researchers better understand how individuals perceive colors differently. Your input contributes to advancing scientific knowledge in vision and color science. The study is brief, engaging, and open to all",
+    description: "Participate in a large-scale study on color perception and help researchers better understand how individuals perceive colors differently.",
     type: "website",
     images: [
       {
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Color Perception Experiment | Interactive Color Study",
-    description: "Participate in a large-scale study on color perception and help researchers better understand how individuals perceive colors differently. Your input contributes to advancing scientific knowledge in vision and color science. The study is brief, engaging, and open to all.",
+    description: "Participate in a large-scale study on color perception and help researchers better understand how individuals perceive colors differently.",
     images: ["/og-image.jpg"],
   },
   other: {
