@@ -52,7 +52,7 @@ export default function ColorGrid({
   return (
     <div
       ref={gridRef}
-      className="inline-grid gap-1 sm:gap-2 p-2 sm:p-6 bg-gray-900/50 rounded-xl"
+      className="inline-grid gap-2 sm:gap-3 p-3 sm:p-6 bg-gray-900/50 rounded-xl mx-auto"
       style={{
         gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
         gridTemplateRows: `repeat(${gridSize}, 1fr)`,
@@ -79,7 +79,7 @@ export default function ColorGrid({
               ease: [0.4, 0, 0.2, 1] // custom easing for smoother motion
             }}
             className={`
-              w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 border border-gray-700/50 rounded-lg
+              w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 border border-gray-700/50 rounded-lg
               ${disabled ? "cursor-not-allowed" : "cursor-pointer hover:shadow-lg"}
             `}
             style={{ backgroundColor: rgbToCss(color) }}

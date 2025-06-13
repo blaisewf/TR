@@ -40,12 +40,13 @@ export default function GameOver({ finalLevel, totalScore, totalTime, onRestart 
         <p className="text-sm text-gray-400">Your anonymous data helps us understand human color perception better.</p>
       </div>
 
-      <button
-        onClick={onRestart}
-        className="bg-gray-700/50 text-white hover:bg-gray-700/70 font-bold py-2 px-10 rounded-xl text-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
+      <div className="h-px bg-gray-700/20 my-8"></div>
+        <button
+          onClick={onRestart}
+          className="bg-gray-800/20 backdrop-blur-md border border-gray-700/20 text-white hover:bg-gray-700/30 font-medium py-2 px-8 rounded-full text-sm shadow-lg transition-all duration-300 cursor-pointer"
         >
-        Play Again
-      </button>
+          Play Again
+        </button>
     </div>
   )
 }

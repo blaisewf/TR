@@ -23,6 +23,12 @@ interface GameRound {
 }
 
 const COLOR_MODELS: ColorModel[] = ["RGB", "CIELAB", "CIECAM02-UCS", "Oklab"]
+const COLOR_MODEL_DISPLAY_NAMES: Record<ColorModel, string> = {
+  "RGB": "RGB",
+  "CIELAB": "CIELAB",
+  "CIECAM02-UCS": "CAM02",
+  "Oklab": "Oklab"
+}
 const GRID_SIZE = 4
 const MAX_WRONG_ANSWERS = 3
 
@@ -177,7 +183,12 @@ export default function ColorPerceptionGame() {
 
             {gameState === "playing" && currentRound && (
               <div className="space-y-8">
-                <GameStats level={level} score={score} timeElapsed={elapsedTime} colorModel={currentRound.colorModel} />
+                <GameStats 
+                  level={level} 
+                  score={score} 
+                  timeElapsed={elapsedTime} 
+                  colorModel={COLOR_MODEL_DISPLAY_NAMES[currentRound.colorModel]} 
+                />
 
                 <div className="text-center bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30">
                   <div className="mb-6">
@@ -187,7 +198,7 @@ export default function ColorPerceptionGame() {
                     </p>
                   </div>
 
-                  <div className="p-6 rounded-xl">
+                  <div className="p-6 rounded-xl flex justify-center">
                     <ColorGrid
                       gridSize={GRID_SIZE}
                       baseColor={currentRound.baseColor}

@@ -43,9 +43,10 @@ export default function GameInstructions({ onStartGame }: GameInstructionsProps)
       </div>
 
       <div className="text-center">
+      <div className="h-px bg-gray-700/20 my-8"></div>
         <button
           onClick={onStartGame}
-          className="bg-gray-700/50 text-white hover:bg-gray-700/70 font-bold py-2 px-10 rounded-xl text-lg shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
+          className="bg-gray-800/20 backdrop-blur-md border border-gray-700/20 text-white hover:bg-gray-700/30 font-medium py-2 px-8 rounded-full text-sm shadow-lg transition-all duration-300 cursor-pointer"
         >
           Start Experiment
         </button>
