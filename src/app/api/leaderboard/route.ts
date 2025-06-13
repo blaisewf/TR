@@ -57,9 +57,9 @@ export async function GET() {
       'CIECAM02-UCS': { total: 0, correct: 0, avgTime: 0, totalTime: 0 },
       Oklab: { total: 0, correct: 0, avgTime: 0, totalTime: 0 }
     };
-
-    // analyze base colors performance
-    const baseColorStats = new Map<string, { total: number; correct: number; avgTime: number; totalTime: number }>();
+    
+    // analyze color families performance
+    const colorFamilyStats = new Map<string, { total: number; correct: number; avgTime: number; totalTime: number; hexColor: string }>();
 
     // analyze user performance
     const userStats = new Map<string, {
@@ -98,16 +98,64 @@ export async function GET() {
           colorModelStats[model].correct++;
         }
 
-        // update base color stats
-        const baseColorKey = round.base_color.join(',');
-        if (!baseColorStats.has(baseColorKey)) {
-          baseColorStats.set(baseColorKey, { total: 0, correct: 0, avgTime: 0, totalTime: 0 });
+        // update color family stats
+        const [r, g, b] = round.base_color;
+        let family = 'Other';
+        let hexColor = '#A0522D';
+
+        // determine color family based on RGB values with more inclusive thresholds
+        if (r > g && r > b && r > 120) {
+          if (g > 100 && b < 100) {
+            family = 'Orange';
+            hexColor = '#FFA500';
+          } else if (b > 100 && g < 100) {
+            family = 'Magenta';
+            hexColor = '#FF00FF';
+          } else {
+            family = 'Red';
+            hexColor = '#FF0000';
+          }
+        } else if (g > r && g > b && g > 120) {
+          if (r > 100 && b < 100) {
+            family = 'Yellow-Green';
+            hexColor = '#9ACD32';
+          } else if (b > 100 && r < 100) {
+            family = 'Cyan';
+            hexColor = '#00FFFF';
+          } else {
+            family = 'Green';
+            hexColor = '#00FF00';
+          }
+        } else if (b > r && b > g && b > 120) {
+          if (r > 100 && g < 100) {
+            family = 'Purple';
+            hexColor = '#800080';
+          } else if (g > 100 && r < 100) {
+            family = 'Blue-Green';
+            hexColor = '#008B8B';
+          } else {
+            family = 'Blue';
+            hexColor = '#0000FF';
+          }
+        } else if (r > 140 && g > 140 && b > 140) {
+          family = 'White';
+          hexColor = '#FFFFFF';
+        } else if (r < 60 && g < 60 && b < 60) {
+          family = 'Black';
+          hexColor = '#000000';
+        } else if (Math.abs(r - g) < 30 && Math.abs(g - b) < 30 && Math.abs(r - b) < 30) {
+          family = 'Gray';
+          hexColor = '#808080';
         }
-        const baseColor = baseColorStats.get(baseColorKey)!;
-        baseColor.total++;
-        baseColor.totalTime += round.time;
+
+        if (!colorFamilyStats.has(family)) {
+          colorFamilyStats.set(family, { total: 0, correct: 0, avgTime: 0, totalTime: 0, hexColor });
+        }
+        const colorFamily = colorFamilyStats.get(family)!;
+        colorFamily.total++;
+        colorFamily.totalTime += round.time;
         if (round.correct) {
-          baseColor.correct++;
+          colorFamily.correct++;
         }
 
         // update user stats
@@ -126,13 +174,16 @@ export async function GET() {
       avgTime: stats.totalTime / stats.total
     }));
 
-    // convert base color stats to array and calculate averages
-    const baseColorData = Array.from(baseColorStats.entries()).map(([color, stats]) => ({
-      color: color.split(',').map(Number),
-      totalTests: stats.total,
-      accuracy: (stats.correct / stats.total) * 100,
-      avgTime: stats.totalTime / stats.total
-    }));
+    // convert color family stats to array and sort by accuracy
+    const colorFamilyData = Array.from(colorFamilyStats.entries())
+      .map(([name, stats]) => ({
+        name,
+        hexColor: stats.hexColor,
+        totalTests: stats.total,
+        accuracy: (stats.correct / stats.total) * 100,
+        avgTime: stats.totalTime / stats.total
+      }))
+      .sort((a, b) => b.accuracy - a.accuracy);
 
     // convert user stats to array
     const userData = Array.from(userStats.entries()).map(([player_id, stats]) => ({
@@ -169,9 +220,9 @@ export async function GET() {
 
     return NextResponse.json({
       colorModels: colorModelData,
-      baseColors: baseColorData.slice(0, 20), // return top 20 best performing colors
+      colorFamilies: colorFamilyData,
       users: sortedUserData,
-      sessions: sessions.slice(0, 10), // return 10 most recent sessions
+      sessions: sessions.slice(0, 10),
       generalStats
     });
   } catch (error) {

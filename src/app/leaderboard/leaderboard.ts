@@ -6,6 +6,14 @@ export interface ColorModelStats {
   avgTime: number;
 }
 
+export interface ColorFamily {
+  name: string;
+  hexColor: string;
+  totalTests: number;
+  accuracy: number;
+  avgTime: number;
+}
+
 export interface BaseColorStats {
   color: number[];
   totalTests: number;
@@ -60,6 +68,7 @@ export interface UserStats {
 
 export interface LeaderboardData {
   colorModels: ColorModelStats[];
+  colorFamilies: ColorFamily[];
   baseColors: BaseColorStats[];
   users: UserStats[];
   sessions: SessionStats[];

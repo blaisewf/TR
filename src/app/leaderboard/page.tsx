@@ -111,38 +111,37 @@ export default function LeaderboardPage() {
           </div>
         </div>
 
-        {/* Base Colors Section */}
+        {/* Color Families Section */}
         <div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30">
-          <h2 className="text-2xl font-bold mb-2 text-center text-white">Top Performing Colors</h2>
-          <p className="text-sm text-gray-400 text-center mb-6">displays the most accurately identified colors across all tests</p>
+          <h2 className="text-2xl font-bold mb-2 text-center text-white">Color Family Performance</h2>
+          <p className="text-sm text-gray-400 text-center mb-6">shows how well different color families are identified</p>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-700">
               <thead>
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">#</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Color</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">RGB</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Color Family</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Tests</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Accuracy</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Avg Time</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-700">
-                {data?.baseColors.map((color, index) => (
-                  <tr key={index} className="hover:bg-gray-700/30 transition-colors">
+                {data?.colorFamilies?.map((family, index) => (
+                  <tr key={family.name} className="hover:bg-gray-700/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400">{index + 1}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div 
-                        className="w-8 h-8 rounded-full border border-gray-600"
-                        style={{ backgroundColor: rgbToHex(color.color) }}
-                      />
+                      <div className="flex items-center gap-2">
+                        <div 
+                          className="w-8 h-8 rounded-full border border-gray-600"
+                          style={{ backgroundColor: family.hexColor }}
+                        />
+                        <span className="text-sm font-medium text-white">{family.name}</span>
+                      </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                      {color.color.map(c => Math.round(c)).join(', ')}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{color.totalTests}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{color.accuracy?.toFixed(1) ?? '0'}%</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{color.avgTime?.toFixed(2) ?? '0'}s</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{family.totalTests}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{family.accuracy?.toFixed(1) ?? '0'}%</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{family.avgTime?.toFixed(2) ?? '0'}s</td>
                   </tr>
                 ))}
               </tbody>
