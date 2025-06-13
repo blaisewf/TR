@@ -1,4 +1,4 @@
-# TR Web Application
+# TR Web
 
 A modern web application built with Next.js, TypeScript, Tailwind CSS, and Supabase integration.
 
