@@ -50,7 +50,6 @@ export const useGame = () => {
 
 		try {
 			await saveCompleteSession(completeSessionData);
-			console.log("Complete session saved:", completeSessionData);
 		} catch (error) {
 			console.error("Failed to save complete session:", error);
 		}

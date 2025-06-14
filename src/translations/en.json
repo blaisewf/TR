@@ -76,6 +76,13 @@
 	"leaderboard": {
 		"loading": "Loading...",
 		"error": "Failed to load leaderboard data. Please try again later.",
+		"viewMode": {
+			"global": "Global",
+			"profile": "Profile"
+		},
+		"profile": {
+			"noPlayerId": "No player ID found. Please play a game first to view your profile."
+		},
 		"stats": {
 			"totalGames": "Total Games",
 			"totalPlayTime": "Total Play Time",

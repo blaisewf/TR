@@ -19,17 +19,30 @@ import {
 	YAxis,
 } from "recharts";
 import type { LeaderboardData } from "../../types/leaderboard";
+import { getPlayerId } from "@/lib/utils/playerId";
 
 export default function LeaderboardPage() {
 	const { t } = useTranslation();
 	const [data, setData] = useState<LeaderboardData | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const [viewMode, setViewMode] = useState<'global' | 'profile'>('global');
+	const [currentPlayerId, setCurrentPlayerId] = useState<string | null>(null);
+
+	useEffect(() => {
+		setCurrentPlayerId(getPlayerId());
+	}, []);
 
 	useEffect(() => {
 		const fetchLeaderboardData = async () => {
 			try {
-				const response = await fetch("/api/leaderboard");
+				const url = new URL('/api/leaderboard', window.location.origin);
+				url.searchParams.set('view', viewMode);
+				if (viewMode === 'profile' && currentPlayerId) {
+					url.searchParams.set('player', currentPlayerId);
+				}
+				
+				const response = await fetch(url);
 				if (!response.ok) throw new Error("Failed to fetch leaderboard data");
 				const data = await response.json();
 				setData(data);
@@ -42,7 +55,7 @@ export default function LeaderboardPage() {
 		};
 
 		fetchLeaderboardData();
-	}, [t]);
+	}, [t, viewMode, currentPlayerId]);
 
 	if (loading) {
 		return (
@@ -64,10 +77,52 @@ export default function LeaderboardPage() {
 		);
 	}
 
+	if (viewMode === 'profile' && !currentPlayerId) {
+		return (
+			<div className="min-h-screen bg-black/50 pt-24 pb-12 px-4 flex items-center justify-center relative overflow-hidden">
+				<Background />
+				<div className="text-center text-red-400">
+					{t("leaderboard.error")}
+					<p className="mt-2 text-sm text-gray-400">
+						{t("leaderboard.profile.noPlayerId")}
+					</p>
+				</div>
+			</div>
+		);
+	}
+
 	return (
 		<div className="min-h-screen bg-black/50 pt-24 pb-12 px-4 flex items-center justify-center relative overflow-hidden">
 			<Background />
 			<div className="max-w-6xl w-full mx-auto space-y-8 relative">
+				{/* View Mode Toggle */}
+				<div className="flex justify-end mb-4">
+					<div className="bg-gray-800/20 backdrop-blur-md border border-gray-700/20 rounded-full p-2 shadow-lg">
+						<div className="flex items-center space-x-2">
+							<button
+								onClick={() => setViewMode('global')}
+								className={`inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full transition-colors cursor-pointer ${
+									viewMode === 'global'
+										? "text-white bg-gray-700/50"
+										: "text-gray-300 hover:text-white hover:bg-gray-700/30"
+								}`}
+							>
+								{t("leaderboard.viewMode.global")}
+							</button>
+							<button
+								onClick={() => setViewMode('profile')}
+								className={`inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full transition-colors cursor-pointer ${
+									viewMode === 'profile'
+										? "text-white bg-gray-700/50"
+										: "text-gray-300 hover:text-white hover:bg-gray-700/30"
+								}`}
+							>
+								{t("leaderboard.viewMode.profile")}
+							</button>
+						</div>
+					</div>
+				</div>
+
 				{/* General Stats Section */}
 				<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 					<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-gray-700/30">

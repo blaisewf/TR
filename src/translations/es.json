@@ -76,6 +76,10 @@
 	"leaderboard": {
 		"loading": "Cargando...",
 		"error": "No se pudieron cargar los datos de la clasificación. Por favor, inténtalo de nuevo más tarde.",
+		"viewMode": {
+			"global": "Global",
+			"profile": "Perfil"
+		},
 		"stats": {
 			"totalGames": "Partidas Totales",
 			"totalPlayTime": "Tiempo Total de Juego",

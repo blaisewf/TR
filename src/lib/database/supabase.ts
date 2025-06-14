@@ -61,7 +61,6 @@ export async function saveCompleteSession(sessionData: GameSessionData) {
 			throw new Error(`Failed to save session: ${error.message}`);
 		}
 
-		console.log("Complete session saved successfully:", data);
 		return data;
 	} catch (error) {
 		console.error("Error in saveCompleteSession:", error);

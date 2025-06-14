@@ -40,8 +40,13 @@ interface Session {
 	device_info: DeviceInfo;
 }
 
-export async function GET() {
+export async function GET(request: Request) {
 	try {
+		// get the view parameter from the URL
+		const { searchParams } = new URL(request.url);
+		const view = searchParams.get('view') || 'global';
+		const playerId = searchParams.get('player');
+		
 		// fetch all sessions
 		const { data: sessions, error } = await supabase
 			.from("data")
@@ -49,6 +54,12 @@ export async function GET() {
 			.order("saved_at", { ascending: false });
 
 		if (error) throw error;
+
+		// if profile view, get the current player's data
+		let filteredSessions = sessions;
+		if (view === 'profile' && playerId) {
+			filteredSessions = sessions.filter(session => session.player_id === playerId);
+		}
 
 		// analyze color model performance
 		const colorModelStats: Record<
@@ -86,8 +97,8 @@ export async function GET() {
 			}
 		>();
 
-		// process all rounds from all sessions
-		(sessions as Session[]).forEach((session) => {
+		// process all rounds from filtered sessions
+		(filteredSessions as Session[]).forEach((session) => {
 			// update user stats
 			if (!userStats.has(session.player_id)) {
 				userStats.set(session.player_id, {
@@ -192,17 +203,18 @@ export async function GET() {
 		});
 
 		// calculate averages and convert to array format
-		const colorModelData = Object.entries(colorModelStats).map(
-			([model, stats]) => ({
+		const colorModelData = Object.entries(colorModelStats)
+			.filter(([_, stats]) => stats.total > 0)
+			.map(([model, stats]) => ({
 				model,
 				totalTests: stats.total,
 				accuracy: (stats.correct / stats.total) * 100,
 				avgTime: stats.totalTime / stats.total,
-			}),
-		);
+			}));
 
 		// convert color family stats to array and sort by accuracy
 		const colorFamilyData = Array.from(colorFamilyStats.entries())
+			.filter(([_, stats]) => stats.total > 0)
 			.map(([name, stats]) => ({
 				name,
 				hexColor: stats.hexColor,
@@ -242,8 +254,8 @@ export async function GET() {
 
 		// calculate general stats
 		const generalStats = {
-			totalGames: sessions.length,
-			totalPlayTime: sessions.reduce(
+			totalGames: filteredSessions.length,
+			totalPlayTime: filteredSessions.reduce(
 				(sum, session) => sum + session.total_time,
 				0,
 			),
@@ -257,7 +269,7 @@ export async function GET() {
 			colorModels: colorModelData,
 			colorFamilies: colorFamilyData,
 			users: sortedUserData,
-			sessions: sessions.slice(0, 10),
+			sessions: filteredSessions.slice(0, 10),
 			generalStats,
 		});
 	} catch (error) {
