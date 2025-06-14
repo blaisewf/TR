@@ -177,15 +177,3 @@ export function createPerceptualDifference(
 export function rgbToCss(rgb: [number, number, number]): string {
 	return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
 }
-
-// Generate or get persistent player ID
-export function getPlayerId(): string {
-	if (typeof window === "undefined") return generateUUID();
-
-	const stored = localStorage.getItem("color-game-player-id");
-	if (stored) return stored;
-
-	const newId = generateUUID();
-	localStorage.setItem("color-game-player-id", newId);
-	return newId;
-}
