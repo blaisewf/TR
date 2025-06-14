@@ -135,7 +135,7 @@ export const useGame = () => {
 				changed_position: currentRound.changedPosition,
 				click_position: position,
 				click_coords: coords,
-				time: Date.now() - currentRound.startTime,
+				time: (Date.now() - currentRound.startTime) / 1000,
 				correct: isCorrect,
 			};
 
