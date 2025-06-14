@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Background from '@/components/layout/Background';
-import { LeaderboardData } from './leaderboard';
+import { LeaderboardData } from '../../types/leaderboard';
 
 export default function LeaderboardPage() {
   const [data, setData] = useState<LeaderboardData | null>(null);

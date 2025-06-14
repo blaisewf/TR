@@ -49,6 +49,16 @@ export default function ColorGrid({
     return baseColor
   }
 
+  const getAnimationDelay = (row: number, col: number) => {
+    // calculate distance from center
+    const center = (gridSize - 1) / 2
+    const distance = Math.max(
+      Math.abs(row - center),
+      Math.abs(col - center)
+    )
+    return distance * 0.1 // delay based on distance from center
+  }
+
   return (
     <div
       ref={gridRef}
@@ -57,6 +67,7 @@ export default function ColorGrid({
         gridTemplateColumns: `repeat(${gridSize}, 1fr)`,
         gridTemplateRows: `repeat(${gridSize}, 1fr)`,
       }}
+      key={`grid-${changedPosition[0]}-${changedPosition[1]}`}
     >
       {Array.from({ length: gridSize * gridSize }, (_, index) => {
         const row = Math.floor(index / gridSize)
@@ -66,18 +77,20 @@ export default function ColorGrid({
         return (
           <motion.button
             key={`${row}-${col}`}
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ 
+              opacity: 1,
+              transition: { 
+                duration: 0.3,
+                delay: getAnimationDelay(row, col),
+                ease: "easeOut"
+              }
+            }}
             whileHover={{ 
               scale: 1.05,
               transition: { duration: 0.2 }
             }}
             whileTap={{ scale: 0.95 }}
-            transition={{ 
-              duration: 0.4,
-              delay: (row + col) * 0.03,
-              ease: [0.4, 0, 0.2, 1] // custom easing for smoother motion
-            }}
             className={`
               w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 border border-gray-700/50 rounded-lg
               ${disabled ? "cursor-not-allowed" : "cursor-pointer hover:shadow-lg"}
