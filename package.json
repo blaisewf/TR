@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.50.0",
-    "@types/recharts": "^2.0.1",
     "culori": "^4.0.1",
     "framer-motion": "^12.18.1",
     "i18next": "^25.2.1",
