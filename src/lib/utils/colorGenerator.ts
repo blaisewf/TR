@@ -6,13 +6,22 @@ import {
 	rgb,
 } from "culori";
 
-export type ColorModel = "RGB" | "CIELAB" | "CIECAM02-UCS" | "Oklab";
+export type ColorModel = "RGB" | "CIELAB" | "JzAzBz" | "Oklab";
 
 // Color space converters
-const rgbToLab = converter("lab");
-const labToRgb = converter("rgb");
-const rgbToOklab = converter("oklab");
-const oklabToRgb = converter("rgb");
+const toRgb = converter("rgb");
+const toLab = converter("lab");
+const toOklab = converter("oklab");
+const toJab = converter("jab");
+
+// Color space volumes, used to keep uniformity between models
+const labVol = 824204.547378;
+const oklabVol = 0.054198192;
+const jabVol = 0.004623475;
+
+const labMod = Math.cbrt(labVol);
+const oklabMod = Math.cbrt(oklabVol);
+const jabMod = Math.cbrt(jabVol);
 
 // Generate a random RGB color
 export function generateRandomRGBColor(): [number, number, number] {
@@ -46,14 +55,21 @@ function rgbObjectToArray(rgbObj: any): [number, number, number] {
 
 // Generate a random 3D unit vector
 function randomUnitVector(): [number, number, number] {
-	const x = (Math.random() - 0.5) * 2;
-	const y = (Math.random() - 0.5) * 2;
-	const z = (Math.random() - 0.5) * 2;
+	function gaussianRandom() {
+    		const u = 1 - Math.random();
+    		const v = Math.random();
+    		const z = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+    		return z ;
+	}
+	
+	const x = gaussianRandom();
+	const y = gaussianRandom();
+	const z = gaussianRandom();
 
-	const length = Math.sqrt(x * x + y * y + z * z);
-	if (length === 0) return randomUnitVector();
+	const magnitude = Math.sqrt(x ** 2 + y ** 2 + z ** 2);
+	if (magnitude === 0) return randomUnitVector();
 
-	return [x / length, y / length, z / length];
+	return [x / magnitude, y / magnitude, z / magnitude];
 }
 
 // Create perceptually uniform color difference
@@ -72,68 +88,64 @@ export function createPerceptualDifference(
 
 			switch (colorModel) {
 				case "RGB": {
-					const [dx, dy, dz] = randomUnitVector();
-					const scale = difficulty * 50;
+					const [dr, dg, db] = randomUnitVector();
 					modifiedColor = {
 						mode: "rgb" as const,
-						r: Math.max(0, Math.min(1, baseRgbObj.r + (dx * scale) / 255)),
-						g: Math.max(0, Math.min(1, baseRgbObj.g + (dy * scale) / 255)),
-						b: Math.max(0, Math.min(1, baseRgbObj.b + (dz * scale) / 255)),
+						r: baseRgbObj.r + dr * difficulty,
+						g: baseRgbObj.g + dg * difficulty,
+						b: baseRgbObj.b + db * difficulty,
 					};
 					break;
 				}
 
 				case "CIELAB": {
-					const labColor = rgbToLab(baseRgbObj);
+					const labColor = toLab(baseRgbObj);
 					if (!labColor) throw new Error("Lab conversion failed");
 
 					const [dL, da, db] = randomUnitVector();
-					const scale = difficulty * 20;
 
 					const modifiedLab = {
 						mode: "lab" as const,
-						l: Math.max(0, Math.min(100, labColor.l + dL * scale)),
-						a: labColor.a + da * scale,
-						b: labColor.b + db * scale,
+						l: labColor.l + dL * difficulty * labMod,
+						a: labColor.a + da * difficulty * labMod,
+						b: labColor.b + db * difficulty * labMod,
 					};
 
-					modifiedColor = labToRgb(modifiedLab);
+					modifiedColor = toRgb(modifiedLab);
 					break;
 				}
 
 				case "Oklab": {
-					const oklabColor = rgbToOklab(baseRgbObj);
+					const oklabColor = toOklab(baseRgbObj);
 					if (!oklabColor) throw new Error("Oklab conversion failed");
 
 					const [dL, da, db] = randomUnitVector();
-					const scale = difficulty * 0.1;
 
 					const modifiedOklab = {
 						mode: "oklab" as const,
-						l: Math.max(0, Math.min(1, oklabColor.l + dL * scale)),
-						a: oklabColor.a + da * scale,
-						b: oklabColor.b + db * scale,
+						l: oklabColor.l + dL * difficulty * oklabMod,
+						a: oklabColor.a + da * difficulty * oklabMod,
+						b: oklabColor.b + db * difficulty * oklabMod,
 					};
 
-					modifiedColor = oklabToRgb(modifiedOklab);
+					modifiedColor = toRgb(modifiedOklab);
 					break;
 				}
 
-				case "CIECAM02-UCS": {
-					const labColor = rgbToLab(baseRgbObj);
-					if (!labColor) throw new Error("Lab conversion failed");
+				case "JzAzBz": {
+					const jabColor = toJab(baseRgbObj);
+					if (!jabColor) throw new Error("Jab conversion failed");
 
-					const [dL, da, db] = randomUnitVector();
-					const scale = difficulty * 15;
+					const [dJ, da, db] = randomUnitVector();
 
-					const modifiedLab = {
-						mode: "lab" as const,
-						l: Math.max(0, Math.min(100, labColor.l + dL * scale)),
-						a: labColor.a + da * scale,
-						b: labColor.b + db * scale,
+					const modifiedJab = {
+						mode: "jab" as const,
+						j: jabColor.j + dJ * difficulty * jabMod,
+						a: jabColor.a + da * difficulty * jabMod,
+						b: jabColor.b + db * difficulty * jabMod,
 					};
 
-					modifiedColor = labToRgb(modifiedLab);
+					modifiedColor = toRgb(modifiedJab);
 					break;
 				}
 			}
@@ -142,19 +154,6 @@ export function createPerceptualDifference(
 				return rgbObjectToArray(modifiedColor);
 			}
 
-			if (modifiedColor) {
-				const clampedColor = clampRgb(modifiedColor);
-				const result = rgbObjectToArray(clampedColor);
-
-				const diff =
-					Math.abs(result[0] - baseColor[0]) +
-					Math.abs(result[1] - baseColor[1]) +
-					Math.abs(result[2] - baseColor[2]);
-
-				if (diff > 3) {
-					return result;
-				}
-			}
 		} catch (error) {
 			console.warn("Color conversion attempt failed:", error);
 		}
@@ -164,11 +163,10 @@ export function createPerceptualDifference(
 
 	// Fallback: simple RGB difference
 	const [dx, dy, dz] = randomUnitVector();
-	const scale = Math.max(5, difficulty * 30);
 	return [
-		Math.max(0, Math.min(255, baseColor[0] + dx * scale)),
-		Math.max(0, Math.min(255, baseColor[1] + dy * scale)),
-		Math.max(0, Math.min(255, baseColor[2] + dz * scale)),
+		Math.max(0, Math.min(255, baseColor[0] + dx * difficulty)),
+		Math.max(0, Math.min(255, baseColor[1] + dy * difficulty)),
+		Math.max(0, Math.min(255, baseColor[2] + dz * difficulty)),
 	];
 }
 

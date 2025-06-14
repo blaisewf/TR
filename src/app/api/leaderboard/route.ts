@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 export const runtime = "edge";
 
 // define types for our data
-type ColorModel = "RGB" | "CIELAB" | "CIECAM02-UCS" | "Oklab";
+type ColorModel = "RGB" | "CIELAB" | "JzAzBz" | "Oklab";
 
 interface Round {
 	level: number;
@@ -57,7 +57,7 @@ export async function GET() {
 		> = {
 			RGB: { total: 0, correct: 0, avgTime: 0, totalTime: 0 },
 			CIELAB: { total: 0, correct: 0, avgTime: 0, totalTime: 0 },
-			"CIECAM02-UCS": { total: 0, correct: 0, avgTime: 0, totalTime: 0 },
+			"JzAzBz": { total: 0, correct: 0, avgTime: 0, totalTime: 0 },
 			Oklab: { total: 0, correct: 0, avgTime: 0, totalTime: 0 },
 		};
 

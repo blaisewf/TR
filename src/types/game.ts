@@ -1,6 +1,6 @@
 // game state types
 export type GameState = "instructions" | "playing" | "game-over";
-export type ColorModel = "RGB" | "CIELAB" | "CIECAM02-UCS" | "Oklab";
+export type ColorModel = "RGB" | "CIELAB" | "JzAzBz" | "Oklab";
 
 // game round interface
 export interface GameRound {
@@ -16,13 +16,13 @@ export interface GameRound {
 export const COLOR_MODELS: ColorModel[] = [
 	"RGB",
 	"CIELAB",
-	"CIECAM02-UCS",
+	"JzAzBz",
 	"Oklab",
 ];
 export const COLOR_MODEL_DISPLAY_NAMES: Record<ColorModel, string> = {
 	RGB: "RGB",
 	CIELAB: "CIELAB",
-	"CIECAM02-UCS": "CAM02",
+	"JzAzBz": "JzAzBz",
 	Oklab: "Oklab",
 };
 export const GRID_SIZE = 4;
