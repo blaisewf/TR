@@ -10,12 +10,14 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.50.0",
+    "@types/recharts": "^2.0.1",
     "culori": "^4.0.1",
     "framer-motion": "^12.18.1",
     "next": "15.3.3",
     "react": "^19.0.0",
     "react-confetti": "^6.4.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "recharts": "^2.15.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

@@ -3,6 +3,21 @@
 import Background from "@/components/layout/Background";
 import { useEffect, useState } from "react";
 import type { LeaderboardData } from "../../types/leaderboard";
+import {
+	BarChart,
+	Bar,
+	XAxis,
+	YAxis,
+	CartesianGrid,
+	Tooltip,
+	Legend,
+	PieChart,
+	Pie,
+	Cell,
+	LineChart,
+	Line,
+	ResponsiveContainer,
+} from "recharts";
 
 export default function LeaderboardPage() {
 	const [data, setData] = useState<LeaderboardData | null>(null);
@@ -112,6 +127,62 @@ export default function LeaderboardPage() {
 					<p className="text-sm text-gray-400 text-center mb-6">
 						shows how well each color model performs in identifying colors
 					</p>
+					
+					{/* Bar Chart for Color Models */}
+					<div className="h-80 mb-8">
+						<ResponsiveContainer width="100%" height="100%">
+							<BarChart data={data?.colorModels}>
+								<CartesianGrid strokeDasharray="3 3" stroke="rgba(75, 85, 99, 0.3)" />
+								<XAxis 
+									dataKey="model" 
+									stroke="#9CA3AF"
+									tick={{ fill: '#9CA3AF', fontSize: 12 }}
+									axisLine={{ stroke: 'rgba(75, 85, 99, 0.3)' }}
+								/>
+								<YAxis 
+									stroke="#9CA3AF"
+									tick={{ fill: '#9CA3AF', fontSize: 12 }}
+									axisLine={{ stroke: 'rgba(75, 85, 99, 0.3)' }}
+									tickFormatter={(value) => Number(value).toFixed(3)}
+								/>
+								<Tooltip 
+									contentStyle={{ 
+										backgroundColor: 'rgba(31, 41, 55, 0.95)',
+										border: '1px solid rgba(75, 85, 99, 0.3)',
+										borderRadius: '0.5rem',
+										color: '#fff',
+										boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+									}}
+									labelStyle={{ color: '#9CA3AF', fontSize: 12 }}
+									itemStyle={{ color: '#fff', fontSize: 12 }}
+									formatter={(value: number, name: string) => [`${name} ${Number(value).toFixed(3)}`, '']}
+								/>
+								<Legend 
+									wrapperStyle={{ 
+										color: '#9CA3AF',
+										fontSize: 12,
+										paddingTop: '1rem'
+									}}
+								/>
+								<Bar 
+									dataKey="accuracy" 
+									name="Accuracy %" 
+									fill="#60A5FA"
+									radius={[4, 4, 0, 0]}
+									activeBar={false}
+								/>
+								<Bar 
+									dataKey="avgTime" 
+									name="Avg Time (s)" 
+									fill="#34D399"
+									radius={[4, 4, 0, 0]}
+									activeBar={false}
+								/>
+							</BarChart>
+						</ResponsiveContainer>
+					</div>
+
+					{/* Original Table */}
 					<div className="overflow-x-auto">
 						<table className="min-w-full divide-y divide-gray-700">
 							<thead>
@@ -151,10 +222,10 @@ export default function LeaderboardPage() {
 												{model.totalTests}
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-												{model.accuracy?.toFixed(1) ?? "0"}%
+												{model.accuracy?.toFixed(3) ?? "0"}%
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-												{model.avgTime?.toFixed(2) ?? "0"}s
+												{model.avgTime?.toFixed(3) ?? "0"}s
 											</td>
 										</tr>
 									))}
@@ -171,6 +242,49 @@ export default function LeaderboardPage() {
 					<p className="text-sm text-gray-400 text-center mb-6">
 						shows how well different color families are identified
 					</p>
+
+					{/* Pie Chart for Color Families */}
+					<div className="h-80 mb-8">
+						<ResponsiveContainer width="100%" height="100%">
+							<PieChart>
+								<Pie
+									data={data?.colorFamilies}
+									dataKey="accuracy"
+									nameKey="name"
+									cx="50%"
+									cy="50%"
+									outerRadius={100}
+									label={({ name, percent }: { name: string; percent: number }) => 
+										`${name} ${(percent * 100).toFixed(0)}%`
+									}
+									labelLine={{ stroke: 'rgba(75, 85, 99, 0.3)' }}
+								>
+									{data?.colorFamilies?.map((entry, index) => (
+										<Cell 
+											key={`cell-${index}`} 
+											fill={entry.hexColor}
+											stroke="rgba(31, 41, 55, 0.95)"
+											strokeWidth={2}
+										/>
+									))}
+								</Pie>
+								<Tooltip 
+									contentStyle={{ 
+										backgroundColor: 'rgba(31, 41, 55, 0.95)',
+										border: '1px solid rgba(75, 85, 99, 0.3)',
+										borderRadius: '0.5rem',
+										color: '#fff',
+										boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+									}}
+									labelStyle={{ color: '#9CA3AF', fontSize: 12 }}
+									itemStyle={{ color: '#fff', fontSize: 12 }}
+									formatter={(value: number, name: string) => [`${name} ${Number(value).toFixed(3)}`, '']}
+								/>
+							</PieChart>
+						</ResponsiveContainer>
+					</div>
+
+					{/* Original Table */}
 					<div className="overflow-x-auto">
 						<table className="min-w-full divide-y divide-gray-700">
 							<thead>
@@ -216,10 +330,10 @@ export default function LeaderboardPage() {
 											{family.totalTests}
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-											{family.accuracy?.toFixed(1) ?? "0"}%
+											{family.accuracy?.toFixed(3) ?? "0"}%
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-											{family.avgTime?.toFixed(2) ?? "0"}s
+											{family.avgTime?.toFixed(3) ?? "0"}s
 										</td>
 									</tr>
 								))}
@@ -280,7 +394,7 @@ export default function LeaderboardPage() {
 												{user.bestLevel}
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-												{user.totalPlayTime?.toFixed(1) ?? "0"}s
+												{user.totalPlayTime?.toFixed(3) ?? "0"}s
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
 												{user.totalGames || 0}
@@ -289,7 +403,7 @@ export default function LeaderboardPage() {
 												{user.deviceType}
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-												{user.accuracy?.toFixed(1) ?? "0"}%
+												{user.accuracy?.toFixed(3) ?? "0"}%
 											</td>
 										</tr>
 									))
@@ -316,6 +430,88 @@ export default function LeaderboardPage() {
 					<p className="text-sm text-gray-400 text-center mb-6">
 						shows the latest gameplay sessions from all players
 					</p>
+
+					{/* Line Chart for Session Times */}
+					<div className="h-80 mb-8">
+						<ResponsiveContainer width="100%" height="100%">
+							<LineChart data={data?.sessions?.slice(0, 10)}>
+								<CartesianGrid strokeDasharray="3 3" stroke="rgba(75, 85, 99, 0.3)" />
+								<XAxis 
+									dataKey="saved_at" 
+									stroke="#9CA3AF"
+									tick={{ fill: '#9CA3AF', fontSize: 12 }}
+									axisLine={{ stroke: 'rgba(75, 85, 99, 0.3)' }}
+									tickFormatter={(value: string) => new Date(value).toLocaleString()}
+								/>
+								<YAxis 
+									stroke="#9CA3AF"
+									tick={{ fill: '#9CA3AF', fontSize: 12 }}
+									axisLine={{ stroke: 'rgba(75, 85, 99, 0.3)' }}
+									tickFormatter={(value) => Number(value).toFixed(3)}
+								/>
+								<Tooltip 
+									contentStyle={{ 
+										backgroundColor: 'rgba(31, 41, 55, 0.95)',
+										border: '1px solid rgba(75, 85, 99, 0.3)',
+										borderRadius: '0.5rem',
+										color: '#fff',
+										boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+									}}
+									labelStyle={{ color: '#9CA3AF', fontSize: 12 }}
+									itemStyle={{ color: '#fff', fontSize: 12 }}
+									labelFormatter={(value: string) => new Date(value).toLocaleString()}
+									formatter={(value: number, name: string) => [`${name} ${Number(value).toFixed(3)}`, '']}
+								/>
+								<Legend 
+									wrapperStyle={{ 
+										color: '#9CA3AF',
+										fontSize: 12,
+										paddingTop: '1rem'
+									}}
+								/>
+								<Line 
+									type="monotone" 
+									dataKey="total_time" 
+									name="Total Time (s)" 
+									stroke="#60A5FA"
+									strokeWidth={2}
+									dot={{ 
+										fill: '#60A5FA',
+										stroke: 'rgba(31, 41, 55, 0.95)',
+										strokeWidth: 2,
+										r: 4
+									}}
+									activeDot={{ 
+										fill: '#60A5FA',
+										stroke: 'rgba(31, 41, 55, 0.95)',
+										strokeWidth: 2,
+										r: 6
+									}}
+								/>
+								<Line 
+									type="monotone" 
+									dataKey="final_level" 
+									name="Final Level" 
+									stroke="#34D399"
+									strokeWidth={2}
+									dot={{ 
+										fill: '#34D399',
+										stroke: 'rgba(31, 41, 55, 0.95)',
+										strokeWidth: 2,
+										r: 4
+									}}
+									activeDot={{ 
+										fill: '#34D399',
+										stroke: 'rgba(31, 41, 55, 0.95)',
+										strokeWidth: 2,
+										r: 6
+									}}
+								/>
+							</LineChart>
+						</ResponsiveContainer>
+					</div>
+
+					{/* Original Table */}
 					<div className="overflow-x-auto">
 						<table className="min-w-full divide-y divide-gray-700">
 							<thead>
@@ -354,7 +550,7 @@ export default function LeaderboardPage() {
 												{session.final_level}
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-												{session.total_time?.toFixed(1) ?? "0"}s
+												{session.total_time?.toFixed(3) ?? "0"}s
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
 												{session.device_info.is_mobile ? "Mobile" : "Desktop"}
