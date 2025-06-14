@@ -57,7 +57,7 @@ export async function GET() {
 		> = {
 			RGB: { total: 0, correct: 0, avgTime: 0, totalTime: 0 },
 			CIELAB: { total: 0, correct: 0, avgTime: 0, totalTime: 0 },
-			"JzAzBz": { total: 0, correct: 0, avgTime: 0, totalTime: 0 },
+			JzAzBz: { total: 0, correct: 0, avgTime: 0, totalTime: 0 },
 			Oklab: { total: 0, correct: 0, avgTime: 0, totalTime: 0 },
 		};
 

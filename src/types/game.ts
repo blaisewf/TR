@@ -13,16 +13,11 @@ export interface GameRound {
 }
 
 // game constants
-export const COLOR_MODELS: ColorModel[] = [
-	"RGB",
-	"CIELAB",
-	"JzAzBz",
-	"Oklab",
-];
+export const COLOR_MODELS: ColorModel[] = ["RGB", "CIELAB", "JzAzBz", "Oklab"];
 export const COLOR_MODEL_DISPLAY_NAMES: Record<ColorModel, string> = {
 	RGB: "RGB",
 	CIELAB: "CIELAB",
-	"JzAzBz": "JzAzBz",
+	JzAzBz: "JzAzBz",
 	Oklab: "Oklab",
 };
 export const GRID_SIZE = 4;
