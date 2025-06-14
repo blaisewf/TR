@@ -134,6 +134,15 @@
 				"mobile": "Móvil",
 				"desktop": "Escritorio"
 			}
+		},
+		"profile": {
+			"noPlayerId": "No se encontró ID de jugador. Por favor, juega primero.",
+			"noData": {
+				"title": "No Hay Datos Disponibles",
+				"message": "Aún no tenemos datos de juego para tu perfil. ¡Comienza a jugar para ver tus estadísticas!",
+				"info": "Tus datos de juego se guardan de forma anónima por dispositivo y sesión. Cada vez que juegues, registraremos tu progreso y lo mostraremos aquí.",
+				"playNow": "Jugar Ahora"
+			}
 		}
 	}
 }

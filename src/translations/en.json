@@ -81,7 +81,13 @@
 			"profile": "Profile"
 		},
 		"profile": {
-			"noPlayerId": "No player ID found. Please play a game first to view your profile."
+			"noPlayerId": "No player ID found. Please play a game first.",
+			"noData": {
+				"title": "No Data Available",
+				"message": "We don't have any game data for your profile yet. Start playing to see your statistics!",
+				"info": "Your game data is saved anonymously per device and session. Each time you play, we'll track your progress and show it here.",
+				"playNow": "Play Now"
+			}
 		},
 		"stats": {
 			"totalGames": "Total Games",

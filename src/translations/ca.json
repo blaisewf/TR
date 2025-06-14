@@ -134,6 +134,15 @@
 				"mobile": "Mòbil",
 				"desktop": "Escriptori"
 			}
+		},
+		"profile": {
+			"noPlayerId": "No s'ha trobat cap ID de jugador. Si us plau, juga primer.",
+			"noData": {
+				"title": "No Hi Ha Dades Disponibles",
+				"message": "Encara no tenim dades de joc per al teu perfil. Comença a jugar per veure les teves estadístiques!",
+				"info": "Les teves dades de joc es guarden de forma anònima per dispositiu i sessió. Cada vegada que juguis, registrarem el teu progrés i el mostrarem aquí.",
+				"playNow": "Jugar Ara"
+			}
 		}
 	}
 }
