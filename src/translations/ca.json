@@ -38,7 +38,6 @@
 		},
 		"stats": {
 			"score": "Puntuació",
-			"round": "Ronda",
 			"time": "Temps",
 			"accuracy": "Precisió",
 			"colorModel": "Model de Color"

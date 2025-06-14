@@ -38,7 +38,6 @@
 		},
 		"stats": {
 			"score": "Score",
-			"round": "Round",
 			"time": "Time",
 			"accuracy": "Accuracy",
 			"colorModel": "Color Model"

@@ -38,7 +38,6 @@
 		},
 		"stats": {
 			"score": "Puntuación",
-			"round": "Ronda",
 			"time": "Tiempo",
 			"accuracy": "Precisión",
 			"colorModel": "Modelo de Color"
