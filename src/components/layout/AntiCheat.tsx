@@ -8,6 +8,11 @@ export default function AntiCheat() {
 	const [isKeybindWarning, setIsKeybindWarning] = useState(false);
 
 	useEffect(() => {
+		// disable anti-cheat in dev mode
+		if (process.env.NODE_ENV === "development") {
+			return;
+		}
+
 		// prevent f12, ctrl+shift+i, ctrl+shift+j, ctrl+shift+c
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (
