@@ -132,7 +132,7 @@ export async function GET() {
 					}
 				} else if (g > r && g > b && g > 120) {
 					if (r > 100 && b < 100) {
-						family = "Yellow-Green";
+						family = "Lime";
 						hexColor = "#9ACD32";
 					} else if (b > 100 && r < 100) {
 						family = "Cyan";
@@ -146,7 +146,7 @@ export async function GET() {
 						family = "Purple";
 						hexColor = "#800080";
 					} else if (g > 100 && r < 100) {
-						family = "Blue-Green";
+						family = "Aqua";
 						hexColor = "#008B8B";
 					} else {
 						family = "Blue";
