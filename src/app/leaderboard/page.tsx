@@ -42,19 +42,6 @@ export default function LeaderboardPage() {
 		fetchLeaderboardData();
 	}, []);
 
-	// helper function to convert RGB array to hex color
-	const rgbToHex = (rgb: number[]) => {
-		return (
-			"#" +
-			rgb
-				.map((x) => {
-					const hex = Math.round(x).toString(16);
-					return hex.length === 1 ? "0" + hex : hex;
-				})
-				.join("")
-		);
-	};
-
 	if (loading) {
 		return (
 			<div className="min-h-screen bg-black/50 pt-24 pb-12 px-4 flex items-center justify-center relative overflow-hidden">
@@ -137,7 +124,7 @@ export default function LeaderboardPage() {
 									dataKey="model" 
 									stroke="#9CA3AF"
 									tick={{ fill: '#9CA3AF', fontSize: 12 }}
-									axisLine={{ stroke: 'rgba(75, 85, 99, 0.3)' }}
+									axisLine={{ stroke: 'rgba(75, 85, 99, 0.3)', }}
 								/>
 								<YAxis 
 									stroke="#9CA3AF"
@@ -156,6 +143,7 @@ export default function LeaderboardPage() {
 									labelStyle={{ color: '#9CA3AF', fontSize: 12 }}
 									itemStyle={{ color: '#fff', fontSize: 12 }}
 									formatter={(value: number, name: string) => [`${name} ${Number(value).toFixed(3)}`, '']}
+									cursor={false}
 								/>
 								<Legend 
 									wrapperStyle={{ 
