@@ -33,7 +33,6 @@ export default function Navigation() {
 
 	const handleLanguageChange = (langCode: string) => {
 		i18nRef.current.changeLanguage(langCode);
-		localStorage.setItem("preferredLanguage", langCode);
 		setIsExpanded(false);
 	};
 
