@@ -89,6 +89,10 @@ export default function GameInstructions({
 									<span className="text-gray-300">•</span>
 									{t("game.instructions.steps.4")}
 								</li>
+								<li className="flex items-center gap-2">
+									<span className="text-gray-300">•</span>
+									{t("game.instructions.steps.5")}
+								</li>
 							</ul>
 						</div>
 					</div>

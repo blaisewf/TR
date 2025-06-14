@@ -17,7 +17,9 @@ import {
 	type GameState,
 	MAX_WRONG_ANSWERS,
 } from "@/types/game";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useRef } from "react";
+
+const LEVEL_TIMER = 30; // 30 seconds per level
 
 export const useGame = () => {
 	const [gameState, setGameState] = useState<GameState>("instructions");
@@ -30,6 +32,8 @@ export const useGame = () => {
 	const [sessionId, setSessionId] = useState<string>("");
 	const [rounds, setRounds] = useState<RoundData[]>([]);
 	const [elapsedTime, setElapsedTime] = useState(0);
+	const [timeRemaining, setTimeRemaining] = useState(LEVEL_TIMER);
+	const roundStartTime = useRef<number>(0);
 
 	// calculate difficulty based on level
 	const getDifficulty = (level: number): number => {
@@ -93,6 +97,8 @@ export const useGame = () => {
 
 	// start new round
 	const startNewRound = useCallback(() => {
+		roundStartTime.current = Date.now();
+		setTimeRemaining(LEVEL_TIMER);
 		if (preloadedRound) {
 			setCurrentRound(preloadedRound);
 			setPreloadedRound(null);
@@ -110,12 +116,41 @@ export const useGame = () => {
 		setLevel(1);
 		setScore(0);
 		setWrongAnswers(0);
-		setGameStartTime(Date.now());
+		const now = Date.now();
+		setGameStartTime(now);
+		roundStartTime.current = now;
 		setSessionId(generateUUID());
 		setRounds([]);
 		setElapsedTime(0);
+		setTimeRemaining(LEVEL_TIMER);
 		startNewRound();
 	}, [startNewRound]);
+
+	// handle timeout
+	const handleTimeout = useCallback(() => {
+		if (!currentRound) return;
+
+		const roundData: RoundData = {
+			level: currentRound.level,
+			base_color: currentRound.baseColor,
+			changed_color: currentRound.changedColor,
+			color_model: currentRound.colorModel,
+			changed_position: currentRound.changedPosition,
+			click_position: [-1, -1],
+			click_coords: [-1, -1],
+			time: LEVEL_TIMER,
+			correct: false,
+		};
+
+		setRounds((prev) => [...prev, roundData]);
+		setWrongAnswers((prev) => prev + 1);
+		
+		if (wrongAnswers + 1 >= MAX_WRONG_ANSWERS) {
+			endGame();
+		} else {
+			startNewRound();
+		}
+	}, [currentRound, wrongAnswers, startNewRound, endGame]);
 
 	// handle square click
 	const handleSquareClick = useCallback(
@@ -156,15 +191,25 @@ export const useGame = () => {
 		[currentRound, wrongAnswers, startNewRound, endGame],
 	);
 
-	// update elapsed time
+	// update elapsed time and level timer
 	useEffect(() => {
 		if (gameState === "playing") {
 			const interval = setInterval(() => {
-				setElapsedTime((Date.now() - gameStartTime) / 1000);
+				const now = Date.now();
+				setElapsedTime((now - gameStartTime) / 1000);
+				
+				const elapsedSinceRoundStart = (now - roundStartTime.current) / 1000;
+				const remaining = Math.max(0, LEVEL_TIMER - elapsedSinceRoundStart);
+				
+				if (remaining === 0) {
+					handleTimeout();
+				} else {
+					setTimeRemaining(remaining);
+				}
 			}, 100);
 			return () => clearInterval(interval);
 		}
-	}, [gameState, gameStartTime]);
+	}, [gameState, gameStartTime, handleTimeout]);
 
 	return {
 		gameState,
@@ -173,6 +218,7 @@ export const useGame = () => {
 		score,
 		wrongAnswers,
 		elapsedTime,
+		timeRemaining,
 		startGame,
 		handleSquareClick,
 	};

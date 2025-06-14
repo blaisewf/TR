@@ -28,7 +28,8 @@
 				"1": "Look at the grid of colors carefully",
 				"2": "Identify the color that stands out the most",
 				"3": "Click on the color you think is different",
-				"4": "You'll have multiple rounds to test your perception"
+				"4": "You'll have multiple rounds to test your perception",
+				"5": "You have 30 seconds to find the different color in each round"
 			},
 			"ready": "Are you ready to begin?",
 			"howToPlay": "How to Play",
@@ -41,7 +42,8 @@
 			"score": "Score",
 			"time": "Time",
 			"accuracy": "Accuracy",
-			"colorModel": "Color Model"
+			"colorModel": "Color Model",
+			"timeLeft": "Time Left: {{time}}s"
 		},
 		"gameOver": {
 			"title": "Test Complete!",

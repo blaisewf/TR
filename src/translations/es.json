@@ -14,34 +14,36 @@
 		"cancel": "Cancelar",
 		"save": "Guardar",
 		"delete": "Eliminar",
-		"start": "Iniciar juego",
+		"start": "Iniciar Juego",
 		"restart": "Reiniciar",
 		"next": "Siguiente",
 		"back": "Atrás"
 	},
 	"game": {
 		"instructions": {
-			"title": "Prueba de Percepción del Color",
-			"projectContext": "Este es un proyecto de Trabajo de Investigación para el Bachillerato en Cataluña, que estudia cómo perciben los colores los humanos y las máquinas de forma diferente.",
+			"title": "Test de Percepción de Color",
+			"projectContext": "Esto es parte de un Treball de Recerca (Proyecto de Investigación) para bachillerato en Cataluña, estudiando cómo los humanos y las máquinas perciben los colores de manera diferente.",
 			"description": "En esta prueba, se te mostrará una cuadrícula de colores. Tu tarea es identificar el color que parece más diferente de los demás.",
 			"steps": {
 				"1": "Observa cuidadosamente la cuadrícula de colores",
-				"2": "Identifica el color que más resalta",
-				"3": "Haz clic en el color que creas que es diferente",
-				"4": "Habrá varias rondas para poner a prueba tu percepción"
+				"2": "Identifica el color que destaca más",
+				"3": "Haz clic en el color que crees que es diferente",
+				"4": "Tendrás múltiples rondas para probar tu percepción",
+				"5": "Tienes 30 segundos para encontrar el color diferente en cada ronda"
 			},
 			"ready": "¿Estás listo para comenzar?",
-			"howToPlay": "Cómo jugar",
-			"whatWeStudy": "Qué estamos estudiando",
-			"studyDescription": "Los diferentes modelos de color (RGB, CIELAB, Oklab, JzAzBz) representan los colores de distintas maneras. Recogemos datos para entender qué modelos se ajustan mejor a la percepción del color humana.",
+			"howToPlay": "Cómo Jugar",
+			"whatWeStudy": "Qué Estamos Estudiando",
+			"studyDescription": "Diferentes modelos de color (RGB, CIELAB, Oklab, JzAzBz) representan los colores de varias maneras. Estamos recopilando datos para entender qué modelos coinciden mejor con la percepción humana del color.",
 			"privacy": "Privacidad",
-			"privacyDescription": "Tus datos se recogen de forma anónima. Solo almacenamos tus respuestas, tiempos e información básica del dispositivo. No se recoge información personal."
+			"privacyDescription": "Tus datos se recopilan de forma anónima. Solo almacenamos tus respuestas, tiempos y información básica del dispositivo. No se recopila información personal."
 		},
 		"stats": {
 			"score": "Puntuación",
 			"time": "Tiempo",
 			"accuracy": "Precisión",
-			"colorModel": "Modelo de color"
+			"colorModel": "Modelo de Color",
+			"timeLeft": "Tiempo Restante: {{time}}s"
 		},
 		"gameOver": {
 			"title": "¡Prueba completada!",

@@ -1,47 +1,49 @@
 {
 	"common": {
 		"copied": "Copiat!",
-		"copyFailed": "No s'ha pogut copiar"
+		"copyFailed": "Error en copiar"
 	},
 	"navigation": {
 		"home": "Inici",
-		"about": "Sobre nosaltres",
+		"about": "Sobre",
 		"contact": "Contacte",
 		"leaderboard": "Classificació"
 	},
 	"buttons": {
-		"submit": "Envia",
-		"cancel": "Cancel·la",
-		"save": "Desa",
-		"delete": "Suprimeix",
-		"start": "Comença el joc",
-		"restart": "Torna a començar",
+		"submit": "Enviar",
+		"cancel": "Cancel·lar",
+		"save": "Desar",
+		"delete": "Eliminar",
+		"start": "Iniciar Joc",
+		"restart": "Reiniciar",
 		"next": "Següent",
 		"back": "Enrere"
 	},
 	"game": {
 		"instructions": {
-			"title": "Test de Percepció del Color",
-			"projectContext": "Aquest és un projecte de Treball de Recerca per al Batxillerat a Catalunya, que estudia com perceben els colors els humans i les màquines de manera diferent.",
-			"description": "En aquest test, veuràs una graella de colors. La teva tasca és identificar el color que sembla més diferent dels altres.",
+			"title": "Test de Percepció de Color",
+			"projectContext": "Això és part d'un Treball de Recerca per a batxillerat a Catalunya, estudiant com els humans i les màquines perceben els colors de manera diferent.",
+			"description": "En aquesta prova, se't mostrarà una graella de colors. La teva tasca és identificar el color que sembla més diferent dels altres.",
 			"steps": {
-				"1": "Observa atentament la graella de colors",
-				"2": "Identifica el color que més destaca",
+				"1": "Observa amb cura la graella de colors",
+				"2": "Identifica el color que destaca més",
 				"3": "Fes clic al color que creus que és diferent",
-				"4": "Hi haurà diverses rondes per posar a prova la teva percepció"
+				"4": "Tindràs múltiples rondes per provar la teva percepció",
+				"5": "Tens 30 segons per trobar el color diferent a cada ronda"
 			},
 			"ready": "Estàs preparat per començar?",
-			"howToPlay": "Com jugar",
-			"whatWeStudy": "Què estem estudiant",
-			"studyDescription": "Els diferents models de color (RGB, CIELAB, Oklab, JzAzBz) representen els colors de diverses maneres. Recollim dades per entendre quin model s'ajusta millor a la percepció humana del color.",
+			"howToPlay": "Com Jugar",
+			"whatWeStudy": "Què Estem Estudiant",
+			"studyDescription": "Diferents models de color (RGB, CIELAB, Oklab, JzAzBz) representen els colors de diverses maneres. Estem recopilant dades per entendre quins models coincideixen millor amb la percepció humana del color.",
 			"privacy": "Privacitat",
-			"privacyDescription": "Les teves dades es recullen de manera anònima. Només emmagatzemem les teves respostes, el temps i informació bàsica del dispositiu. No es recull cap dada personal."
+			"privacyDescription": "Les teves dades es recopilen de forma anònima. Només emmagatzemem les teves respostes, temps i informació bàsica del dispositiu. No es recopila informació personal."
 		},
 		"stats": {
 			"score": "Puntuació",
 			"time": "Temps",
 			"accuracy": "Precisió",
-			"colorModel": "Model de color"
+			"colorModel": "Model de Color",
+			"timeLeft": "Temps Restant: {{time}}s"
 		},
 		"gameOver": {
 			"title": "Test completat!",
