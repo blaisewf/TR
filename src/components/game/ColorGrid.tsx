@@ -2,6 +2,7 @@
 
 import { rgbToCss } from "@/lib/utils/colorGenerator";
 import { motion } from "framer-motion";
+import { useTranslation } from 'react-i18next';
 import React, { useRef, useState } from "react";
 
 interface ColorGridProps {
@@ -23,6 +24,7 @@ export default function ColorGrid({
 	disabled = false,
 	isColorsUpdated = true,
 }: ColorGridProps) {
+	const { t } = useTranslation();
 	const gridRef = useRef<HTMLDivElement>(null);
 	const [hasClicked, setHasClicked] = useState(false);
 
@@ -99,7 +101,7 @@ export default function ColorGrid({
 						style={{ backgroundColor: rgbToCss(color) }}
 						onClick={(e) => handleSquareClick(row, col, e)}
 						disabled={disabled}
-						aria-label={`Color square at row ${row + 1}, column ${col + 1}`}
+						aria-label={t('game.grid.squareLabel', { row: row + 1, col: col + 1 })}
 					/>
 				);
 			})}

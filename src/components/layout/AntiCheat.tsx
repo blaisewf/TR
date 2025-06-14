@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslation } from 'react-i18next';
 
 export default function AntiCheat() {
 	const [showWarning, setShowWarning] = useState(false);
 	const [isDevToolsOpen, setIsDevToolsOpen] = useState(false);
 	const [isKeybindWarning, setIsKeybindWarning] = useState(false);
+	const { t } = useTranslation();
 
 	useEffect(() => {
 		// disable anti-cheat in dev mode
@@ -65,12 +67,12 @@ export default function AntiCheat() {
 		<div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
 			<div className="max-w-md mx-auto p-8 bg-gray-800/20 backdrop-blur-md rounded-2xl border border-gray-700/20 shadow-lg">
 				<h2 className="text-2xl font-bold text-center mb-4 text-white">
-					Warning
+				{t('antiCheat.warning')}
 				</h2>
 				<p className="text-gray-300 text-center mb-6">
 					{isDevToolsOpen
-						? "Developer tools detected! Please close them and refresh the page to continue."
-						: "Please don't try to cheat! This experiment requires your honest participation."}
+						? t('antiCheat.messages.1')
+						: t('antiCheat.messages.2')}
 				</p>
 				<div className="text-center">
 					{isKeybindWarning && !isDevToolsOpen && (

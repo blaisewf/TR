@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../styles/globals.css";
 import AntiCheat from "@/components/layout/AntiCheat";
 import Navigation from "@/components/layout/Navigation";
+import I18nProvider from "@/components/providers/I18nProvider";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -59,9 +60,11 @@ export default function RootLayout({
 				className={`${geistSans.variable} ${geistMono.variable}`}
 				suppressHydrationWarning
 			>
-				<AntiCheat />
-				<Navigation />
-				<main>{children}</main>
+				<I18nProvider>
+					<AntiCheat />
+					<Navigation />
+					<main>{children}</main>
+				</I18nProvider>
 			</body>
 		</html>
 	);

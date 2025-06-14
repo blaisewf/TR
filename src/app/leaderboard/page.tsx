@@ -1,6 +1,7 @@
 "use client";
 
 import Background from "@/components/layout/Background";
+import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from "react";
 import type { LeaderboardData } from "../../types/leaderboard";
 import {
@@ -20,6 +21,7 @@ import {
 } from "recharts";
 
 export default function LeaderboardPage() {
+	const { t } = useTranslation();
 	const [data, setData] = useState<LeaderboardData | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
@@ -33,14 +35,14 @@ export default function LeaderboardPage() {
 				setData(data);
 			} catch (error) {
 				console.error("Error fetching leaderboard data:", error);
-				setError("Failed to load leaderboard data. Please try again later.");
+				setError(t('leaderboard.error'));
 			} finally {
 				setLoading(false);
 			}
 		};
 
 		fetchLeaderboardData();
-	}, []);
+	}, [t]);
 
 	if (loading) {
 		return (
@@ -70,7 +72,7 @@ export default function LeaderboardPage() {
 				<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 					<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-gray-700/30">
 						<h3 className="text-lg font-semibold text-gray-400 mb-2">
-							Total Games
+							{t('leaderboard.stats.totalGames')}
 						</h3>
 						<p className="text-3xl font-bold text-white">
 							{data?.generalStats?.totalGames || 0}
@@ -78,7 +80,7 @@ export default function LeaderboardPage() {
 					</div>
 					<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-gray-700/30">
 						<h3 className="text-lg font-semibold text-gray-400 mb-2">
-							Total Play Time
+							{t('leaderboard.stats.totalPlayTime')}
 						</h3>
 						<p className="text-3xl font-bold text-white">
 							{data?.generalStats?.totalPlayTime
@@ -88,7 +90,7 @@ export default function LeaderboardPage() {
 					</div>
 					<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-gray-700/30">
 						<h3 className="text-lg font-semibold text-gray-400 mb-2">
-							Total Players
+							{t('leaderboard.stats.totalPlayers')}
 						</h3>
 						<p className="text-3xl font-bold text-white">
 							{data?.generalStats?.totalPlayers || 0}
@@ -96,7 +98,7 @@ export default function LeaderboardPage() {
 					</div>
 					<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-gray-700/30">
 						<h3 className="text-lg font-semibold text-gray-400 mb-2">
-							Average Accuracy
+							{t('leaderboard.stats.averageAccuracy')}
 						</h3>
 						<p className="text-3xl font-bold text-white">
 							{data?.generalStats?.averageAccuracy
@@ -109,10 +111,10 @@ export default function LeaderboardPage() {
 				{/* Color Models Section */}
 				<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30">
 					<h2 className="text-2xl font-bold mb-2 text-center text-white">
-						Color Model Performance
+						{t('leaderboard.colorModels.title')}
 					</h2>
 					<p className="text-sm text-gray-400 text-center mb-6">
-						shows how well each color model performs in identifying colors
+						{t('leaderboard.colorModels.description')}
 					</p>
 					
 					{/* Bar Chart for Color Models */}
@@ -179,16 +181,16 @@ export default function LeaderboardPage() {
 										#
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										Model
+										{t('leaderboard.colorModels.table.model')}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										Tests
+										{t('leaderboard.colorModels.table.tests')}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										Accuracy
+										{t('leaderboard.colorModels.table.accuracy')}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										Avg Time
+										{t('leaderboard.colorModels.table.avgTime')}
 									</th>
 								</tr>
 							</thead>
@@ -225,10 +227,10 @@ export default function LeaderboardPage() {
 				{/* Color Families Section */}
 				<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30">
 					<h2 className="text-2xl font-bold mb-2 text-center text-white">
-						Color Family Performance
+						{t('leaderboard.colorFamilies.title')}
 					</h2>
 					<p className="text-sm text-gray-400 text-center mb-6">
-						shows how well different color families are identified
+						{t('leaderboard.colorFamilies.description')}
 					</p>
 
 					{/* Pie Chart for Color Families */}
@@ -281,16 +283,16 @@ export default function LeaderboardPage() {
 										#
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										Color Family
+										{t('leaderboard.colorFamilies.table.family')}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										Tests
+										{t('leaderboard.colorFamilies.table.tests')}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										Accuracy
+										{t('leaderboard.colorFamilies.table.accuracy')}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										Avg Time
+										{t('leaderboard.colorFamilies.table.avgTime')}
 									</th>
 								</tr>
 							</thead>
@@ -333,10 +335,10 @@ export default function LeaderboardPage() {
 				{/* Users Section */}
 				<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30">
 					<h2 className="text-2xl font-bold mb-2 text-center text-white">
-						Top Users
+						{t('leaderboard.users.title')}
 					</h2>
 					<p className="text-sm text-gray-400 text-center mb-6">
-						ranks players based on their performance and achievements
+						{t('leaderboard.users.description')}
 					</p>
 					<div className="overflow-x-auto">
 						<table className="min-w-full divide-y divide-gray-700">
@@ -346,22 +348,22 @@ export default function LeaderboardPage() {
 										#
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										Player ID
+										{t('leaderboard.users.table.playerId')}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										Best Level
+										{t('leaderboard.users.table.bestLevel')}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										Total Time
+										{t('leaderboard.users.table.totalTime')}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										Games
+										{t('leaderboard.users.table.games')}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										Device
+										{t('leaderboard.users.table.device')}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										Accuracy
+										{t('leaderboard.users.table.accuracy')}
 									</th>
 								</tr>
 							</thead>
@@ -401,7 +403,7 @@ export default function LeaderboardPage() {
 											colSpan={6}
 											className="px-6 py-4 text-center text-sm text-gray-400"
 										>
-											No user data available yet
+											{t('leaderboard.users.noData')}
 										</td>
 									</tr>
 								)}
@@ -413,10 +415,10 @@ export default function LeaderboardPage() {
 				{/* Recent Sessions Section */}
 				<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30">
 					<h2 className="text-2xl font-bold mb-2 text-center text-white">
-						Recent Sessions
+						{t('leaderboard.sessions.title')}
 					</h2>
 					<p className="text-sm text-gray-400 text-center mb-6">
-						shows the latest gameplay sessions from all players
+						{t('leaderboard.sessions.description')}
 					</p>
 
 					{/* Line Chart for Session Times */}
@@ -505,19 +507,19 @@ export default function LeaderboardPage() {
 							<thead>
 								<tr>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										Player ID
+										{t('leaderboard.sessions.table.playerId')}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										Date
+										{t('leaderboard.sessions.table.date')}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										Level
+										{t('leaderboard.sessions.table.level')}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										Time
+										{t('leaderboard.sessions.table.time')}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										Device
+										{t('leaderboard.sessions.table.device')}
 									</th>
 								</tr>
 							</thead>
@@ -541,7 +543,9 @@ export default function LeaderboardPage() {
 												{session.total_time?.toFixed(1) ?? "0"}s
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-												{session.device_info.is_mobile ? "Mobile" : "Desktop"}
+												{session.device_info.is_mobile 
+													? t('leaderboard.sessions.deviceTypes.mobile')
+													: t('leaderboard.sessions.deviceTypes.desktop')}
 											</td>
 										</tr>
 									))
@@ -551,7 +555,7 @@ export default function LeaderboardPage() {
 											colSpan={5}
 											className="px-6 py-4 text-center text-sm text-gray-400"
 										>
-											No session data available yet
+											{t('leaderboard.sessions.noData')}
 										</td>
 									</tr>
 								)}
