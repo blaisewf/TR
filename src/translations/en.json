@@ -22,6 +22,7 @@
 	"game": {
 		"instructions": {
 			"title": "Color Perception Test",
+			"projectContext": "This is part of a Treball de Recerca (Research Project) for high school (Bachillerat) in Catalonia, studying how humans and machines perceive colors differently.",
 			"description": "In this test, you'll be shown a grid of colors. Your task is to identify the color that appears most different from the others.",
 			"steps": {
 				"1": "Look at the grid of colors carefully",

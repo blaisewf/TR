@@ -1,148 +1,150 @@
 {
 	"common": {
-		"copied": "¡Copiado!",
-		"copyFailed": "Fallo al copiar"
+	  "copied": "¡Copiado!",
+	  "copyFailed": "Error al copiar"
 	},
 	"navigation": {
-		"home": "Inicio",
-		"about": "Acerca de",
-		"contact": "Contacto",
-		"leaderboard": "Clasificación"
+	  "home": "Inicio",
+	  "about": "Acerca de",
+	  "contact": "Contacto",
+	  "leaderboard": "Clasificación"
 	},
 	"buttons": {
-		"submit": "Enviar",
-		"cancel": "Cancelar",
-		"save": "Guardar",
-		"delete": "Eliminar",
-		"start": "Iniciar Juego",
-		"restart": "Reiniciar",
-		"next": "Siguiente",
-		"back": "Atrás"
+	  "submit": "Enviar",
+	  "cancel": "Cancelar",
+	  "save": "Guardar",
+	  "delete": "Eliminar",
+	  "start": "Iniciar juego",
+	  "restart": "Reiniciar",
+	  "next": "Siguiente",
+	  "back": "Atrás"
 	},
 	"game": {
-		"instructions": {
-			"title": "Prueba de Percepción del Color",
-			"description": "En esta prueba, se te mostrará una cuadrícula de colores. Tu tarea es identificar el color que parece más diferente de los demás.",
-			"steps": {
-				"1": "Observa cuidadosamente la cuadrícula de colores",
-				"2": "Identifica el color que más resalta",
-				"3": "Haz clic en el color que crees que es diferente",
-				"4": "Tendrás múltiples rondas para poner a prueba tu percepción"
-			},
-			"ready": "¿Estás listo para comenzar?",
-			"howToPlay": "Cómo Jugar",
-			"whatWeStudy": "Lo que Estudiamos",
-			"studyDescription": "Diferentes modelos de color (RGB, CIELAB, Oklab, JzAzBz) representan los colores de varias maneras. Estamos recopilando datos para comprender qué modelos se ajustan mejor a la percepción del color humano.",
-			"privacy": "Privacidad",
-			"privacyDescription": "Tus datos se recopilan de forma anónima. Solo almacenamos tus respuestas, el tiempo y la información básica del dispositivo. No se recopila información personal."
+	  "instructions": {
+		"title": "Prueba de Percepción del Color",
+		"projectContext": "Este es un proyecto de Trabajo de Investigación para el Bachillerato en Cataluña, que estudia cómo perciben los colores los humanos y las máquinas de forma diferente.",
+		"description": "En esta prueba, se te mostrará una cuadrícula de colores. Tu tarea es identificar el color que parece más diferente de los demás.",
+		"steps": {
+		  "1": "Observa cuidadosamente la cuadrícula de colores",
+		  "2": "Identifica el color que más resalta",
+		  "3": "Haz clic en el color que creas que es diferente",
+		  "4": "Habrá varias rondas para poner a prueba tu percepción"
 		},
-		"stats": {
-			"score": "Puntuación",
-			"time": "Tiempo",
-			"accuracy": "Precisión",
-			"colorModel": "Modelo de Color"
-		},
-		"gameOver": {
-			"title": "¡Prueba Completada!",
-			"congratulations": "¡Felicidades!",
-			"finalScore": "Tu Puntuación Final",
-			"accuracy": "Precisión",
-			"timeSpent": "Tiempo Empleado",
-			"roundsCompleted": "Rondas Completadas",
-			"share": "Comparte tus resultados",
-			"playAgain": "Jugar de Nuevo",
-			"home": "Volver a Inicio",
-			"shareText": "¡Completé el nivel {{level}} con una puntuación de {{score}} en {{time}}! ¡Pruébalo tú mismo!",
-			"thankYou": "¡Gracias por participar en nuestro estudio de percepción del color! Tus datos anónimos nos ayudan a comprender mejor la percepción del color humano."
-		},
-		"board": {
-			"loading": "Cargando...",
-			"error": "Ocurrió un error. Por favor, inténtalo de nuevo.",
-			"findDifferent": "Encuentra el cuadrado de color diferente",
-			"wrongAnswers": "Respuestas incorrectas: {{count}}/3"
-		},
-		"grid": {
-			"squareLabel": "Cuadrado de color en fila {{row}}, columna {{col}}"
-		}
+		"ready": "¿Estás listo para comenzar?",
+		"howToPlay": "Cómo jugar",
+		"whatWeStudy": "Qué estamos estudiando",
+		"studyDescription": "Los diferentes modelos de color (RGB, CIELAB, Oklab, JzAzBz) representan los colores de distintas maneras. Recogemos datos para entender qué modelos se ajustan mejor a la percepción del color humana.",
+		"privacy": "Privacidad",
+		"privacyDescription": "Tus datos se recogen de forma anónima. Solo almacenamos tus respuestas, tiempos e información básica del dispositivo. No se recoge información personal."
+	  },
+	  "stats": {
+		"score": "Puntuación",
+		"time": "Tiempo",
+		"accuracy": "Precisión",
+		"colorModel": "Modelo de color"
+	  },
+	  "gameOver": {
+		"title": "¡Prueba completada!",
+		"congratulations": "¡Felicidades!",
+		"finalScore": "Tu puntuación final",
+		"accuracy": "Precisión",
+		"timeSpent": "Tiempo empleado",
+		"roundsCompleted": "Rondas completadas",
+		"share": "Comparte tus resultados",
+		"playAgain": "Jugar de nuevo",
+		"home": "Volver al inicio",
+		"shareText": "¡He completado el nivel {{level}} con una puntuación de {{score}} en {{time}}! ¡Pruébalo tú también!",
+		"thankYou": "Gracias por participar en nuestro estudio sobre la percepción del color. Tus datos anónimos nos ayudan a entender mejor cómo los humanos percibimos los colores."
+	  },
+	  "board": {
+		"loading": "Cargando...",
+		"error": "Se produjo un error. Inténtalo de nuevo.",
+		"findDifferent": "Encuentra el cuadrado de color diferente",
+		"wrongAnswers": "Respuestas incorrectas: {{count}}/3"
+	  },
+	  "grid": {
+		"squareLabel": "Cuadro de color en la fila {{row}}, columna {{col}}"
+	  }
 	},
 	"antiCheat": {
-		"warning": "Advertencia",
-		"messages": {
-			"1": "¡Herramientas de desarrollador detectadas! Ciérralas y actualiza la página para continuar.",
-			"2": "¡Por favor, no intentes hacer trampa! Este experimento requiere tu participación honesta"
-		},
-		"accept": "Entiendo"
+	  "warning": "Advertencia",
+	  "messages": {
+		"1": "¡Se han detectado herramientas de desarrollador! Ciérralas y actualiza la página para continuar.",
+		"2": "¡Por favor, no intentes hacer trampas! Este experimento requiere tu participación honesta"
+	  },
+	  "accept": "Entiendo"
 	},
 	"leaderboard": {
-		"loading": "Cargando...",
-		"error": "No se pudieron cargar los datos de la clasificación. Por favor, inténtalo de nuevo más tarde.",
-		"viewMode": {
-			"global": "Global",
-			"profile": "Perfil"
-		},
-		"stats": {
-			"totalGames": "Partidas Totales",
-			"totalPlayTime": "Tiempo Total de Juego",
-			"totalPlayers": "Jugadores Totales",
-			"averageAccuracy": "Precisión Promedio"
-		},
-		"colorModels": {
-			"title": "Rendimiento del Modelo de Color",
-			"description": "muestra qué tan bien se desempeña cada modelo de color en la identificación de colores",
-			"table": {
-				"model": "Modelo",
-				"tests": "Pruebas",
-				"accuracy": "Precisión",
-				"avgTime": "Tiempo Promedio"
-			}
-		},
-		"colorFamilies": {
-			"title": "Rendimiento de la Familia de Colores",
-			"description": "muestra qué tan bien se identifican las diferentes familias de colores",
-			"table": {
-				"family": "Familia de Colores",
-				"tests": "Pruebas",
-				"accuracy": "Precisión",
-				"avgTime": "Tiempo Promedio"
-			}
-		},
-		"users": {
-			"title": "Usuarios Principales",
-			"description": "clasifica a los jugadores según su rendimiento y logros",
-			"table": {
-				"playerId": "ID de Jugador",
-				"bestLevel": "Mejor Nivel",
-				"totalTime": "Tiempo Total",
-				"games": "Partidas",
-				"device": "Dispositivo",
-				"accuracy": "Precisión"
-			},
-			"noData": "Aún no hay datos de usuario disponibles"
-		},
-		"sessions": {
-			"title": "Sesiones Recientes",
-			"description": "muestra las últimas sesiones de juego de todos los jugadores",
-			"table": {
-				"playerId": "ID de Jugador",
-				"date": "Fecha",
-				"level": "Nivel",
-				"time": "Tiempo",
-				"device": "Dispositivo"
-			},
-			"noData": "Aún no hay datos de sesión disponibles",
-			"deviceTypes": {
-				"mobile": "Móvil",
-				"desktop": "Escritorio"
-			}
-		},
-		"profile": {
-			"noPlayerId": "No se encontró ID de jugador. Por favor, juega primero.",
-			"noData": {
-				"title": "No Hay Datos Disponibles",
-				"message": "Aún no tenemos datos de juego para tu perfil. ¡Comienza a jugar para ver tus estadísticas!",
-				"info": "Tus datos de juego se guardan de forma anónima por dispositivo y sesión. Cada vez que juegues, registraremos tu progreso y lo mostraremos aquí.",
-				"playNow": "Jugar Ahora"
-			}
+	  "loading": "Cargando...",
+	  "error": "No se pudieron cargar los datos de la clasificación. Inténtalo más tarde.",
+	  "viewMode": {
+		"global": "Global",
+		"profile": "Perfil"
+	  },
+	  "profile": {
+		"noPlayerId": "No se encontró ID de jugador. Juega una partida primero.",
+		"noData": {
+		  "title": "No hay datos disponibles",
+		  "message": "Aún no tenemos datos de juego para tu perfil. ¡Empieza a jugar para ver tus estadísticas!",
+		  "info": "Tus datos de juego se guardan de forma anónima por dispositivo y sesión. Cada vez que juegues, registraremos tu progreso y lo mostraremos aquí.",
+		  "playNow": "Jugar ahora"
 		}
+	  },
+	  "stats": {
+		"totalGames": "Partidas totales",
+		"totalPlayTime": "Tiempo total de juego",
+		"totalPlayers": "Total de jugadores",
+		"averageAccuracy": "Precisión media"
+	  },
+	  "colorModels": {
+		"title": "Rendimiento por modelo de color",
+		"description": "muestra qué tan bien funciona cada modelo para identificar colores",
+		"table": {
+		  "model": "Modelo",
+		  "tests": "Pruebas",
+		  "accuracy": "Precisión",
+		  "avgTime": "Tiempo medio"
+		}
+	  },
+	  "colorFamilies": {
+		"title": "Rendimiento por familia de color",
+		"description": "muestra qué tan bien se identifican las diferentes familias de color",
+		"table": {
+		  "family": "Familia de color",
+		  "tests": "Pruebas",
+		  "accuracy": "Precisión",
+		  "avgTime": "Tiempo medio"
+		}
+	  },
+	  "users": {
+		"title": "Mejores usuarios",
+		"description": "clasifica a los jugadores según su rendimiento y logros",
+		"table": {
+		  "playerId": "ID del jugador",
+		  "bestLevel": "Mejor nivel",
+		  "totalTime": "Tiempo total",
+		  "games": "Partidas",
+		  "device": "Dispositivo",
+		  "accuracy": "Precisión"
+		},
+		"noData": "Aún no hay datos de usuarios disponibles"
+	  },
+	  "sessions": {
+		"title": "Sesiones recientes",
+		"description": "muestra las últimas sesiones de juego de todos los jugadores",
+		"table": {
+		  "playerId": "ID del jugador",
+		  "date": "Fecha",
+		  "level": "Nivel",
+		  "time": "Tiempo",
+		  "device": "Dispositivo"
+		},
+		"noData": "Aún no hay datos de sesiones disponibles",
+		"deviceTypes": {
+		  "mobile": "Móvil",
+		  "desktop": "Ordenador"
+		}
+	  }
 	}
-}
+  }
+  
