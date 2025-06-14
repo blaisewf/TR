@@ -18,6 +18,20 @@ if (!i18n.isInitialized) {
 			interpolation: {
 				escapeValue: false,
 			},
+			detection: {
+				order: ['navigator'],
+				lookupFromPathIndex: 0,
+				convertDetectedLanguage: (lng: string) => {
+					const languageMap: { [key: string]: string } = {
+						'en-GB': 'en',
+						'en-US': 'en',
+						'es-ES': 'es',
+						'es-MX': 'es',
+						'ca-ES': 'ca'
+					};
+					return languageMap[lng] || lng;
+				}
+			},
 			resources: {
 				en: {
 					translation: enTranslation,
