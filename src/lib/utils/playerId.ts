@@ -10,4 +10,4 @@ export function getPlayerId(): string {
 	const newId = generateUUID();
 	localStorage.setItem("color-game-player-id", newId);
 	return newId;
-} 
+}

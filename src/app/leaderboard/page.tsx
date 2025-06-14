@@ -1,24 +1,24 @@
 "use client";
 
 import Background from "@/components/layout/Background";
-import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from "react";
-import type { LeaderboardData } from "../../types/leaderboard";
+import { useTranslation } from "react-i18next";
 import {
-	BarChart,
 	Bar,
+	BarChart,
+	CartesianGrid,
+	Cell,
+	Legend,
+	Line,
+	LineChart,
+	Pie,
+	PieChart,
+	ResponsiveContainer,
+	Tooltip,
 	XAxis,
 	YAxis,
-	CartesianGrid,
-	Tooltip,
-	Legend,
-	PieChart,
-	Pie,
-	Cell,
-	LineChart,
-	Line,
-	ResponsiveContainer,
 } from "recharts";
+import type { LeaderboardData } from "../../types/leaderboard";
 
 export default function LeaderboardPage() {
 	const { t } = useTranslation();
@@ -35,7 +35,7 @@ export default function LeaderboardPage() {
 				setData(data);
 			} catch (error) {
 				console.error("Error fetching leaderboard data:", error);
-				setError(t('leaderboard.error'));
+				setError(t("leaderboard.error"));
 			} finally {
 				setLoading(false);
 			}
@@ -72,7 +72,7 @@ export default function LeaderboardPage() {
 				<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 					<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-gray-700/30">
 						<h3 className="text-lg font-semibold text-gray-400 mb-2">
-							{t('leaderboard.stats.totalGames')}
+							{t("leaderboard.stats.totalGames")}
 						</h3>
 						<p className="text-3xl font-bold text-white">
 							{data?.generalStats?.totalGames || 0}
@@ -80,7 +80,7 @@ export default function LeaderboardPage() {
 					</div>
 					<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-gray-700/30">
 						<h3 className="text-lg font-semibold text-gray-400 mb-2">
-							{t('leaderboard.stats.totalPlayTime')}
+							{t("leaderboard.stats.totalPlayTime")}
 						</h3>
 						<p className="text-3xl font-bold text-white">
 							{data?.generalStats?.totalPlayTime
@@ -90,7 +90,7 @@ export default function LeaderboardPage() {
 					</div>
 					<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-gray-700/30">
 						<h3 className="text-lg font-semibold text-gray-400 mb-2">
-							{t('leaderboard.stats.totalPlayers')}
+							{t("leaderboard.stats.totalPlayers")}
 						</h3>
 						<p className="text-3xl font-bold text-white">
 							{data?.generalStats?.totalPlayers || 0}
@@ -98,7 +98,7 @@ export default function LeaderboardPage() {
 					</div>
 					<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-gray-700/30">
 						<h3 className="text-lg font-semibold text-gray-400 mb-2">
-							{t('leaderboard.stats.averageAccuracy')}
+							{t("leaderboard.stats.averageAccuracy")}
 						</h3>
 						<p className="text-3xl font-bold text-white">
 							{data?.generalStats?.averageAccuracy
@@ -111,59 +111,66 @@ export default function LeaderboardPage() {
 				{/* Color Models Section */}
 				<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30">
 					<h2 className="text-2xl font-bold mb-2 text-center text-white">
-						{t('leaderboard.colorModels.title')}
+						{t("leaderboard.colorModels.title")}
 					</h2>
 					<p className="text-sm text-gray-400 text-center mb-6">
-						{t('leaderboard.colorModels.description')}
+						{t("leaderboard.colorModels.description")}
 					</p>
-					
+
 					{/* Bar Chart for Color Models */}
 					<div className="h-80 mb-8">
 						<ResponsiveContainer width="100%" height="100%">
 							<BarChart data={data?.colorModels}>
-								<CartesianGrid strokeDasharray="3 3" stroke="rgba(75, 85, 99, 0.3)" />
-								<XAxis 
-									dataKey="model" 
-									stroke="#9CA3AF"
-									tick={{ fill: '#9CA3AF', fontSize: 12 }}
-									axisLine={{ stroke: 'rgba(75, 85, 99, 0.3)', }}
+								<CartesianGrid
+									strokeDasharray="3 3"
+									stroke="rgba(75, 85, 99, 0.3)"
 								/>
-								<YAxis 
+								<XAxis
+									dataKey="model"
 									stroke="#9CA3AF"
-									tick={{ fill: '#9CA3AF', fontSize: 12 }}
-									axisLine={{ stroke: 'rgba(75, 85, 99, 0.3)' }}
+									tick={{ fill: "#9CA3AF", fontSize: 12 }}
+									axisLine={{ stroke: "rgba(75, 85, 99, 0.3)" }}
+								/>
+								<YAxis
+									stroke="#9CA3AF"
+									tick={{ fill: "#9CA3AF", fontSize: 12 }}
+									axisLine={{ stroke: "rgba(75, 85, 99, 0.3)" }}
 									tickFormatter={(value) => Number(value).toFixed(3)}
 								/>
-								<Tooltip 
-									contentStyle={{ 
-										backgroundColor: 'rgba(31, 41, 55, 0.95)',
-										border: '1px solid rgba(75, 85, 99, 0.3)',
-										borderRadius: '0.5rem',
-										color: '#fff',
-										boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+								<Tooltip
+									contentStyle={{
+										backgroundColor: "rgba(31, 41, 55, 0.95)",
+										border: "1px solid rgba(75, 85, 99, 0.3)",
+										borderRadius: "0.5rem",
+										color: "#fff",
+										boxShadow:
+											"0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
 									}}
-									labelStyle={{ color: '#9CA3AF', fontSize: 12 }}
-									itemStyle={{ color: '#fff', fontSize: 12 }}
-									formatter={(value: number, name: string) => [`${name} ${Number(value).toFixed(3)}`, '']}
+									labelStyle={{ color: "#9CA3AF", fontSize: 12 }}
+									itemStyle={{ color: "#fff", fontSize: 12 }}
+									formatter={(value: number, name: string) => [
+										`${name} ${Number(value).toFixed(3)}`,
+										"",
+									]}
 									cursor={false}
 								/>
-								<Legend 
-									wrapperStyle={{ 
-										color: '#9CA3AF',
+								<Legend
+									wrapperStyle={{
+										color: "#9CA3AF",
 										fontSize: 12,
-										paddingTop: '1rem'
+										paddingTop: "1rem",
 									}}
 								/>
-								<Bar 
-									dataKey="accuracy" 
-									name="Accuracy %" 
+								<Bar
+									dataKey="accuracy"
+									name="Accuracy %"
 									fill="#60A5FA"
 									radius={[4, 4, 0, 0]}
 									activeBar={false}
 								/>
-								<Bar 
-									dataKey="avgTime" 
-									name="Avg Time (s)" 
+								<Bar
+									dataKey="avgTime"
+									name="Avg Time (s)"
 									fill="#34D399"
 									radius={[4, 4, 0, 0]}
 									activeBar={false}
@@ -181,16 +188,16 @@ export default function LeaderboardPage() {
 										#
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										{t('leaderboard.colorModels.table.model')}
+										{t("leaderboard.colorModels.table.model")}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										{t('leaderboard.colorModels.table.tests')}
+										{t("leaderboard.colorModels.table.tests")}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										{t('leaderboard.colorModels.table.accuracy')}
+										{t("leaderboard.colorModels.table.accuracy")}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										{t('leaderboard.colorModels.table.avgTime')}
+										{t("leaderboard.colorModels.table.avgTime")}
 									</th>
 								</tr>
 							</thead>
@@ -227,10 +234,10 @@ export default function LeaderboardPage() {
 				{/* Color Families Section */}
 				<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30">
 					<h2 className="text-2xl font-bold mb-2 text-center text-white">
-						{t('leaderboard.colorFamilies.title')}
+						{t("leaderboard.colorFamilies.title")}
 					</h2>
 					<p className="text-sm text-gray-400 text-center mb-6">
-						{t('leaderboard.colorFamilies.description')}
+						{t("leaderboard.colorFamilies.description")}
 					</p>
 
 					{/* Pie Chart for Color Families */}
@@ -244,31 +251,38 @@ export default function LeaderboardPage() {
 									cx="50%"
 									cy="50%"
 									outerRadius={100}
-									label={({ name, percent }: { name: string; percent: number }) => 
+									label={({
+										name,
+										percent,
+									}: { name: string; percent: number }) =>
 										`${name} ${(percent * 100).toFixed(0)}%`
 									}
-									labelLine={{ stroke: 'rgba(75, 85, 99, 0.3)' }}
+									labelLine={{ stroke: "rgba(75, 85, 99, 0.3)" }}
 								>
 									{data?.colorFamilies?.map((entry, index) => (
-										<Cell 
-											key={`cell-${index}`} 
+										<Cell
+											key={`cell-${index}`}
 											fill={entry.hexColor}
 											stroke="rgba(31, 41, 55, 0.95)"
 											strokeWidth={2}
 										/>
 									))}
 								</Pie>
-								<Tooltip 
-									contentStyle={{ 
-										backgroundColor: 'rgba(31, 41, 55, 0.95)',
-										border: '1px solid rgba(75, 85, 99, 0.3)',
-										borderRadius: '0.5rem',
-										color: '#fff',
-										boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+								<Tooltip
+									contentStyle={{
+										backgroundColor: "rgba(31, 41, 55, 0.95)",
+										border: "1px solid rgba(75, 85, 99, 0.3)",
+										borderRadius: "0.5rem",
+										color: "#fff",
+										boxShadow:
+											"0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
 									}}
-									labelStyle={{ color: '#9CA3AF', fontSize: 12 }}
-									itemStyle={{ color: '#fff', fontSize: 12 }}
-									formatter={(value: number, name: string) => [`${name} ${Number(value).toFixed(3)}`, '']}
+									labelStyle={{ color: "#9CA3AF", fontSize: 12 }}
+									itemStyle={{ color: "#fff", fontSize: 12 }}
+									formatter={(value: number, name: string) => [
+										`${name} ${Number(value).toFixed(3)}`,
+										"",
+									]}
 								/>
 							</PieChart>
 						</ResponsiveContainer>
@@ -283,16 +297,16 @@ export default function LeaderboardPage() {
 										#
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										{t('leaderboard.colorFamilies.table.family')}
+										{t("leaderboard.colorFamilies.table.family")}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										{t('leaderboard.colorFamilies.table.tests')}
+										{t("leaderboard.colorFamilies.table.tests")}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										{t('leaderboard.colorFamilies.table.accuracy')}
+										{t("leaderboard.colorFamilies.table.accuracy")}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										{t('leaderboard.colorFamilies.table.avgTime')}
+										{t("leaderboard.colorFamilies.table.avgTime")}
 									</th>
 								</tr>
 							</thead>
@@ -335,10 +349,10 @@ export default function LeaderboardPage() {
 				{/* Users Section */}
 				<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30">
 					<h2 className="text-2xl font-bold mb-2 text-center text-white">
-						{t('leaderboard.users.title')}
+						{t("leaderboard.users.title")}
 					</h2>
 					<p className="text-sm text-gray-400 text-center mb-6">
-						{t('leaderboard.users.description')}
+						{t("leaderboard.users.description")}
 					</p>
 					<div className="overflow-x-auto">
 						<table className="min-w-full divide-y divide-gray-700">
@@ -348,22 +362,22 @@ export default function LeaderboardPage() {
 										#
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										{t('leaderboard.users.table.playerId')}
+										{t("leaderboard.users.table.playerId")}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										{t('leaderboard.users.table.bestLevel')}
+										{t("leaderboard.users.table.bestLevel")}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										{t('leaderboard.users.table.totalTime')}
+										{t("leaderboard.users.table.totalTime")}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										{t('leaderboard.users.table.games')}
+										{t("leaderboard.users.table.games")}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										{t('leaderboard.users.table.device')}
+										{t("leaderboard.users.table.device")}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										{t('leaderboard.users.table.accuracy')}
+										{t("leaderboard.users.table.accuracy")}
 									</th>
 								</tr>
 							</thead>
@@ -403,7 +417,7 @@ export default function LeaderboardPage() {
 											colSpan={6}
 											className="px-6 py-4 text-center text-sm text-gray-400"
 										>
-											{t('leaderboard.users.noData')}
+											{t("leaderboard.users.noData")}
 										</td>
 									</tr>
 								)}
@@ -415,86 +429,97 @@ export default function LeaderboardPage() {
 				{/* Recent Sessions Section */}
 				<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30">
 					<h2 className="text-2xl font-bold mb-2 text-center text-white">
-						{t('leaderboard.sessions.title')}
+						{t("leaderboard.sessions.title")}
 					</h2>
 					<p className="text-sm text-gray-400 text-center mb-6">
-						{t('leaderboard.sessions.description')}
+						{t("leaderboard.sessions.description")}
 					</p>
 
 					{/* Line Chart for Session Times */}
 					<div className="h-80 mb-8">
 						<ResponsiveContainer width="100%" height="100%">
 							<LineChart data={data?.sessions?.slice(0, 10)}>
-								<CartesianGrid strokeDasharray="3 3" stroke="rgba(75, 85, 99, 0.3)" />
-								<XAxis 
-									dataKey="saved_at" 
-									stroke="#9CA3AF"
-									tick={{ fill: '#9CA3AF', fontSize: 12 }}
-									axisLine={{ stroke: 'rgba(75, 85, 99, 0.3)' }}
-									tickFormatter={(value: string) => new Date(value).toLocaleString()}
+								<CartesianGrid
+									strokeDasharray="3 3"
+									stroke="rgba(75, 85, 99, 0.3)"
 								/>
-								<YAxis 
+								<XAxis
+									dataKey="saved_at"
 									stroke="#9CA3AF"
-									tick={{ fill: '#9CA3AF', fontSize: 12 }}
-									axisLine={{ stroke: 'rgba(75, 85, 99, 0.3)' }}
+									tick={{ fill: "#9CA3AF", fontSize: 12 }}
+									axisLine={{ stroke: "rgba(75, 85, 99, 0.3)" }}
+									tickFormatter={(value: string) =>
+										new Date(value).toLocaleString()
+									}
+								/>
+								<YAxis
+									stroke="#9CA3AF"
+									tick={{ fill: "#9CA3AF", fontSize: 12 }}
+									axisLine={{ stroke: "rgba(75, 85, 99, 0.3)" }}
 									tickFormatter={(value) => Number(value).toFixed(1)}
 								/>
-								<Tooltip 
-									contentStyle={{ 
-										backgroundColor: 'rgba(31, 41, 55, 0.95)',
-										border: '1px solid rgba(75, 85, 99, 0.3)',
-										borderRadius: '0.5rem',
-										color: '#fff',
-										boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+								<Tooltip
+									contentStyle={{
+										backgroundColor: "rgba(31, 41, 55, 0.95)",
+										border: "1px solid rgba(75, 85, 99, 0.3)",
+										borderRadius: "0.5rem",
+										color: "#fff",
+										boxShadow:
+											"0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
 									}}
-									labelStyle={{ color: '#9CA3AF', fontSize: 12 }}
-									itemStyle={{ color: '#fff', fontSize: 12 }}
-									labelFormatter={(value: string) => new Date(value).toLocaleString()}
-									formatter={(value: number, name: string) => [`${name} ${Number(value).toFixed(1)}`, '']}
+									labelStyle={{ color: "#9CA3AF", fontSize: 12 }}
+									itemStyle={{ color: "#fff", fontSize: 12 }}
+									labelFormatter={(value: string) =>
+										new Date(value).toLocaleString()
+									}
+									formatter={(value: number, name: string) => [
+										`${name} ${Number(value).toFixed(1)}`,
+										"",
+									]}
 								/>
-								<Legend 
-									wrapperStyle={{ 
-										color: '#9CA3AF',
+								<Legend
+									wrapperStyle={{
+										color: "#9CA3AF",
 										fontSize: 12,
-										paddingTop: '1rem'
+										paddingTop: "1rem",
 									}}
 								/>
-								<Line 
-									type="monotone" 
-									dataKey="total_time" 
-									name="Total Time (s)" 
+								<Line
+									type="monotone"
+									dataKey="total_time"
+									name="Total Time (s)"
 									stroke="#60A5FA"
 									strokeWidth={2}
-									dot={{ 
-										fill: '#60A5FA',
-										stroke: 'rgba(31, 41, 55, 0.95)',
+									dot={{
+										fill: "#60A5FA",
+										stroke: "rgba(31, 41, 55, 0.95)",
 										strokeWidth: 2,
-										r: 4
+										r: 4,
 									}}
-									activeDot={{ 
-										fill: '#60A5FA',
-										stroke: 'rgba(31, 41, 55, 0.95)',
+									activeDot={{
+										fill: "#60A5FA",
+										stroke: "rgba(31, 41, 55, 0.95)",
 										strokeWidth: 2,
-										r: 6
+										r: 6,
 									}}
 								/>
-								<Line 
-									type="monotone" 
-									dataKey="final_level" 
-									name="Final Level" 
+								<Line
+									type="monotone"
+									dataKey="final_level"
+									name="Final Level"
 									stroke="#34D399"
 									strokeWidth={2}
-									dot={{ 
-										fill: '#34D399',
-										stroke: 'rgba(31, 41, 55, 0.95)',
+									dot={{
+										fill: "#34D399",
+										stroke: "rgba(31, 41, 55, 0.95)",
 										strokeWidth: 2,
-										r: 4
+										r: 4,
 									}}
-									activeDot={{ 
-										fill: '#34D399',
-										stroke: 'rgba(31, 41, 55, 0.95)',
+									activeDot={{
+										fill: "#34D399",
+										stroke: "rgba(31, 41, 55, 0.95)",
 										strokeWidth: 2,
-										r: 6
+										r: 6,
 									}}
 								/>
 							</LineChart>
@@ -507,19 +532,19 @@ export default function LeaderboardPage() {
 							<thead>
 								<tr>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										{t('leaderboard.sessions.table.playerId')}
+										{t("leaderboard.sessions.table.playerId")}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										{t('leaderboard.sessions.table.date')}
+										{t("leaderboard.sessions.table.date")}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										{t('leaderboard.sessions.table.level')}
+										{t("leaderboard.sessions.table.level")}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										{t('leaderboard.sessions.table.time')}
+										{t("leaderboard.sessions.table.time")}
 									</th>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-										{t('leaderboard.sessions.table.device')}
+										{t("leaderboard.sessions.table.device")}
 									</th>
 								</tr>
 							</thead>
@@ -543,9 +568,9 @@ export default function LeaderboardPage() {
 												{session.total_time?.toFixed(1) ?? "0"}s
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-												{session.device_info.is_mobile 
-													? t('leaderboard.sessions.deviceTypes.mobile')
-													: t('leaderboard.sessions.deviceTypes.desktop')}
+												{session.device_info.is_mobile
+													? t("leaderboard.sessions.deviceTypes.mobile")
+													: t("leaderboard.sessions.deviceTypes.desktop")}
 											</td>
 										</tr>
 									))
@@ -555,7 +580,7 @@ export default function LeaderboardPage() {
 											colSpan={5}
 											className="px-6 py-4 text-center text-sm text-gray-400"
 										>
-											{t('leaderboard.sessions.noData')}
+											{t("leaderboard.sessions.noData")}
 										</td>
 									</tr>
 								)}

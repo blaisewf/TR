@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 	description:
 		"Explore how humans perceive color compared to digital systems. This interactive research project examines color models and their alignment with real-world perception.",
 	keywords:
-	"color perception, color research, TDR, TR project, treballderecerca, final research project, color experiment, digital color models, human vision, RGB, CIELAB, Oklab, CIECAM02-UCS, visual perception, interactive study, TDR 2025, color accuracy, color science, research in color, high school research project",
+		"color perception, color research, TDR, TR project, treballderecerca, final research project, color experiment, digital color models, human vision, RGB, CIELAB, Oklab, CIECAM02-UCS, visual perception, interactive study, TDR 2025, color accuracy, color science, research in color, high school research project",
 	openGraph: {
 		title: "Human vs Digital Color Perception | Research & Experiment",
 		description:
