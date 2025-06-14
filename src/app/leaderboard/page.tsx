@@ -526,9 +526,10 @@ export default function LeaderboardPage() {
 									stroke="#9CA3AF"
 									tick={{ fill: "#9CA3AF", fontSize: 12 }}
 									axisLine={{ stroke: "rgba(75, 85, 99, 0.3)" }}
-									tickFormatter={(value: string) =>
-										new Date(value).toLocaleString()
-									}
+									tickFormatter={(value: string) => {
+										const date = new Date(value);
+										return `${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
+									}}
 								/>
 								<YAxis
 									stroke="#9CA3AF"
