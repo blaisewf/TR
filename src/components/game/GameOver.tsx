@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Confetti from "react-confetti";
+import { useTranslation } from "react-i18next";
 
 interface GameOverProps {
 	finalLevel: number;
@@ -16,6 +17,7 @@ export default function GameOver({
 	totalTime,
 	onRestart,
 }: GameOverProps) {
+	const { t } = useTranslation();
 	const [copied, setCopied] = useState(false);
 	const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 	const [showConfetti, setShowConfetti] = useState(true);
@@ -82,7 +84,11 @@ export default function GameOver({
 	};
 
 	const handleShare = async () => {
-		const shareText = `I completed level ${finalLevel} with a score of ${totalScore} in ${formatTime(totalTime)}! Try it yourself!`;
+		const shareText = t("game.gameOver.shareText", {
+			level: finalLevel,
+			score: totalScore,
+			time: formatTime(totalTime),
+		});
 		const shareUrl = window.location.href;
 		const fullText = `${shareText}\n${shareUrl}`;
 
@@ -90,7 +96,7 @@ export default function GameOver({
 		if (navigator.share && !/iPad|iPhone|iPod/.test(navigator.userAgent)) {
 			try {
 				await navigator.share({
-					title: "Color Perception Study",
+					title: t("game.instructions.title"),
 					text: shareText,
 					url: shareUrl,
 				});
@@ -128,7 +134,7 @@ export default function GameOver({
 					</div>
 				)}
 				<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4 sm:mb-6 md:mb-8 text-white">
-					Experiment Complete!
+					{t("game.gameOver.title")}
 				</h1>
 
 				<div className="space-y-4 sm:space-y-6 text-white/90 mb-6 sm:mb-8 md:mb-10">
@@ -138,30 +144,35 @@ export default function GameOver({
 								<div className="text-2xl sm:text-3xl font-bold text-white">
 									{finalLevel}
 								</div>
-								<div className="text-xs sm:text-sm text-gray-400 mt-1">Final Level</div>
+								<div className="text-xs sm:text-sm text-gray-400 mt-1">
+									{t("game.stats.round")}
+								</div>
 							</div>
 							<div className="text-center">
 								<div className="text-2xl sm:text-3xl font-bold text-white">
 									{totalScore}
 								</div>
-								<div className="text-xs sm:text-sm text-gray-400 mt-1">Total Score</div>
+								<div className="text-xs sm:text-sm text-gray-400 mt-1">
+									{t("game.stats.score")}
+								</div>
 							</div>
 							<div className="text-center">
 								<div className="text-2xl sm:text-3xl font-bold text-white">
 									{formatTime(totalTime)}
 								</div>
-								<div className="text-xs sm:text-sm text-gray-400 mt-1">Total Time</div>
+								<div className="text-xs sm:text-sm text-gray-400 mt-1">
+									{t("game.stats.time")}
+								</div>
 							</div>
 						</div>
 					</div>
 
 					<div className="bg-gray-800/20 backdrop-blur-md p-4 sm:p-6 rounded-xl border border-gray-700/20">
 						<h2 className="font-semibold text-lg sm:text-xl text-white mb-2 sm:mb-3">
-							Thank You!
+							{t("game.gameOver.congratulations")}
 						</h2>
 						<p className="text-sm sm:text-base text-gray-300">
-							Thank you for participating in our color perception study! Your
-							anonymous data helps us understand human color perception better.
+							{t("game.gameOver.thankYou")}
 						</p>
 					</div>
 				</div>
@@ -172,7 +183,7 @@ export default function GameOver({
 						onClick={onRestart}
 						className="w-full sm:w-auto bg-gray-800/20 backdrop-blur-md border border-gray-700/20 text-white hover:bg-gray-700/30 font-medium py-2 px-6 sm:px-8 rounded-full text-sm shadow-lg transition-all duration-300 cursor-pointer"
 					>
-						Play Again
+						{t("game.gameOver.playAgain")}
 					</button>
 
 					<button
@@ -180,9 +191,9 @@ export default function GameOver({
 						className="text-gray-400 hover:text-white text-sm transition-colors duration-300 flex items-center gap-2 cursor-pointer"
 					>
 						{copied ? (
-							<span>Copied!</span>
+							<span>{t("common.copied")}</span>
 						) : shareError ? (
-							<span>Failed to copy</span>
+							<span>{t("common.copyFailed")}</span>
 						) : (
 							<>
 								<svg
@@ -194,7 +205,7 @@ export default function GameOver({
 								>
 									<path d="M680-80q-50 0-85-35t-35-85q0-6 3-28L282-392q-16 15-37 23.5t-45 8.5q-50 0-85-35t-35-85q0-50 35-85t85-35q24 0 45 8.5t37 23.5l281-164q-2-7-2.5-13.5T560-760q0-50 35-85t85-35q50 0 85 35t35 85q0 50-35 85t-85 35q-24 0-45-8.5T598-672L317-508q2 7 2.5 13.5t.5 14.5q0 8-.5 14.5T317-452l281 164q16-15 37-23.5t45-8.5q50 0 85 35t35 85q0 50-35 85t-85 35Z" />
 								</svg>
-								<span>Share Results</span>
+								<span>{t("game.gameOver.share")}</span>
 							</>
 						)}
 					</button>

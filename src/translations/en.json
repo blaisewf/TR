@@ -1,0 +1,136 @@
+{
+	"common": {
+		"copied": "Copied!",
+		"copyFailed": "Failed to copy"
+	},
+	"navigation": {
+		"home": "Home",
+		"about": "About",
+		"contact": "Contact",
+		"leaderboard": "Leaderboard"
+	},
+	"buttons": {
+		"submit": "Submit",
+		"cancel": "Cancel",
+		"save": "Save",
+		"delete": "Delete",
+		"start": "Start Game",
+		"restart": "Restart",
+		"next": "Next",
+		"back": "Back"
+	},
+	"game": {
+		"instructions": {
+			"title": "Color Perception Test",
+			"description": "In this test, you'll be shown a grid of colors. Your task is to identify the color that appears most different from the others.",
+			"steps": {
+				"1": "Look at the grid of colors carefully",
+				"2": "Identify the color that stands out the most",
+				"3": "Click on the color you think is different",
+				"4": "You'll have multiple rounds to test your perception"
+			},
+			"ready": "Are you ready to begin?",
+			"howToPlay": "How to Play",
+			"whatWeStudy": "What We're Studying",
+			"studyDescription": "Different color models (RGB, CIELAB, Oklab, JzAzBz) represent colors in various ways. We're collecting data to understand which models best match human color perception.",
+			"privacy": "Privacy",
+			"privacyDescription": "Your data is collected anonymously. We only store your responses, timing, and basic device information. No personal information is collected."
+		},
+		"stats": {
+			"score": "Score",
+			"round": "Round",
+			"time": "Time",
+			"accuracy": "Accuracy",
+			"colorModel": "Color Model"
+		},
+		"gameOver": {
+			"title": "Test Complete!",
+			"congratulations": "Congratulations!",
+			"finalScore": "Your Final Score",
+			"accuracy": "Accuracy",
+			"timeSpent": "Time Spent",
+			"roundsCompleted": "Rounds Completed",
+			"share": "Share your results",
+			"playAgain": "Play Again",
+			"home": "Return to Home",
+			"shareText": "I completed level {{level}} with a score of {{score}} in {{time}}! Try it yourself!",
+			"thankYou": "Thank you for participating in our color perception study! Your anonymous data helps us understand human color perception better."
+		},
+		"board": {
+			"loading": "Loading...",
+			"error": "An error occurred. Please try again.",
+			"findDifferent": "Find the different colored square",
+			"wrongAnswers": "Wrong answers: {{count}}/3"
+		},
+		"grid": {
+			"squareLabel": "Color square at row {{row}}, column {{col}}"
+		}
+	},
+	"antiCheat": {
+		"warning": "Warning",
+		"messages": {
+			"1": "Developer tools detected! Please close them and refresh the page to continue.",
+			"2": "Please don't try to cheat! This experiment requires your honest participation"
+		},
+		"accept": "I Understand"
+	},
+	"leaderboard": {
+		"loading": "Loading...",
+		"error": "Failed to load leaderboard data. Please try again later.",
+		"stats": {
+			"totalGames": "Total Games",
+			"totalPlayTime": "Total Play Time",
+			"totalPlayers": "Total Players",
+			"averageAccuracy": "Average Accuracy"
+		},
+		"colorModels": {
+			"title": "Color Model Performance",
+			"description": "shows how well each color model performs in identifying colors",
+			"table": {
+				"model": "Model",
+				"tests": "Tests",
+				"accuracy": "Accuracy",
+				"avgTime": "Avg Time"
+			}
+		},
+		"colorFamilies": {
+			"title": "Color Family Performance",
+			"description": "shows how well different color families are identified",
+			"table": {
+				"family": "Color Family",
+				"tests": "Tests",
+				"accuracy": "Accuracy",
+				"avgTime": "Avg Time"
+			}
+		},
+		"users": {
+			"title": "Top Users",
+			"description": "ranks players based on their performance and achievements",
+			"table": {
+				"playerId": "Player ID",
+				"bestLevel": "Best Level",
+				"totalTime": "Total Time",
+				"games": "Games",
+				"device": "Device",
+				"accuracy": "Accuracy"
+			},
+			"noData": "No user data available yet"
+		},
+		"sessions": {
+			"title": "Recent Sessions",
+			"description": "shows the latest gameplay sessions from all players",
+			"table": {
+				"playerId": "Player ID",
+				"date": "Date",
+				"level": "Level",
+				"time": "Time",
+				"device": "Device"
+			},
+			"noData": "No session data available yet",
+			"deviceTypes": {
+				"mobile": "Mobile",
+				"desktop": "Desktop"
+			}
+		}
+	}
+}

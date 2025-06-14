@@ -7,8 +7,8 @@ import {
 	createPerceptualDifference,
 	generateRandomRGBColor,
 } from "@/lib/utils/colorGenerator";
-import { getPlayerId } from "@/lib/utils/playerId";
 import { getDeviceInfo } from "@/lib/utils/deviceClassifier";
+import { getPlayerId } from "@/lib/utils/playerId";
 import { generateUUID } from "@/lib/utils/uuidGenerator";
 import {
 	COLOR_MODELS,
@@ -22,6 +22,7 @@ import { useCallback, useEffect, useState } from "react";
 export const useGame = () => {
 	const [gameState, setGameState] = useState<GameState>("instructions");
 	const [currentRound, setCurrentRound] = useState<GameRound | null>(null);
+	const [preloadedRound, setPreloadedRound] = useState<GameRound | null>(null);
 	const [level, setLevel] = useState(1);
 	const [score, setScore] = useState(0);
 	const [wrongAnswers, setWrongAnswers] = useState(0);
@@ -34,6 +35,28 @@ export const useGame = () => {
 	const getDifficulty = (level: number): number => {
 		return Math.max(1, 50 - level/2) / 255;
 	};
+
+	// end game and save session
+	const endGame = useCallback(async () => {
+		const totalTime = (Date.now() - gameStartTime) / 1000;
+		const completeSessionData: GameSessionData = {
+			session_id: sessionId,
+			player_id: getPlayerId(),
+			total_time: totalTime,
+			final_level: level,
+			rounds: rounds,
+			device_info: getDeviceInfo(),
+		};
+
+		try {
+			await saveCompleteSession(completeSessionData);
+			console.log("Complete session saved:", completeSessionData);
+		} catch (error) {
+			console.error("Failed to save complete session:", error);
+		}
+
+		setGameState("game-over");
+	}, [sessionId, gameStartTime, level, rounds]);
 
 	// generate new round
 	const generateRound = useCallback((level: number): GameRound => {
@@ -62,28 +85,47 @@ export const useGame = () => {
 		};
 	}, []);
 
-	// start new game
+	// preload next round
+	const preloadNextRound = useCallback(() => {
+		const nextLevel = level + 1;
+		const nextRound = generateRound(nextLevel);
+		setPreloadedRound(nextRound);
+	}, [level, generateRound]);
+
+	// start new round
+	const startNewRound = useCallback(() => {
+		if (preloadedRound) {
+			setCurrentRound(preloadedRound);
+			setPreloadedRound(null);
+			preloadNextRound();
+		} else {
+			const newRound = generateRound(level);
+			setCurrentRound(newRound);
+			preloadNextRound();
+		}
+	}, [level, preloadedRound, generateRound, preloadNextRound]);
+
+	// initialize game
 	const startGame = useCallback(() => {
 		setGameState("playing");
 		setLevel(1);
 		setScore(0);
 		setWrongAnswers(0);
 		setGameStartTime(Date.now());
-		setRounds([]);
 		setSessionId(generateUUID());
-		setCurrentRound(generateRound(1));
-	}, [generateRound]);
+		setRounds([]);
+		setElapsedTime(0);
+		startNewRound();
+	}, [startNewRound]);
 
 	// handle square click
 	const handleSquareClick = useCallback(
-		async (clickPosition: [number, number], clickCoords: [number, number]) => {
+		(position: [number, number], coords: [number, number]) => {
 			if (!currentRound) return;
 
-			const endTime = Date.now();
-			const timeTaken = (endTime - currentRound.startTime) / 1000;
-			const correct =
-				clickPosition[0] === currentRound.changedPosition[0] &&
-				clickPosition[1] === currentRound.changedPosition[1];
+			const isCorrect =
+				position[0] === currentRound.changedPosition[0] &&
+				position[1] === currentRound.changedPosition[1];
 
 			const roundData: RoundData = {
 				level: currentRound.level,
@@ -91,60 +133,28 @@ export const useGame = () => {
 				changed_color: currentRound.changedColor,
 				color_model: currentRound.colorModel,
 				changed_position: currentRound.changedPosition,
-				click_position: clickPosition,
-				click_coords: clickCoords,
-				time: timeTaken,
-				correct,
+				click_position: position,
+				click_coords: coords,
+				time: Date.now() - currentRound.startTime,
+				correct: isCorrect,
 			};
 
-			const updatedRounds = [...rounds, roundData];
-			setRounds(updatedRounds);
+			setRounds((prev) => [...prev, roundData]);
 
-			if (correct) {
+			if (isCorrect) {
 				setScore((prev) => prev + 1);
 				setLevel((prev) => prev + 1);
-				setTimeout(() => {
-					setCurrentRound(generateRound(level + 1));
-				}, 1000);
+				startNewRound();
 			} else {
-				const newWrongAnswers = wrongAnswers + 1;
-				setWrongAnswers(newWrongAnswers);
-
-				if (newWrongAnswers >= MAX_WRONG_ANSWERS) {
-					const totalTime = (Date.now() - gameStartTime) / 1000;
-					const completeSessionData: GameSessionData = {
-						session_id: sessionId,
-						player_id: getPlayerId(),
-						total_time: totalTime,
-						final_level: level,
-						rounds: updatedRounds,
-						device_info: getDeviceInfo(),
-					};
-
-					try {
-						await saveCompleteSession(completeSessionData);
-						console.log("Complete session saved:", completeSessionData);
-					} catch (error) {
-						console.error("Failed to save complete session:", error);
-					}
-
-					setGameState("game-over");
+				setWrongAnswers((prev) => prev + 1);
+				if (wrongAnswers + 1 >= MAX_WRONG_ANSWERS) {
+					endGame();
 				} else {
-					setTimeout(() => {
-						setCurrentRound(generateRound(level));
-					}, 1000);
+					startNewRound();
 				}
 			}
 		},
-		[
-			currentRound,
-			sessionId,
-			level,
-			wrongAnswers,
-			gameStartTime,
-			generateRound,
-			rounds,
-		],
+		[currentRound, wrongAnswers, startNewRound, endGame],
 	);
 
 	// update elapsed time

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../styles/globals.css";
 import AntiCheat from "@/components/layout/AntiCheat";
 import Navigation from "@/components/layout/Navigation";
+import I18nProvider from "@/components/providers/I18nProvider";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -15,35 +16,35 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	metadataBase: new URL("https://trcolors.vercel.app/"), // TODO: replace with the actual domain
-	title: "Color Perception Experiment | Interactive Color Study",
+	metadataBase: new URL("https://treballderecerca.cat"),
+	title: "Human vs Digital Color Perception | Research & Experiment",
 	description:
-		"Participate in a large-scale study on color perception and help researchers better understand how individuals perceive colors differently.",
+		"Explore how humans perceive color compared to digital systems. This interactive research project examines color models and their alignment with real-world perception.",
 	keywords:
-		"color perception, color experiment, color science, color models, RGB, CIELAB, Oklab, JzAzBz, interactive study, color vision test",
+		"color perception, color research, TDR, TR project, treballderecerca, final research project, color experiment, digital color models, human vision, RGB, CIELAB, Oklab, JzAzBz, visual perception, interactive study, TDR 2025, color accuracy, color science, research in color, high school research project",
 	openGraph: {
-		title: "Color Perception Experiment | Interactive Color Study",
+		title: "Human vs Digital Color Perception | Research & Experiment",
 		description:
-			"Participate in a large-scale study on color perception and help researchers better understand how individuals perceive colors differently.",
+			"An in-depth study comparing human color perception to digital color models. Participate in the interactive experiment and help improve color accuracy in technology.",
 		type: "website",
 		images: [
 			{
 				url: "/og-image.jpg",
 				width: 1200,
 				height: 500,
-				alt: "Color Perception Experiment | Interactive Color Study",
+				alt: "Human vs Digital Color Perception | Research & Experiment",
 			},
 		],
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: "Color Perception Experiment | Interactive Color Study",
+		title: "Human vs Digital Color Perception | Research & Experiment",
 		description:
-			"Participate in a large-scale study on color perception and help researchers better understand how individuals perceive colors differently.",
+			"Join an interactive research project comparing how humans and machines perceive color. Help shape more inclusive and accurate visual technologies.",
 		images: ["/og-image.jpg"],
 	},
 	other: {
-		"og:site_name": "Color Perception Experiment",
+		"og:site_name": "Color Perception Research Project",
 		"og:locale": "en_US",
 	},
 };
@@ -59,9 +60,11 @@ export default function RootLayout({
 				className={`${geistSans.variable} ${geistMono.variable}`}
 				suppressHydrationWarning
 			>
-				<AntiCheat />
-				<Navigation />
-				<main>{children}</main>
+				<I18nProvider>
+					<AntiCheat />
+					<Navigation />
+					<main>{children}</main>
+				</I18nProvider>
 			</body>
 		</html>
 	);
