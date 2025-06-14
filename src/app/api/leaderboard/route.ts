@@ -194,7 +194,8 @@ export async function GET() {
       bestLevel: stats.bestLevel,
       totalPlayTime: stats.totalTime,
       deviceType: stats.deviceType,
-      sessions: stats.sessions
+      sessions: stats.sessions,
+      totalGames: stats.sessions.length
     }));
 
     // sort by best level (descending) first, then by accuracy (descending)

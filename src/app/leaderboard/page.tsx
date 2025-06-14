@@ -161,6 +161,7 @@ export default function LeaderboardPage() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Player ID</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Best Level</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Total Time</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Games</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Device</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Accuracy</th>
                 </tr>
@@ -173,6 +174,7 @@ export default function LeaderboardPage() {
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">{user.player_id}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{user.bestLevel}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{user.totalPlayTime?.toFixed(1) ?? '0'}s</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{user.totalGames || 0}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{user.deviceType}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{user.accuracy?.toFixed(1) ?? '0'}%</td>
                     </tr>

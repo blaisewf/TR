@@ -64,6 +64,7 @@ export interface UserStats {
   bestLevel: number;
   totalPlayTime: number;
   deviceType: string;
+  totalGames: number;
 }
 
 export interface LeaderboardData {
