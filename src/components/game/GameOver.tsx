@@ -55,7 +55,7 @@ export default function GameOver({
 	const formatTime = (seconds: number): string => {
 		const mins = Math.floor(seconds / 60);
 		const secs = Math.floor(seconds % 60);
-		return `${mins}:${secs.toString().padStart(2, "0")}`;
+		return `${mins}m ${secs}s`;
 	};
 
 	const copyToClipboard = async (text: string): Promise<boolean> => {
@@ -139,15 +139,7 @@ export default function GameOver({
 
 				<div className="space-y-4 sm:space-y-6 text-white/90 mb-6 sm:mb-8 md:mb-10">
 					<div className="bg-gray-800/20 backdrop-blur-md p-4 sm:p-6 rounded-xl border border-gray-700/20">
-						<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-							<div className="text-center">
-								<div className="text-2xl sm:text-3xl font-bold text-white">
-									{finalLevel}
-								</div>
-								<div className="text-xs sm:text-sm text-gray-400 mt-1">
-									{t("game.stats.round")}
-								</div>
-							</div>
+						<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 							<div className="text-center">
 								<div className="text-2xl sm:text-3xl font-bold text-white">
 									{totalScore}
