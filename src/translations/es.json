@@ -32,7 +32,7 @@
 			"ready": "¿Estás listo para comenzar?",
 			"howToPlay": "Cómo Jugar",
 			"whatWeStudy": "Lo que Estudiamos",
-			"studyDescription": "Diferentes modelos de color (RGB, CIELAB, Oklab, CIECAM02-UCS) representan los colores de varias maneras. Estamos recopilando datos para comprender qué modelos se ajustan mejor a la percepción del color humano.",
+			"studyDescription": "Diferentes modelos de color (RGB, CIELAB, Oklab, JzAzBz) representan los colores de varias maneras. Estamos recopilando datos para comprender qué modelos se ajustan mejor a la percepción del color humano.",
 			"privacy": "Privacidad",
 			"privacyDescription": "Tus datos se recopilan de forma anónima. Solo almacenamos tus respuestas, el tiempo y la información básica del dispositivo. No se recopila información personal."
 		},
