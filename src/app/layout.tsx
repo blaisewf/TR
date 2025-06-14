@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "../styles/globals.css";
 import AntiCheat from "@/components/layout/AntiCheat";
 import Navigation from "@/components/layout/Navigation";
@@ -17,13 +18,13 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
 	metadataBase: new URL("https://treballderecerca.cat"),
-	title: "Human vs Digital Color Perception | Research & Experiment",
+	title: "Human vs Digital Color Perception | Treball de Recerca",
 	description:
 		"Explore how humans perceive color compared to digital systems. This interactive research project examines color models and their alignment with real-world perception.",
 	keywords:
 		"color perception, color research, TDR, TR project, treballderecerca, final research project, color experiment, digital color models, human vision, RGB, CIELAB, Oklab, JzAzBz, visual perception, interactive study, TDR 2025, color accuracy, color science, research in color, high school research project",
 	openGraph: {
-		title: "Human vs Digital Color Perception | Research & Experiment",
+		title: "Human vs Digital Color Perception | Treball de Recerca",
 		description:
 			"An in-depth study comparing human color perception to digital color models. Participate in the interactive experiment and help improve color accuracy in technology.",
 		type: "website",
@@ -32,13 +33,13 @@ export const metadata: Metadata = {
 				url: "/og-image.jpg",
 				width: 1200,
 				height: 500,
-				alt: "Human vs Digital Color Perception | Research & Experiment",
+				alt: "Human vs Digital Color Perception | Treball de Recerca",
 			},
 		],
 	},
 	twitter: {
 		card: "summary_large_image",
-		title: "Human vs Digital Color Perception | Research & Experiment",
+		title: "Human vs Digital Color Perception | Treball de Recerca",
 		description:
 			"Join an interactive research project comparing how humans and machines perceive color. Help shape more inclusive and accurate visual technologies.",
 		images: ["/og-image.jpg"],
@@ -65,6 +66,7 @@ export default function RootLayout({
 					<Navigation />
 					<main>{children}</main>
 				</I18nProvider>
+				<Script src="https://scripts.simpleanalyticscdn.com/latest.js" />
 			</body>
 		</html>
 	);
