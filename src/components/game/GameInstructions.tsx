@@ -21,7 +21,9 @@ export default function GameInstructions({
 				</p>
 
 				<div className="bg-gray-800/20 backdrop-blur-md p-4 sm:p-6 rounded-xl border border-gray-700/20">
-					<h2 className="font-semibold text-lg sm:text-xl text-white mb-2 sm:mb-3">How to Play</h2>
+					<h2 className="font-semibold text-lg sm:text-xl text-white mb-2 sm:mb-3">
+						How to Play
+					</h2>
 					<ul className="list-disc list-inside space-y-1.5 sm:space-y-2 text-sm sm:text-base text-gray-300">
 						<li>You'll see a grid of colored squares</li>
 						<li>One square will be slightly different from the others</li>
@@ -42,7 +44,9 @@ export default function GameInstructions({
 				</div>
 
 				<div className="bg-gray-800/20 backdrop-blur-md p-4 sm:p-6 rounded-xl border border-gray-700/20">
-					<h2 className="font-semibold text-lg sm:text-xl text-white mb-2 sm:mb-3">Privacy</h2>
+					<h2 className="font-semibold text-lg sm:text-xl text-white mb-2 sm:mb-3">
+						Privacy
+					</h2>
 					<p className="text-sm sm:text-base text-gray-300">
 						Your data is collected anonymously. We only store your responses,
 						timing, and basic device information. No personal information is
