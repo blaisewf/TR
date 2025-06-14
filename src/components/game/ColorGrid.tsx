@@ -58,11 +58,6 @@ export default function ColorGrid({
 		return baseColor;
 	};
 
-	const getAnimationDelay = (row: number, col: number) => {
-		// simplified animation - no delay based on distance
-		return 0;
-	};
-
 	return (
 		<div
 			ref={gridRef}

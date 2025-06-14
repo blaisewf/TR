@@ -5,7 +5,6 @@ import {
 	random as randomColor,
 	rgb,
 } from "culori";
-import { generateUUID } from "./uuidGenerator";
 
 export type ColorModel = "RGB" | "CIELAB" | "CIECAM02-UCS" | "Oklab";
 
