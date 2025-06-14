@@ -9,7 +9,7 @@ export type RoundData = {
 	level: number;
 	base_color: [number, number, number];
 	changed_color: [number, number, number];
-	color_model: "RGB" | "CIELAB" | "CIECAM02-UCS" | "Oklab";
+	color_model: "RGB" | "CIELAB" | "JzAzBz" | "Oklab";
 	changed_position: [number, number];
 	click_position: [number, number];
 	click_coords: [number, number];
