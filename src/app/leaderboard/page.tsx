@@ -1,6 +1,7 @@
 "use client";
 
 import Background from "@/components/layout/Background";
+import { getPlayerId } from "@/lib/utils/playerId";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -19,14 +20,13 @@ import {
 	YAxis,
 } from "recharts";
 import type { LeaderboardData } from "../../types/leaderboard";
-import { getPlayerId } from "@/lib/utils/playerId";
 
 export default function LeaderboardPage() {
 	const { t } = useTranslation();
 	const [data, setData] = useState<LeaderboardData | null>(null);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
-	const [viewMode, setViewMode] = useState<'global' | 'profile'>('global');
+	const [viewMode, setViewMode] = useState<"global" | "profile">("global");
 	const [currentPlayerId, setCurrentPlayerId] = useState<string | null>(null);
 
 	useEffect(() => {
@@ -36,12 +36,12 @@ export default function LeaderboardPage() {
 	useEffect(() => {
 		const fetchLeaderboardData = async () => {
 			try {
-				const url = new URL('/api/leaderboard', window.location.origin);
-				url.searchParams.set('view', viewMode);
-				if (viewMode === 'profile' && currentPlayerId) {
-					url.searchParams.set('player', currentPlayerId);
+				const url = new URL("/api/leaderboard", window.location.origin);
+				url.searchParams.set("view", viewMode);
+				if (viewMode === "profile" && currentPlayerId) {
+					url.searchParams.set("player", currentPlayerId);
 				}
-				
+
 				const response = await fetch(url);
 				if (!response.ok) throw new Error("Failed to fetch leaderboard data");
 				const data = await response.json();
@@ -77,7 +77,7 @@ export default function LeaderboardPage() {
 		);
 	}
 
-	if (viewMode === 'profile' && !currentPlayerId) {
+	if (viewMode === "profile" && !currentPlayerId) {
 		return (
 			<div className="min-h-screen bg-black/50 pt-24 pb-12 px-4 flex items-center justify-center relative overflow-hidden">
 				<Background />
@@ -100,9 +100,9 @@ export default function LeaderboardPage() {
 					<div className="bg-gray-800/20 backdrop-blur-md border border-gray-700/20 rounded-full p-2 shadow-lg">
 						<div className="flex items-center space-x-2">
 							<button
-								onClick={() => setViewMode('global')}
+								onClick={() => setViewMode("global")}
 								className={`inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full transition-colors cursor-pointer ${
-									viewMode === 'global'
+									viewMode === "global"
 										? "text-white bg-gray-700/50"
 										: "text-gray-300 hover:text-white hover:bg-gray-700/30"
 								}`}
@@ -110,9 +110,9 @@ export default function LeaderboardPage() {
 								{t("leaderboard.viewMode.global")}
 							</button>
 							<button
-								onClick={() => setViewMode('profile')}
+								onClick={() => setViewMode("profile")}
 								className={`inline-flex items-center px-3 py-1.5 text-xs font-medium rounded-full transition-colors cursor-pointer ${
-									viewMode === 'profile'
+									viewMode === "profile"
 										? "text-white bg-gray-700/50"
 										: "text-gray-300 hover:text-white hover:bg-gray-700/30"
 								}`}
@@ -124,27 +124,28 @@ export default function LeaderboardPage() {
 				</div>
 
 				{/* No Data Card */}
-				{viewMode === 'profile' && (!data?.users?.length || !data?.sessions?.length) && (
-					<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30 mb-8">
-						<h2 className="text-2xl font-bold mb-2 text-center text-white">
-							{t("leaderboard.profile.noData.title")}
-						</h2>
-						<p className="text-sm text-gray-400 text-center mb-4">
-							{t("leaderboard.profile.noData.message")}
-						</p>
-						<p className="text-xs text-gray-500 text-center mb-6">
-							{t("leaderboard.profile.noData.info")}
-						</p>
-						<div className="flex justify-center">
-							<a
-								href="/"
-								className="w-full sm:w-auto bg-gray-800/20 backdrop-blur-md border border-gray-700/20 text-white hover:bg-gray-700/30 font-medium py-2 px-6 sm:px-8 rounded-full text-sm shadow-lg transition-all duration-300 cursor-pointer"
-							>
-								{t("leaderboard.profile.noData.playNow")}
-							</a>
+				{viewMode === "profile" &&
+					(!data?.users?.length || !data?.sessions?.length) && (
+						<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30 mb-8">
+							<h2 className="text-2xl font-bold mb-2 text-center text-white">
+								{t("leaderboard.profile.noData.title")}
+							</h2>
+							<p className="text-sm text-gray-400 text-center mb-4">
+								{t("leaderboard.profile.noData.message")}
+							</p>
+							<p className="text-xs text-gray-500 text-center mb-6">
+								{t("leaderboard.profile.noData.info")}
+							</p>
+							<div className="flex justify-center">
+								<a
+									href="/"
+									className="w-full sm:w-auto bg-gray-800/20 backdrop-blur-md border border-gray-700/20 text-white hover:bg-gray-700/30 font-medium py-2 px-6 sm:px-8 rounded-full text-sm shadow-lg transition-all duration-300 cursor-pointer"
+								>
+									{t("leaderboard.profile.noData.playNow")}
+								</a>
+							</div>
 						</div>
-					</div>
-				)}
+					)}
 
 				{/* General Stats Section */}
 				<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -530,7 +531,7 @@ export default function LeaderboardPage() {
 									axisLine={{ stroke: "rgba(75, 85, 99, 0.3)" }}
 									tickFormatter={(value: string) => {
 										const date = new Date(value);
-										return `${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
+										return `${date.getHours()}:${date.getMinutes().toString().padStart(2, "0")}`;
 									}}
 								/>
 								<YAxis

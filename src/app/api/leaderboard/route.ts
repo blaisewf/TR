@@ -44,9 +44,9 @@ export async function GET(request: Request) {
 	try {
 		// get the view parameter from the URL
 		const { searchParams } = new URL(request.url);
-		const view = searchParams.get('view') || 'global';
-		const playerId = searchParams.get('player');
-		
+		const view = searchParams.get("view") || "global";
+		const playerId = searchParams.get("player");
+
 		// fetch all sessions
 		const { data: sessions, error } = await supabase
 			.from("data")
@@ -57,8 +57,10 @@ export async function GET(request: Request) {
 
 		// if profile view, get the current player's data
 		let filteredSessions = sessions;
-		if (view === 'profile' && playerId) {
-			filteredSessions = sessions.filter(session => session.player_id === playerId);
+		if (view === "profile" && playerId) {
+			filteredSessions = sessions.filter(
+				(session) => session.player_id === playerId,
+			);
 		}
 
 		// analyze color model performance
