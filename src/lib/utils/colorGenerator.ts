@@ -1,5 +1,4 @@
 import {
-	clampRgb,
 	converter,
 	inGamut,
 	random as randomColor,
@@ -8,13 +7,13 @@ import {
 
 export type ColorModel = "RGB" | "CIELAB" | "JzAzBz" | "Oklab";
 
-// Color space converters
+// color space converters
 const toRgb = converter("rgb");
 const toLab = converter("lab");
 const toOklab = converter("oklab");
 const toJab = converter("jab");
 
-// Color space volumes, used to keep uniformity between models
+// color space volumes, used to keep uniformity between models
 const labVol = 824204.547378;
 const oklabVol = 0.054198192;
 const jabVol = 0.004623475;
@@ -23,7 +22,7 @@ const labMod = Math.cbrt(labVol);
 const oklabMod = Math.cbrt(oklabVol);
 const jabMod = Math.cbrt(jabVol);
 
-// Generate a random RGB color
+// generate a random RGB color
 export function generateRandomRGBColor(): [number, number, number] {
 	const color = randomColor();
 	const rgbColor = rgb(color);
@@ -34,7 +33,7 @@ export function generateRandomRGBColor(): [number, number, number] {
 	];
 }
 
-// Convert RGB array to normalized RGB object
+// convert RGB array to normalized RGB object
 function rgbArrayToObject(rgbArray: [number, number, number]) {
 	return {
 		mode: "rgb" as const,
@@ -44,7 +43,7 @@ function rgbArrayToObject(rgbArray: [number, number, number]) {
 	};
 }
 
-// Convert normalized RGB object to RGB array
+// convert normalized RGB object to RGB array
 function rgbObjectToArray(rgbObj: any): [number, number, number] {
 	return [
 		Math.round(Math.max(0, Math.min(255, rgbObj.r * 255))),
@@ -53,7 +52,7 @@ function rgbObjectToArray(rgbObj: any): [number, number, number] {
 	];
 }
 
-// Generate a random 3D unit vector
+// generate a random 3D unit vector
 function randomUnitVector(): [number, number, number] {
 	function gaussianRandom() {
 		const u = 1 - Math.random();
@@ -72,7 +71,7 @@ function randomUnitVector(): [number, number, number] {
 	return [x / magnitude, y / magnitude, z / magnitude];
 }
 
-// Create perceptually uniform color difference
+// create perceptually uniform color difference
 export function createPerceptualDifference(
 	baseColor: [number, number, number],
 	colorModel: ColorModel,
@@ -160,7 +159,7 @@ export function createPerceptualDifference(
 		attempts++;
 	}
 
-	// Fallback: simple RGB difference
+	// fallback - simple RGB difference
 	const [dx, dy, dz] = randomUnitVector();
 	return [
 		Math.max(0, Math.min(255, baseColor[0] + dx * difficulty)),
@@ -169,7 +168,7 @@ export function createPerceptualDifference(
 	];
 }
 
-// Convert RGB array to CSS color string
+// convert RGB array to CSS color string
 export function rgbToCss(rgb: [number, number, number]): string {
 	return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
 }
