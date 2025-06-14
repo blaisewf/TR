@@ -25,8 +25,8 @@ export default function GameInstructions({
 	};
 
 	return (
-		<div className="max-w-3xl mx-auto p-4 sm:p-8 md:p-12 bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-md rounded-2xl border border-gray-700/20 shadow-lg hover:shadow-xl transition-all duration-300">
-			<h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-center mb-4 sm:mb-8 md:mb-10 text-white">
+		<div className="max-w-3xl mx-auto p-5 sm:p-6 md:p-10 bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-md rounded-2xl border border-gray-700/20 shadow-lg hover:shadow-xl transition-all duration-300">
+			<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4 sm:mb-8 md:mb-10 text-white">
 				{t("game.instructions.title")}
 			</h1>
 
@@ -173,6 +173,18 @@ export default function GameInstructions({
 						<div className="p-3 sm:p-4 pt-1">
 							<p className="text-sm sm:text-base text-gray-300 leading-relaxed">
 								{t("game.instructions.privacyDescription")}
+							</p>
+							<p className="text-sm sm:text-base text-gray-300 leading-relaxed mt-2">
+								This project is open source and available on GitHub. You can review our code, contribute, or report issues at{" "}
+								<a
+									href="https://github.com/blaisewf/TR"
+									target="_blank"
+									rel="noopener noreferrer"
+									className="text-blue-400 hover:text-blue-300 transition-colors duration-200"
+								>
+									github.com/blaisewf/TR
+								</a>
+								.
 							</p>
 						</div>
 					</div>
