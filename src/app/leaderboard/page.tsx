@@ -162,8 +162,8 @@ export default function LeaderboardPage() {
 						</h3>
 						<p className="text-3xl font-bold text-white">
 							{data?.generalStats?.totalPlayTime
-								? `${Math.round(data.generalStats.totalPlayTime / 60)}m`
-								: "0m"}
+								? `${Math.floor(data.generalStats.totalPlayTime / 60)}m ${Math.round(data.generalStats.totalPlayTime % 60)}s`
+								: "0m 0s"}
 						</p>
 					</div>
 					<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-gray-700/30">
@@ -476,7 +476,9 @@ export default function LeaderboardPage() {
 												{user.bestLevel}
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-												{user.totalPlayTime?.toFixed(1) ?? "0"}s
+												{user.totalPlayTime
+													? `${Math.floor(user.totalPlayTime / 60)}m ${Math.round(user.totalPlayTime % 60)}s`
+													: "0m 0s"}
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
 												{user.totalGames || 0}
