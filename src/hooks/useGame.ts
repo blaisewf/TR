@@ -7,8 +7,8 @@ import {
 	createPerceptualDifference,
 	generateRandomRGBColor,
 } from "@/lib/utils/colorGenerator";
-import { getPlayerId } from "@/lib/utils/playerId";
 import { getDeviceInfo } from "@/lib/utils/deviceClassifier";
+import { getPlayerId } from "@/lib/utils/playerId";
 import { generateUUID } from "@/lib/utils/uuidGenerator";
 import {
 	COLOR_MODELS,
