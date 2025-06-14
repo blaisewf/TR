@@ -32,7 +32,7 @@ export const useGame = () => {
 
 	// calculate difficulty based on level
 	const getDifficulty = (level: number): number => {
-		return Math.max(0.1, 1.0 - (level - 1) * 0.1);
+		return Math.max(1, 50 - level/2);
 	};
 
 	// generate new round
