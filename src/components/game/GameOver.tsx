@@ -15,6 +15,7 @@ export default function GameOver({ finalLevel, totalScore, totalTime, onRestart 
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
   const [showConfetti, setShowConfetti] = useState(true)
   const [shareError, setShareError] = useState(false)
+  const [confettiOpacity, setConfettiOpacity] = useState(0)
 
   useEffect(() => {
     // set initial dimensions
@@ -29,6 +30,9 @@ export default function GameOver({ finalLevel, totalScore, totalTime, onRestart 
 
     // handle window resize
     window.addEventListener("resize", updateDimensions)
+
+    // fade in confetti
+    setConfettiOpacity(1)
 
     // stop confetti after 5 seconds
     const timer = setTimeout(() => {
@@ -105,7 +109,7 @@ export default function GameOver({ finalLevel, totalScore, totalTime, onRestart 
     <>
       <div className="max-w-2xl mx-auto p-10 relative">
         {showConfetti && (
-          <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden transition-opacity duration-1000" style={{ opacity: confettiOpacity }}>
             <Confetti
               width={dimensions.width}
               height={dimensions.height}
