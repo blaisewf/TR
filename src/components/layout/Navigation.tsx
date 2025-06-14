@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function Navigation() {
@@ -15,7 +15,7 @@ export default function Navigation() {
 	useEffect(() => {
 		setMounted(true);
 		// load saved language preference from localStorage
-		const savedLang = localStorage.getItem('preferredLanguage');
+		const savedLang = localStorage.getItem("preferredLanguage");
 		if (savedLang && i18nRef.current.language !== savedLang) {
 			i18nRef.current.changeLanguage(savedLang);
 		}
@@ -33,7 +33,7 @@ export default function Navigation() {
 
 	const handleLanguageChange = (langCode: string) => {
 		i18nRef.current.changeLanguage(langCode);
-		localStorage.setItem('preferredLanguage', langCode);
+		localStorage.setItem("preferredLanguage", langCode);
 		setIsExpanded(false);
 	};
 
