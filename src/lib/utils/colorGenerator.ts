@@ -57,12 +57,12 @@ function rgbObjectToArray(rgbObj: any): [number, number, number] {
 // Generate a random 3D unit vector
 function randomUnitVector(): [number, number, number] {
 	function gaussianRandom() {
-    		const u = 1 - Math.random();
-    		const v = Math.random();
-    		const z = Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
-    		return z ;
+		const u = 1 - Math.random();
+		const v = Math.random();
+		const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+		return z;
 	}
-	
+
 	const x = gaussianRandom();
 	const y = gaussianRandom();
 	const z = gaussianRandom();
@@ -154,7 +154,6 @@ export function createPerceptualDifference(
 			if (modifiedColor && inGamut("rgb")(modifiedColor)) {
 				return rgbObjectToArray(modifiedColor);
 			}
-
 		} catch (error) {
 			console.warn("Color conversion attempt failed:", error);
 		}
