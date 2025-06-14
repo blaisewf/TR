@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 	description:
 		"Participate in a large-scale study on color perception and help researchers better understand how individuals perceive colors differently.",
 	keywords:
-		"color perception, color experiment, color science, color models, RGB, CIELAB, Oklab, CIECAM02-UCS, interactive study, color vision test",
+		"color perception, color experiment, color science, color models, RGB, CIELAB, Oklab, JzAzBz, interactive study, color vision test",
 	openGraph: {
 		title: "Color Perception Experiment | Interactive Color Study",
 		description:
