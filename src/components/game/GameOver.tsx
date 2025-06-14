@@ -138,19 +138,25 @@ export default function GameOver({
 								<div className="text-2xl sm:text-3xl font-bold text-white">
 									{finalLevel}
 								</div>
-								<div className="text-xs sm:text-sm text-gray-400 mt-1">Final Level</div>
+								<div className="text-xs sm:text-sm text-gray-400 mt-1">
+									Final Level
+								</div>
 							</div>
 							<div className="text-center">
 								<div className="text-2xl sm:text-3xl font-bold text-white">
 									{totalScore}
 								</div>
-								<div className="text-xs sm:text-sm text-gray-400 mt-1">Total Score</div>
+								<div className="text-xs sm:text-sm text-gray-400 mt-1">
+									Total Score
+								</div>
 							</div>
 							<div className="text-center">
 								<div className="text-2xl sm:text-3xl font-bold text-white">
 									{formatTime(totalTime)}
 								</div>
-								<div className="text-xs sm:text-sm text-gray-400 mt-1">Total Time</div>
+								<div className="text-xs sm:text-sm text-gray-400 mt-1">
+									Total Time
+								</div>
 							</div>
 						</div>
 					</div>

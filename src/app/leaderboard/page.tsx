@@ -2,22 +2,22 @@
 
 import Background from "@/components/layout/Background";
 import { useEffect, useState } from "react";
-import type { LeaderboardData } from "../../types/leaderboard";
 import {
-	BarChart,
 	Bar,
+	BarChart,
+	CartesianGrid,
+	Cell,
+	Legend,
+	Line,
+	LineChart,
+	Pie,
+	PieChart,
+	ResponsiveContainer,
+	Tooltip,
 	XAxis,
 	YAxis,
-	CartesianGrid,
-	Tooltip,
-	Legend,
-	PieChart,
-	Pie,
-	Cell,
-	LineChart,
-	Line,
-	ResponsiveContainer,
 } from "recharts";
+import type { LeaderboardData } from "../../types/leaderboard";
 
 export default function LeaderboardPage() {
 	const [data, setData] = useState<LeaderboardData | null>(null);
@@ -114,54 +114,61 @@ export default function LeaderboardPage() {
 					<p className="text-sm text-gray-400 text-center mb-6">
 						shows how well each color model performs in identifying colors
 					</p>
-					
+
 					{/* Bar Chart for Color Models */}
 					<div className="h-80 mb-8">
 						<ResponsiveContainer width="100%" height="100%">
 							<BarChart data={data?.colorModels}>
-								<CartesianGrid strokeDasharray="3 3" stroke="rgba(75, 85, 99, 0.3)" />
-								<XAxis 
-									dataKey="model" 
-									stroke="#9CA3AF"
-									tick={{ fill: '#9CA3AF', fontSize: 12 }}
-									axisLine={{ stroke: 'rgba(75, 85, 99, 0.3)', }}
+								<CartesianGrid
+									strokeDasharray="3 3"
+									stroke="rgba(75, 85, 99, 0.3)"
 								/>
-								<YAxis 
+								<XAxis
+									dataKey="model"
 									stroke="#9CA3AF"
-									tick={{ fill: '#9CA3AF', fontSize: 12 }}
-									axisLine={{ stroke: 'rgba(75, 85, 99, 0.3)' }}
+									tick={{ fill: "#9CA3AF", fontSize: 12 }}
+									axisLine={{ stroke: "rgba(75, 85, 99, 0.3)" }}
+								/>
+								<YAxis
+									stroke="#9CA3AF"
+									tick={{ fill: "#9CA3AF", fontSize: 12 }}
+									axisLine={{ stroke: "rgba(75, 85, 99, 0.3)" }}
 									tickFormatter={(value) => Number(value).toFixed(3)}
 								/>
-								<Tooltip 
-									contentStyle={{ 
-										backgroundColor: 'rgba(31, 41, 55, 0.95)',
-										border: '1px solid rgba(75, 85, 99, 0.3)',
-										borderRadius: '0.5rem',
-										color: '#fff',
-										boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+								<Tooltip
+									contentStyle={{
+										backgroundColor: "rgba(31, 41, 55, 0.95)",
+										border: "1px solid rgba(75, 85, 99, 0.3)",
+										borderRadius: "0.5rem",
+										color: "#fff",
+										boxShadow:
+											"0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
 									}}
-									labelStyle={{ color: '#9CA3AF', fontSize: 12 }}
-									itemStyle={{ color: '#fff', fontSize: 12 }}
-									formatter={(value: number, name: string) => [`${name} ${Number(value).toFixed(3)}`, '']}
+									labelStyle={{ color: "#9CA3AF", fontSize: 12 }}
+									itemStyle={{ color: "#fff", fontSize: 12 }}
+									formatter={(value: number, name: string) => [
+										`${name} ${Number(value).toFixed(3)}`,
+										"",
+									]}
 									cursor={false}
 								/>
-								<Legend 
-									wrapperStyle={{ 
-										color: '#9CA3AF',
+								<Legend
+									wrapperStyle={{
+										color: "#9CA3AF",
 										fontSize: 12,
-										paddingTop: '1rem'
+										paddingTop: "1rem",
 									}}
 								/>
-								<Bar 
-									dataKey="accuracy" 
-									name="Accuracy %" 
+								<Bar
+									dataKey="accuracy"
+									name="Accuracy %"
 									fill="#60A5FA"
 									radius={[4, 4, 0, 0]}
 									activeBar={false}
 								/>
-								<Bar 
-									dataKey="avgTime" 
-									name="Avg Time (s)" 
+								<Bar
+									dataKey="avgTime"
+									name="Avg Time (s)"
 									fill="#34D399"
 									radius={[4, 4, 0, 0]}
 									activeBar={false}
@@ -242,31 +249,38 @@ export default function LeaderboardPage() {
 									cx="50%"
 									cy="50%"
 									outerRadius={100}
-									label={({ name, percent }: { name: string; percent: number }) => 
+									label={({
+										name,
+										percent,
+									}: { name: string; percent: number }) =>
 										`${name} ${(percent * 100).toFixed(0)}%`
 									}
-									labelLine={{ stroke: 'rgba(75, 85, 99, 0.3)' }}
+									labelLine={{ stroke: "rgba(75, 85, 99, 0.3)" }}
 								>
 									{data?.colorFamilies?.map((entry, index) => (
-										<Cell 
-											key={`cell-${index}`} 
+										<Cell
+											key={`cell-${index}`}
 											fill={entry.hexColor}
 											stroke="rgba(31, 41, 55, 0.95)"
 											strokeWidth={2}
 										/>
 									))}
 								</Pie>
-								<Tooltip 
-									contentStyle={{ 
-										backgroundColor: 'rgba(31, 41, 55, 0.95)',
-										border: '1px solid rgba(75, 85, 99, 0.3)',
-										borderRadius: '0.5rem',
-										color: '#fff',
-										boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+								<Tooltip
+									contentStyle={{
+										backgroundColor: "rgba(31, 41, 55, 0.95)",
+										border: "1px solid rgba(75, 85, 99, 0.3)",
+										borderRadius: "0.5rem",
+										color: "#fff",
+										boxShadow:
+											"0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
 									}}
-									labelStyle={{ color: '#9CA3AF', fontSize: 12 }}
-									itemStyle={{ color: '#fff', fontSize: 12 }}
-									formatter={(value: number, name: string) => [`${name} ${Number(value).toFixed(3)}`, '']}
+									labelStyle={{ color: "#9CA3AF", fontSize: 12 }}
+									itemStyle={{ color: "#fff", fontSize: 12 }}
+									formatter={(value: number, name: string) => [
+										`${name} ${Number(value).toFixed(3)}`,
+										"",
+									]}
 								/>
 							</PieChart>
 						</ResponsiveContainer>
@@ -423,76 +437,87 @@ export default function LeaderboardPage() {
 					<div className="h-80 mb-8">
 						<ResponsiveContainer width="100%" height="100%">
 							<LineChart data={data?.sessions?.slice(0, 10)}>
-								<CartesianGrid strokeDasharray="3 3" stroke="rgba(75, 85, 99, 0.3)" />
-								<XAxis 
-									dataKey="saved_at" 
-									stroke="#9CA3AF"
-									tick={{ fill: '#9CA3AF', fontSize: 12 }}
-									axisLine={{ stroke: 'rgba(75, 85, 99, 0.3)' }}
-									tickFormatter={(value: string) => new Date(value).toLocaleString()}
+								<CartesianGrid
+									strokeDasharray="3 3"
+									stroke="rgba(75, 85, 99, 0.3)"
 								/>
-								<YAxis 
+								<XAxis
+									dataKey="saved_at"
 									stroke="#9CA3AF"
-									tick={{ fill: '#9CA3AF', fontSize: 12 }}
-									axisLine={{ stroke: 'rgba(75, 85, 99, 0.3)' }}
+									tick={{ fill: "#9CA3AF", fontSize: 12 }}
+									axisLine={{ stroke: "rgba(75, 85, 99, 0.3)" }}
+									tickFormatter={(value: string) =>
+										new Date(value).toLocaleString()
+									}
+								/>
+								<YAxis
+									stroke="#9CA3AF"
+									tick={{ fill: "#9CA3AF", fontSize: 12 }}
+									axisLine={{ stroke: "rgba(75, 85, 99, 0.3)" }}
 									tickFormatter={(value) => Number(value).toFixed(1)}
 								/>
-								<Tooltip 
-									contentStyle={{ 
-										backgroundColor: 'rgba(31, 41, 55, 0.95)',
-										border: '1px solid rgba(75, 85, 99, 0.3)',
-										borderRadius: '0.5rem',
-										color: '#fff',
-										boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+								<Tooltip
+									contentStyle={{
+										backgroundColor: "rgba(31, 41, 55, 0.95)",
+										border: "1px solid rgba(75, 85, 99, 0.3)",
+										borderRadius: "0.5rem",
+										color: "#fff",
+										boxShadow:
+											"0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
 									}}
-									labelStyle={{ color: '#9CA3AF', fontSize: 12 }}
-									itemStyle={{ color: '#fff', fontSize: 12 }}
-									labelFormatter={(value: string) => new Date(value).toLocaleString()}
-									formatter={(value: number, name: string) => [`${name} ${Number(value).toFixed(1)}`, '']}
+									labelStyle={{ color: "#9CA3AF", fontSize: 12 }}
+									itemStyle={{ color: "#fff", fontSize: 12 }}
+									labelFormatter={(value: string) =>
+										new Date(value).toLocaleString()
+									}
+									formatter={(value: number, name: string) => [
+										`${name} ${Number(value).toFixed(1)}`,
+										"",
+									]}
 								/>
-								<Legend 
-									wrapperStyle={{ 
-										color: '#9CA3AF',
+								<Legend
+									wrapperStyle={{
+										color: "#9CA3AF",
 										fontSize: 12,
-										paddingTop: '1rem'
+										paddingTop: "1rem",
 									}}
 								/>
-								<Line 
-									type="monotone" 
-									dataKey="total_time" 
-									name="Total Time (s)" 
+								<Line
+									type="monotone"
+									dataKey="total_time"
+									name="Total Time (s)"
 									stroke="#60A5FA"
 									strokeWidth={2}
-									dot={{ 
-										fill: '#60A5FA',
-										stroke: 'rgba(31, 41, 55, 0.95)',
+									dot={{
+										fill: "#60A5FA",
+										stroke: "rgba(31, 41, 55, 0.95)",
 										strokeWidth: 2,
-										r: 4
+										r: 4,
 									}}
-									activeDot={{ 
-										fill: '#60A5FA',
-										stroke: 'rgba(31, 41, 55, 0.95)',
+									activeDot={{
+										fill: "#60A5FA",
+										stroke: "rgba(31, 41, 55, 0.95)",
 										strokeWidth: 2,
-										r: 6
+										r: 6,
 									}}
 								/>
-								<Line 
-									type="monotone" 
-									dataKey="final_level" 
-									name="Final Level" 
+								<Line
+									type="monotone"
+									dataKey="final_level"
+									name="Final Level"
 									stroke="#34D399"
 									strokeWidth={2}
-									dot={{ 
-										fill: '#34D399',
-										stroke: 'rgba(31, 41, 55, 0.95)',
+									dot={{
+										fill: "#34D399",
+										stroke: "rgba(31, 41, 55, 0.95)",
 										strokeWidth: 2,
-										r: 4
+										r: 4,
 									}}
-									activeDot={{ 
-										fill: '#34D399',
-										stroke: 'rgba(31, 41, 55, 0.95)',
+									activeDot={{
+										fill: "#34D399",
+										stroke: "rgba(31, 41, 55, 0.95)",
 										strokeWidth: 2,
-										r: 6
+										r: 6,
 									}}
 								/>
 							</LineChart>
