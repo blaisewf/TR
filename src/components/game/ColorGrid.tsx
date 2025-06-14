@@ -50,13 +50,8 @@ export default function ColorGrid({
   }
 
   const getAnimationDelay = (row: number, col: number) => {
-    // calculate distance from center
-    const center = (gridSize - 1) / 2
-    const distance = Math.max(
-      Math.abs(row - center),
-      Math.abs(col - center)
-    )
-    return distance * 0.1 // delay based on distance from center
+    // simplified animation - no delay based on distance
+    return 0
   }
 
   return (
@@ -81,14 +76,13 @@ export default function ColorGrid({
             animate={{ 
               opacity: 1,
               transition: { 
-                duration: 0.3,
-                delay: getAnimationDelay(row, col),
+                duration: 0.2,
                 ease: "easeOut"
               }
             }}
             whileHover={{ 
               scale: 1.05,
-              transition: { duration: 0.2 }
+              transition: { duration: 0.15 }
             }}
             whileTap={{ scale: 0.95 }}
             className={`
