@@ -330,10 +330,10 @@ export default function LeaderboardPage() {
 											{family.totalTests}
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-											{family.accuracy?.toFixed(3) ?? "0"}%
+											{family.accuracy?.toFixed(2) ?? "0"}%
 										</td>
 										<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-											{family.avgTime?.toFixed(3) ?? "0"}s
+											{family.avgTime?.toFixed(2) ?? "0"}s
 										</td>
 									</tr>
 								))}
@@ -394,7 +394,7 @@ export default function LeaderboardPage() {
 												{user.bestLevel}
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-												{user.totalPlayTime?.toFixed(3) ?? "0"}s
+												{user.totalPlayTime?.toFixed(1) ?? "0"}s
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
 												{user.totalGames || 0}
@@ -403,7 +403,7 @@ export default function LeaderboardPage() {
 												{user.deviceType}
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-												{user.accuracy?.toFixed(3) ?? "0"}%
+												{user.accuracy?.toFixed(1) ?? "0"}%
 											</td>
 										</tr>
 									))
@@ -447,7 +447,7 @@ export default function LeaderboardPage() {
 									stroke="#9CA3AF"
 									tick={{ fill: '#9CA3AF', fontSize: 12 }}
 									axisLine={{ stroke: 'rgba(75, 85, 99, 0.3)' }}
-									tickFormatter={(value) => Number(value).toFixed(3)}
+									tickFormatter={(value) => Number(value).toFixed(1)}
 								/>
 								<Tooltip 
 									contentStyle={{ 
@@ -460,7 +460,7 @@ export default function LeaderboardPage() {
 									labelStyle={{ color: '#9CA3AF', fontSize: 12 }}
 									itemStyle={{ color: '#fff', fontSize: 12 }}
 									labelFormatter={(value: string) => new Date(value).toLocaleString()}
-									formatter={(value: number, name: string) => [`${name} ${Number(value).toFixed(3)}`, '']}
+									formatter={(value: number, name: string) => [`${name} ${Number(value).toFixed(1)}`, '']}
 								/>
 								<Legend 
 									wrapperStyle={{ 
@@ -550,7 +550,7 @@ export default function LeaderboardPage() {
 												{session.final_level}
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-												{session.total_time?.toFixed(3) ?? "0"}s
+												{session.total_time?.toFixed(1) ?? "0"}s
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
 												{session.device_info.is_mobile ? "Mobile" : "Desktop"}
