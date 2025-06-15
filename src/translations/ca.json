@@ -21,7 +21,7 @@
 	  "instructions": {
 		"title": "Test de percepció del color",
 		"projectContext": "Aquest projecte forma part d'un Treball de Recerca de Batxillerat a Catalunya, i estudia com perceben els colors els humans i les màquines.",
-		"description": "En aquest test se’t mostrarà una graella de colors. La teva tasca és identificar el color que és més diferent dels altres.",
+		"description": "En aquest test se't mostrarà una graella de colors. La teva tasca és identificar el color que és més diferent dels altres.",
 		"hasVisibilityCondition": "Tinc una condició visual (p. ex., daltonisme, visió reduïda)",
 		"steps": {
 		  "1": "Observa la graella de colors amb atenció",
@@ -59,8 +59,9 @@
 		"level": "Nivell",
 		"time": "Temps",
 		"accuracy": "Precisió",
-		"colorModel": "Model de color",
-		"timeLeft": "Temps restant: {{time}}s"
+		"colorModel": "Model de Color",
+		"timeLeft": "Temps restant: {{time}}s",
+		"globalRanking": "Classificació Global"
 	  },
 	  "gameOver": {
 		"title": "Test completat!",

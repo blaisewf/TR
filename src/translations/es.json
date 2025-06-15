@@ -59,8 +59,9 @@
 		"level": "Nivel",
 		"time": "Tiempo",
 		"accuracy": "Precisión",
-		"colorModel": "Modelo de color",
-		"timeLeft": "Tiempo restante: {{time}}s"
+		"colorModel": "Modelo de Color",
+		"timeLeft": "Tiempo restante: {{time}}s",
+		"globalRanking": "Clasificación Global"
 	  },
 	  "gameOver": {
 		"title": "¡Test completado!",

@@ -60,7 +60,8 @@
 			"time": "Time",
 			"accuracy": "Accuracy",
 			"colorModel": "Color Model",
-			"timeLeft": "Time Left: {{time}}s"
+			"timeLeft": "Time Left: {{time}}s",
+			"globalRanking": "Global Ranking"
 		},
 		"gameOver": {
 			"title": "Test Completed!",

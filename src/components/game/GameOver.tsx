@@ -24,6 +24,30 @@ export default function GameOver({
 	const [shareError, setShareError] = useState(false);
 	const [confettiOpacity, setConfettiOpacity] = useState(0);
 	const [countdown, setCountdown] = useState(7);
+	const [gameRank, setGameRank] = useState<number | null>(null);
+
+	useEffect(() => {
+		// fetch global ranking
+		const fetchRanking = async () => {
+			try {
+				const response = await fetch('/api/leaderboard');
+				if (!response.ok) throw new Error('Failed to fetch ranking');
+				const data = await response.json();
+				
+				// get all sessions and sort them by final_level
+				const allSessions = data.sessions;
+				const sortedSessions = [...allSessions].sort((a, b) => b.final_level - a.final_level);
+				
+				// find the position of this game's finalLevel
+				const rank = sortedSessions.findIndex(session => session.final_level <= finalLevel) + 1;
+				setGameRank(rank);
+			} catch (error) {
+				console.error('Error fetching ranking:', error);
+			}
+		};
+
+		fetchRanking();
+	}, [finalLevel]);
 
 	useEffect(() => {
 		// set initial dimensions
@@ -181,7 +205,7 @@ export default function GameOver({
 
 				<div className="space-y-4 sm:space-y-6 text-white/90 mb-6 sm:mb-8 md:mb-10">
 					<div className="bg-gray-800/20 backdrop-blur-md p-4 sm:p-6 rounded-xl border border-gray-700/20">
-						<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+						<div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
 							<div className="text-center">
 								<div className="text-2xl sm:text-3xl font-bold text-white">
 									{finalLevel}
@@ -196,6 +220,14 @@ export default function GameOver({
 								</div>
 								<div className="text-xs sm:text-sm text-gray-400 mt-1">
 									{t("game.stats.time")}
+								</div>
+							</div>
+							<div className="text-center">
+								<div className="text-2xl sm:text-3xl font-bold text-white">
+									{gameRank ? `#${gameRank}` : '-'}
+								</div>
+								<div className="text-xs sm:text-sm text-gray-400 mt-1">
+									{t("game.stats.globalRanking")}
 								</div>
 							</div>
 						</div>
