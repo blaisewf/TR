@@ -573,6 +573,7 @@ export default function LeaderboardPage() {
 													.toLowerCase()
 													.includes(searchQuery.toLowerCase()),
 										)
+										.slice(0, 10)
 										.map((user) => (
 											<motion.tr
 												key={user.player_id}
