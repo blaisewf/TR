@@ -1,9 +1,9 @@
 import type { GameRound } from "@/types/game";
 import { COLOR_MODEL_DISPLAY_NAMES } from "@/types/game";
+import { memo } from "react";
 import { useTranslation } from "react-i18next";
 import ColorGrid from "./ColorGrid";
 import GameStats from "./GameStats";
-import { memo } from "react";
 
 interface GameBoardProps {
 	currentRound: GameRound;

@@ -583,7 +583,7 @@ export default function LeaderboardPage() {
 													{user.rank}
 												</td>
 												<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
-													{user.player_id.split('-')[0]}
+													{user.player_id.split("-")[0]}
 												</td>
 												<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
 													{user.bestLevel}
@@ -762,7 +762,7 @@ export default function LeaderboardPage() {
 											variants={rowVariants}
 										>
 											<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
-												{session.player_id.split('-')[0]}
+												{session.player_id.split("-")[0]}
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
 												{new Date(session.saved_at).toLocaleString()}
