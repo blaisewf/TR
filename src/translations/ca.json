@@ -72,8 +72,7 @@
 		"roundsCompleted": "Rondes completades",
 		"share": "Comparteix els teus resultats",
 		"playAgain": "Torna a jugar",
-		"home": "Torna a l'inici",
-		"shareText": "He completat el nivell {{level}} amb una puntuació de {{score}} en {{time}}! Prova-ho tu també!",
+		"shareText": "He completat el nivell {{level}} en {{time}}! Prova-ho tu també!",
 		"thankYou": "Gràcies per participar en el nostre estudi de percepció del color! Les teves dades anònimes ens ajuden a entendre millor la percepció humana.",
 		"autoRestart": "Nou joc començant en {{seconds}} segons"
 	  },

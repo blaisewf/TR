@@ -72,8 +72,7 @@
 			"roundsCompleted": "Rounds Completed",
 			"share": "Share your results",
 			"playAgain": "Play Again",
-			"home": "Return to Home",
-			"shareText": "I completed level {{level}} with a score of {{score}} in {{time}}! Try it yourself!",
+			"shareText": "I completed level {{level}} in {{time}}! Try it yourself!",
 			"thankYou": "Thank you for participating in our color perception study! Your anonymous data helps us understand human color perception better.",
 			"autoRestart": "New game starting in {{seconds}} seconds"
 		},
