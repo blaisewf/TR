@@ -33,6 +33,7 @@ export type GameSessionData = {
 		pixel_ratio: number;
 		is_mobile: boolean;
 	};
+	has_visibility_condition: boolean;
 };
 
 export async function saveCompleteSession(sessionData: GameSessionData) {
@@ -47,6 +48,7 @@ export async function saveCompleteSession(sessionData: GameSessionData) {
 					final_level: sessionData.final_level,
 					rounds: sessionData.rounds,
 					device_info: sessionData.device_info,
+					has_visibility_condition: sessionData.has_visibility_condition,
 				},
 			])
 			.select();

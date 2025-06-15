@@ -24,6 +24,7 @@
 			"title": "Test de Percepción de Color",
 			"projectContext": "Esto es parte de un Treball de Recerca (Proyecto de Investigación) para bachillerato en Cataluña, estudiando cómo los humanos y las máquinas perciben los colores de manera diferente.",
 			"description": "En esta prueba, se te mostrará una cuadrícula de colores. Tu tarea es identificar el color que parece más diferente de los demás.",
+			"hasVisibilityCondition": "Tengo una condición visual (por ejemplo, daltonismo, visión reducida)",
 			"steps": {
 				"1": "Observa cuidadosamente la cuadrícula de colores",
 				"2": "Identifica el color que destaca más",
@@ -36,7 +37,25 @@
 			"whatWeStudy": "Qué Estamos Estudiando",
 			"studyDescription": "Diferentes modelos de color (RGB, CIELAB, Oklab, JzAzBz) representan los colores de varias maneras. Estamos recopilando datos para entender qué modelos coinciden mejor con la percepción humana del color.",
 			"privacy": "Privacidad",
-			"privacyDescription": "Tus datos se recopilan de forma anónima. Solo almacenamos tus respuestas, tiempos y información básica del dispositivo. No se recopila información personal."
+			"privacyDescription": "Sus datos se recopilan de forma anónima. Solo almacenamos sus respuestas, tiempo y información básica del dispositivo. No se recopila información personal.",
+			"visibility": {
+				"consideredConditions": "Condiciones Consideradas",
+				"notConsidered": "No Consideradas",
+				"conditions": {
+					"colorBlindness": "Daltonismo",
+					"screenReaders": "Discapacidades visuales que requieren lectores de pantalla",
+					"lowVision": "Baja visión",
+					"blindness": "Ceguera"
+				},
+				"notConsideredConditions": {
+					"glasses": "Usar gafas o lentes de contacto",
+					"temporary": "Problemas de visión temporales",
+					"eyeStrain": "Fatiga visual"
+				},
+				"confirmMessage": "Por favor, confirme si tiene una condición de visibilidad permanente que afecta a cómo percibe e interactúa con el contenido digital.",
+				"confirm": "Confirmar",
+				"cancel": "Cancelar"
+			}
 		},
 		"stats": {
 			"score": "Puntuación",

@@ -33,6 +33,7 @@ export const useGame = () => {
 	const [rounds, setRounds] = useState<RoundData[]>([]);
 	const [elapsedTime, setElapsedTime] = useState(0);
 	const [timeRemaining, setTimeRemaining] = useState(LEVEL_TIMER);
+	const [hasVisibilityCondition, setHasVisibilityCondition] = useState(false);
 	const roundStartTime = useRef<number>(0);
 
 	// calculate difficulty based on level
@@ -50,6 +51,7 @@ export const useGame = () => {
 			final_level: level,
 			rounds: rounds,
 			device_info: getDeviceInfo(),
+			has_visibility_condition: hasVisibilityCondition,
 		};
 
 		try {
@@ -59,7 +61,7 @@ export const useGame = () => {
 		}
 
 		setGameState("game-over");
-	}, [sessionId, gameStartTime, level, rounds]);
+	}, [sessionId, gameStartTime, level, rounds, hasVisibilityCondition]);
 
 	// generate new round
 	const generateRound = useCallback((level: number): GameRound => {
@@ -111,11 +113,12 @@ export const useGame = () => {
 	}, [level, preloadedRound, generateRound, preloadNextRound]);
 
 	// initialize game
-	const startGame = useCallback(() => {
+	const startGame = useCallback((hasVisibilityCondition: boolean) => {
 		setGameState("playing");
 		setLevel(1);
 		setScore(0);
 		setWrongAnswers(0);
+		setHasVisibilityCondition(hasVisibilityCondition);
 		const now = Date.now();
 		setGameStartTime(now);
 		roundStartTime.current = now;

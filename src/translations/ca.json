@@ -24,6 +24,7 @@
 			"title": "Test de Percepció de Color",
 			"projectContext": "Això és part d'un Treball de Recerca per a batxillerat a Catalunya, estudiant com els humans i les màquines perceben els colors de manera diferent.",
 			"description": "En aquesta prova, se't mostrarà una graella de colors. La teva tasca és identificar el color que sembla més diferent dels altres.",
+			"hasVisibilityCondition": "Tinc una condició visual (per exemple, daltonisme, visió reduïda)",
 			"steps": {
 				"1": "Observa amb cura la graella de colors",
 				"2": "Identifica el color que destaca més",
@@ -36,7 +37,25 @@
 			"whatWeStudy": "Què Estem Estudiant",
 			"studyDescription": "Diferents models de color (RGB, CIELAB, Oklab, JzAzBz) representen els colors de diverses maneres. Estem recopilant dades per entendre quins models coincideixen millor amb la percepció humana del color.",
 			"privacy": "Privacitat",
-			"privacyDescription": "Les teves dades es recopilen de forma anònima. Només emmagatzemem les teves respostes, temps i informació bàsica del dispositiu. No es recopila informació personal."
+			"privacyDescription": "Les teves dades es recopilen de forma anònima. Només emmagatzemem les teves respostes, temps i informació bàsica del dispositiu. No es recopila informació personal.",
+			"visibility": {
+				"consideredConditions": "Condicions Considerades",
+				"notConsidered": "No Considerades",
+				"conditions": {
+					"colorBlindness": "Daltonisme",
+					"screenReaders": "Discapacitats visuals que requereixen lectors de pantalla",
+					"lowVision": "Baixa visió",
+					"blindness": "Ceguesa"
+				},
+				"notConsideredConditions": {
+					"glasses": "Portar ulleres o lentilles",
+					"temporary": "Problemes de visió temporals",
+					"eyeStrain": "Fatiga visual"
+				},
+				"confirmMessage": "Si us plau, confirma si tens una condició de visibilitat permanent que afecta com percebes i interactues amb el contingut digital.",
+				"confirm": "Confirmar",
+				"cancel": "Cancel·lar"
+			}
 		},
 		"stats": {
 			"score": "Puntuació",

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 interface GameInstructionsProps {
-	onStartGame: () => void;
+	onStartGame: (hasVisibilityCondition: boolean) => void;
 }
 
 export default function GameInstructions({
@@ -16,6 +16,8 @@ export default function GameInstructions({
 		whatWeStudy: true,
 		privacy: false,
 	});
+	const [hasVisibilityCondition, setHasVisibilityCondition] = useState(false);
+	const [showVisibilityDetails, setShowVisibilityDetails] = useState(false);
 
 	const toggleSection = (section: keyof typeof expandedSections) => {
 		setExpandedSections((prev) => ({
@@ -24,13 +26,27 @@ export default function GameInstructions({
 		}));
 	};
 
+	const handleVisibilityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		if (e.target.checked) {
+			setShowVisibilityDetails(true);
+		} else {
+			setHasVisibilityCondition(false);
+			setShowVisibilityDetails(false);
+		}
+	};
+
+	const handleVisibilityConfirm = () => {
+		setHasVisibilityCondition(true);
+		setShowVisibilityDetails(false);
+	};
+
 	return (
 		<div className="max-w-3xl mx-auto p-5 sm:p-6 md:p-10 bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-md rounded-2xl border border-gray-700/20 shadow-lg hover:shadow-xl transition-all duration-300">
 			<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4 sm:mb-8 md:mb-10 text-white">
 				{t("game.instructions.title")}
 			</h1>
 
-			<div className="space-y-4 sm:space-y-8 text-white/90 mb-4 sm:mb-10 md:mb-12">
+			<div className="space-y-4 sm:space-y-8 text-white/90 mb-6">
 				<p className="text-sm sm:text-lg text-gray-300 leading-relaxed">
 					{t("game.instructions.projectContext")}
 				</p>
@@ -191,14 +207,120 @@ export default function GameInstructions({
 				</div>
 			</div>
 
-			<div className="h-px bg-gray-700/20 my-4 sm:my-8"></div>
-			<div className="text-center">
-				<button
-					onClick={onStartGame}
-					className="w-full sm:w-auto bg-gray-800/20 backdrop-blur-md border border-gray-700/20 text-white hover:bg-gray-700/30 font-medium py-3 px-6 sm:px-8 rounded-full text-sm shadow-lg transition-all duration-300 cursor-pointer"
-				>
-					{t("buttons.start")}
-				</button>
+			<div className="h-px bg-gray-700/20 my-3"></div>
+			<div className="space-y-3">
+				<div>
+					<div className="p-2">
+						<div className="flex items-center gap-3 opacity-75 hover:opacity-100 transition-opacity duration-200">
+							<div className="relative">
+								<input
+									type="checkbox"
+									id="visibility-condition"
+									checked={hasVisibilityCondition}
+									onChange={handleVisibilityChange}
+									className="peer absolute inset-0 w-5 h-5 opacity-0 cursor-pointer z-10"
+								/>
+								<div className="w-5 h-5 border-2 border-gray-600 rounded-md bg-gray-800/30 backdrop-blur-sm peer-checked:bg-blue-400 peer-checked:border-blue-400 transition-all duration-200 flex items-center justify-center">
+									{hasVisibilityCondition && (
+										<svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+											<path d="M20 6L9 17L4 12" strokeLinecap="round" strokeLinejoin="round" />
+										</svg>
+									)}
+								</div>
+							</div>
+							<label
+								htmlFor="visibility-condition"
+								className="text-sm text-gray-300 cursor-pointer select-none"
+							>
+								{t("game.instructions.hasVisibilityCondition")}
+							</label>
+						</div>
+
+						<div className={`overflow-hidden transition-all duration-300 ${showVisibilityDetails ? "max-h-96 mt-4" : "max-h-0"}`}>
+							<div className="space-y-4">
+								<div className="flex gap-4">
+									<div className="flex-1 p-3 bg-gray-800/10 rounded-lg border border-green-500/20">
+										<div className="flex items-center gap-2 mb-2">
+											<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#4ade80">
+												<path d="m382-354 339-339q12-12 28-12t28 12q12 12 12 28.5T777-636L410-268q-12 12-28 12t-28-12L182-440q-12-12-11.5-28.5T183-497q12-12 28.5-12t28.5 12l142 143Z"/>
+											</svg>
+											<h3 className="text-green-400 text-sm font-medium">{t("game.instructions.visibility.consideredConditions")}</h3>
+										</div>
+										<ul className="space-y-1 text-xs text-gray-300">
+											<li className="flex items-center gap-2">
+												<span className="text-green-400">•</span>
+												{t("game.instructions.visibility.conditions.colorBlindness")}
+											</li>
+											<li className="flex items-center gap-2">
+												<span className="text-green-400">•</span>
+												{t("game.instructions.visibility.conditions.screenReaders")}
+											</li>
+											<li className="flex items-center gap-2">
+												<span className="text-green-400">•</span>
+												{t("game.instructions.visibility.conditions.lowVision")}
+											</li>
+											<li className="flex items-center gap-2">
+												<span className="text-green-400">•</span>
+												{t("game.instructions.visibility.conditions.blindness")}
+											</li>
+										</ul>
+									</div>
+
+									<div className="flex-1 p-3 bg-gray-800/10 rounded-lg border border-red-500/20">
+										<div className="flex items-center gap-2 mb-2">
+											<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#f87171">
+												<path d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z"/>
+											</svg>
+											<h3 className="text-red-400 text-sm font-medium">{t("game.instructions.visibility.notConsidered")}</h3>
+										</div>
+										<ul className="space-y-1 text-xs text-gray-300">
+											<li className="flex items-center gap-2">
+												<span className="text-red-400">•</span>
+												{t("game.instructions.visibility.notConsideredConditions.glasses")}
+											</li>
+											<li className="flex items-center gap-2">
+												<span className="text-red-400">•</span>
+												{t("game.instructions.visibility.notConsideredConditions.temporary")}
+											</li>
+											<li className="flex items-center gap-2">
+												<span className="text-red-400">•</span>
+												{t("game.instructions.visibility.notConsideredConditions.eyeStrain")}
+											</li>
+										</ul>
+									</div>
+								</div>
+
+								<p className="text-xs text-gray-400 text-left">
+									{t("game.instructions.visibility.confirmMessage")}
+								</p>
+
+								<div className="flex justify-left gap-3">
+									<button
+										onClick={handleVisibilityConfirm}
+										className="bg-white backdrop-blur-md text-black hover:bg-white/70 font-medium py-1.5 px-4 rounded-full text-xs shadow-lg transition-all duration-300 cursor-pointer"
+									>
+										{t("game.instructions.visibility.confirm")}
+									</button>
+									<button
+										onClick={() => setShowVisibilityDetails(false)}
+										className="text-gray-400 hover:text-white text-xs transition-colors duration-200 cursor-pointer"
+									>
+										{t("game.instructions.visibility.cancel")}
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div className="text-center">
+					<button
+						onClick={() => onStartGame(hasVisibilityCondition)}
+						className="w-full sm:w-auto bg-gray-800/20 backdrop-blur-md border border-gray-700/20 text-white hover:bg-gray-700/30 font-medium py-3 px-6 sm:px-8 rounded-full text-sm shadow-lg transition-all duration-300 cursor-pointer"
+					>
+						{t("buttons.start")}
+					</button>
+				</div>
 			</div>
 		</div>
 	);
