@@ -33,30 +33,29 @@ export default function ColorGrid({
 		setHasClicked(false);
 	}, [changedPosition]);
 
-	const handleSquareClick = useCallback((
-		row: number,
-		col: number,
-		event: React.MouseEvent,
-	) => {
-		if (disabled || hasClicked || !isColorsUpdated) return;
+	const handleSquareClick = useCallback(
+		(row: number, col: number, event: React.MouseEvent) => {
+			if (disabled || hasClicked || !isColorsUpdated) return;
 
-		const rect = event.currentTarget.getBoundingClientRect();
-		const x = event.clientX - rect.left + rect.width / 2;
-		const y = event.clientY - rect.top + rect.height / 2;
+			const rect = event.currentTarget.getBoundingClientRect();
+			const x = event.clientX - rect.left + rect.width / 2;
+			const y = event.clientY - rect.top + rect.height / 2;
 
-		setHasClicked(true);
-		onSquareClick([row, col], [Math.round(x), Math.round(y)]);
-	}, [disabled, hasClicked, isColorsUpdated, onSquareClick]);
+			setHasClicked(true);
+			onSquareClick([row, col], [Math.round(x), Math.round(y)]);
+		},
+		[disabled, hasClicked, isColorsUpdated, onSquareClick],
+	);
 
-	const getSquareColor = useCallback((
-		row: number,
-		col: number,
-	): [number, number, number] => {
-		if (row === changedPosition[0] && col === changedPosition[1]) {
-			return changedColor;
-		}
-		return baseColor;
-	}, [changedPosition, changedColor, baseColor]);
+	const getSquareColor = useCallback(
+		(row: number, col: number): [number, number, number] => {
+			if (row === changedPosition[0] && col === changedPosition[1]) {
+				return changedColor;
+			}
+			return baseColor;
+		},
+		[changedPosition, changedColor, baseColor],
+	);
 
 	const gridSquares = useMemo(() => {
 		return Array.from({ length: gridSize * gridSize }, (_, index) => {

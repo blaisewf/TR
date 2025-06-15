@@ -1,8 +1,8 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { motion, AnimatePresence } from "framer-motion";
 
 interface GameInstructionsProps {
 	onStartGame: (hasVisibilityCondition: boolean) => void;
@@ -56,10 +56,14 @@ export default function GameInstructions({
 					{t("game.instructions.description")}
 				</p>
 
-				<motion.div 
+				<motion.div
 					className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-md rounded-xl border border-gray-700/20 hover:border-gray-600/30"
 					initial={false}
-					animate={{ borderColor: expandedSections.howToPlay ? "rgba(75, 85, 99, 0.3)" : "rgba(75, 85, 99, 0.2)" }}
+					animate={{
+						borderColor: expandedSections.howToPlay
+							? "rgba(75, 85, 99, 0.3)"
+							: "rgba(75, 85, 99, 0.2)",
+					}}
 					transition={{ duration: 0.2 }}
 				>
 					<button
@@ -129,10 +133,14 @@ export default function GameInstructions({
 					</AnimatePresence>
 				</motion.div>
 
-				<motion.div 
+				<motion.div
 					className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-md rounded-xl border border-gray-700/20 hover:border-gray-600/30"
 					initial={false}
-					animate={{ borderColor: expandedSections.whatWeStudy ? "rgba(75, 85, 99, 0.3)" : "rgba(75, 85, 99, 0.2)" }}
+					animate={{
+						borderColor: expandedSections.whatWeStudy
+							? "rgba(75, 85, 99, 0.3)"
+							: "rgba(75, 85, 99, 0.2)",
+					}}
 					transition={{ duration: 0.2 }}
 				>
 					<button
@@ -183,10 +191,14 @@ export default function GameInstructions({
 					</AnimatePresence>
 				</motion.div>
 
-				<motion.div 
+				<motion.div
 					className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-md rounded-xl border border-gray-700/20 hover:border-gray-600/30"
 					initial={false}
-					animate={{ borderColor: expandedSections.privacy ? "rgba(75, 85, 99, 0.3)" : "rgba(75, 85, 99, 0.2)" }}
+					animate={{
+						borderColor: expandedSections.privacy
+							? "rgba(75, 85, 99, 0.3)"
+							: "rgba(75, 85, 99, 0.2)",
+					}}
 					transition={{ duration: 0.2 }}
 				>
 					<button
@@ -264,11 +276,15 @@ export default function GameInstructions({
 									onChange={handleVisibilityChange}
 									className="peer absolute inset-0 w-5 h-5 opacity-0 cursor-pointer z-10"
 								/>
-								<motion.div 
+								<motion.div
 									className="w-5 h-5 border-2 rounded-md bg-gray-800/30 backdrop-blur-sm flex items-center justify-center"
-									animate={{ 
-										backgroundColor: hasVisibilityCondition ? "rgb(96, 165, 250)" : "rgba(31, 41, 55, 0.3)",
-										borderColor: hasVisibilityCondition ? "rgb(96, 165, 250)" : "rgb(75, 85, 99)"
+									animate={{
+										backgroundColor: hasVisibilityCondition
+											? "rgb(96, 165, 250)"
+											: "rgba(31, 41, 55, 0.3)",
+										borderColor: hasVisibilityCondition
+											? "rgb(96, 165, 250)"
+											: "rgb(75, 85, 99)",
 									}}
 									transition={{ duration: 0.2 }}
 								>
@@ -326,7 +342,9 @@ export default function GameInstructions({
 														<path d="m382-354 339-339q12-12 28-12t28 12q12 12 12 28.5T777-636L410-268q-12 12-28 12t-28-12L182-440q-12-12-11.5-28.5T183-497q12-12 28.5-12t28.5 12l142 143Z" />
 													</svg>
 													<h3 className="text-green-400 text-sm font-medium">
-														{t("game.instructions.visibility.consideredConditions")}
+														{t(
+															"game.instructions.visibility.consideredConditions",
+														)}
 													</h3>
 												</div>
 												<ul className="space-y-1 text-xs text-gray-300">
@@ -344,11 +362,15 @@ export default function GameInstructions({
 													</li>
 													<li className="flex items-center gap-2">
 														<span className="text-green-400">•</span>
-														{t("game.instructions.visibility.conditions.lowVision")}
+														{t(
+															"game.instructions.visibility.conditions.lowVision",
+														)}
 													</li>
 													<li className="flex items-center gap-2">
 														<span className="text-green-400">•</span>
-														{t("game.instructions.visibility.conditions.blindness")}
+														{t(
+															"game.instructions.visibility.conditions.blindness",
+														)}
 													</li>
 												</ul>
 											</div>
