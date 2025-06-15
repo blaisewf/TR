@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface GameInstructionsProps {
 	onStartGame: (hasVisibilityCondition: boolean) => void;
@@ -55,10 +56,15 @@ export default function GameInstructions({
 					{t("game.instructions.description")}
 				</p>
 
-				<div className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-md rounded-xl border border-gray-700/20 hover:border-gray-600/30 transition-all duration-300">
+				<motion.div 
+					className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-md rounded-xl border border-gray-700/20 hover:border-gray-600/30"
+					initial={false}
+					animate={{ borderColor: expandedSections.howToPlay ? "rgba(75, 85, 99, 0.3)" : "rgba(75, 85, 99, 0.2)" }}
+					transition={{ duration: 0.2 }}
+				>
 					<button
 						onClick={() => toggleSection("howToPlay")}
-						className="w-full p-3 sm:p-4 flex items-center justify-between text-left cursor-pointer hover:bg-gray-700/10 transition-colors duration-200"
+						className="w-full p-3 sm:p-4 flex items-center justify-between text-left cursor-pointer hover:bg-gray-700/10"
 					>
 						<h2 className="font-semibold text-base sm:text-xl text-white flex items-center gap-2">
 							<svg
@@ -70,11 +76,13 @@ export default function GameInstructions({
 							</svg>
 							{t("game.instructions.howToPlay")}
 						</h2>
-						<svg
-							className={`w-5 h-5 transform transition-transform duration-300 ${expandedSections.howToPlay ? "rotate-180" : ""}`}
+						<motion.svg
+							className="w-5 h-5"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
+							animate={{ rotate: expandedSections.howToPlay ? 180 : 0 }}
+							transition={{ duration: 0.2 }}
 						>
 							<path
 								strokeLinecap="round"
@@ -82,42 +90,54 @@ export default function GameInstructions({
 								strokeWidth={2}
 								d="M19 9l-7 7-7-7"
 							/>
-						</svg>
+						</motion.svg>
 					</button>
-					<div
-						className={`overflow-hidden transition-all duration-300 ${expandedSections.howToPlay ? "max-h-96" : "max-h-0"}`}
-					>
-						<div className="p-3 sm:p-4 pt-1">
-							<ul className="list-none space-y-1.5 sm:space-y-2.5 text-sm sm:text-base text-gray-300 leading-relaxed">
-								<li className="flex items-center gap-2">
-									<span className="text-gray-300">•</span>
-									{t("game.instructions.steps.1")}
-								</li>
-								<li className="flex items-center gap-2">
-									<span className="text-gray-300">•</span>
-									{t("game.instructions.steps.2")}
-								</li>
-								<li className="flex items-center gap-2">
-									<span className="text-gray-300">•</span>
-									{t("game.instructions.steps.3")}
-								</li>
-								<li className="flex items-center gap-2">
-									<span className="text-gray-300">•</span>
-									{t("game.instructions.steps.4")}
-								</li>
-								<li className="flex items-center gap-2">
-									<span className="text-gray-300">•</span>
-									{t("game.instructions.steps.5")}
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
+					<AnimatePresence initial={false}>
+						{expandedSections.howToPlay && (
+							<motion.div
+								initial={{ height: 0, opacity: 0 }}
+								animate={{ height: "auto", opacity: 1 }}
+								exit={{ height: 0, opacity: 0 }}
+								transition={{ duration: 0.2 }}
+							>
+								<div className="p-3 sm:p-4 pt-1">
+									<ul className="list-none space-y-1.5 sm:space-y-2.5 text-sm sm:text-base text-gray-300 leading-relaxed">
+										<li className="flex items-center gap-2">
+											<span className="text-gray-300">•</span>
+											{t("game.instructions.steps.1")}
+										</li>
+										<li className="flex items-center gap-2">
+											<span className="text-gray-300">•</span>
+											{t("game.instructions.steps.2")}
+										</li>
+										<li className="flex items-center gap-2">
+											<span className="text-gray-300">•</span>
+											{t("game.instructions.steps.3")}
+										</li>
+										<li className="flex items-center gap-2">
+											<span className="text-gray-300">•</span>
+											{t("game.instructions.steps.4")}
+										</li>
+										<li className="flex items-center gap-2">
+											<span className="text-gray-300">•</span>
+											{t("game.instructions.steps.5")}
+										</li>
+									</ul>
+								</div>
+							</motion.div>
+						)}
+					</AnimatePresence>
+				</motion.div>
 
-				<div className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-md rounded-xl border border-gray-700/20 hover:border-gray-600/30 transition-all duration-300">
+				<motion.div 
+					className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-md rounded-xl border border-gray-700/20 hover:border-gray-600/30"
+					initial={false}
+					animate={{ borderColor: expandedSections.whatWeStudy ? "rgba(75, 85, 99, 0.3)" : "rgba(75, 85, 99, 0.2)" }}
+					transition={{ duration: 0.2 }}
+				>
 					<button
 						onClick={() => toggleSection("whatWeStudy")}
-						className="w-full p-3 sm:p-4 flex items-center justify-between text-left cursor-pointer hover:bg-gray-700/10 transition-colors duration-200"
+						className="w-full p-3 sm:p-4 flex items-center justify-between text-left cursor-pointer hover:bg-gray-700/10"
 					>
 						<h2 className="font-semibold text-base sm:text-xl text-white flex items-center gap-2">
 							<svg
@@ -129,11 +149,13 @@ export default function GameInstructions({
 							</svg>
 							{t("game.instructions.whatWeStudy")}
 						</h2>
-						<svg
-							className={`w-5 h-5 transform transition-transform duration-300 ${expandedSections.whatWeStudy ? "rotate-180" : ""}`}
+						<motion.svg
+							className="w-5 h-5"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
+							animate={{ rotate: expandedSections.whatWeStudy ? 180 : 0 }}
+							transition={{ duration: 0.2 }}
 						>
 							<path
 								strokeLinecap="round"
@@ -141,23 +163,35 @@ export default function GameInstructions({
 								strokeWidth={2}
 								d="M19 9l-7 7-7-7"
 							/>
-						</svg>
+						</motion.svg>
 					</button>
-					<div
-						className={`overflow-hidden transition-all duration-300 ${expandedSections.whatWeStudy ? "max-h-96" : "max-h-0"}`}
-					>
-						<div className="p-3 sm:p-4 pt-1">
-							<p className="text-sm sm:text-base text-gray-300 leading-relaxed">
-								{t("game.instructions.studyDescription")}
-							</p>
-						</div>
-					</div>
-				</div>
+					<AnimatePresence initial={false}>
+						{expandedSections.whatWeStudy && (
+							<motion.div
+								initial={{ height: 0, opacity: 0 }}
+								animate={{ height: "auto", opacity: 1 }}
+								exit={{ height: 0, opacity: 0 }}
+								transition={{ duration: 0.2 }}
+							>
+								<div className="p-3 sm:p-4 pt-1">
+									<p className="text-sm sm:text-base text-gray-300 leading-relaxed">
+										{t("game.instructions.studyDescription")}
+									</p>
+								</div>
+							</motion.div>
+						)}
+					</AnimatePresence>
+				</motion.div>
 
-				<div className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-md rounded-xl border border-gray-700/20 hover:border-gray-600/30 transition-all duration-300">
+				<motion.div 
+					className="bg-gradient-to-br from-gray-800/30 to-gray-900/30 backdrop-blur-md rounded-xl border border-gray-700/20 hover:border-gray-600/30"
+					initial={false}
+					animate={{ borderColor: expandedSections.privacy ? "rgba(75, 85, 99, 0.3)" : "rgba(75, 85, 99, 0.2)" }}
+					transition={{ duration: 0.2 }}
+				>
 					<button
 						onClick={() => toggleSection("privacy")}
-						className="w-full p-3 sm:p-4 flex items-center justify-between text-left cursor-pointer hover:bg-gray-700/10 transition-colors duration-200"
+						className="w-full p-3 sm:p-4 flex items-center justify-between text-left cursor-pointer hover:bg-gray-700/10"
 					>
 						<h2 className="font-semibold text-base sm:text-xl text-white flex items-center gap-2">
 							<svg
@@ -169,11 +203,13 @@ export default function GameInstructions({
 							</svg>
 							{t("game.instructions.privacy")}
 						</h2>
-						<svg
-							className={`w-5 h-5 transform transition-transform duration-300 ${expandedSections.privacy ? "rotate-180" : ""}`}
+						<motion.svg
+							className="w-5 h-5"
 							fill="none"
 							viewBox="0 0 24 24"
 							stroke="currentColor"
+							animate={{ rotate: expandedSections.privacy ? 180 : 0 }}
+							transition={{ duration: 0.2 }}
 						>
 							<path
 								strokeLinecap="round"
@@ -181,31 +217,38 @@ export default function GameInstructions({
 								strokeWidth={2}
 								d="M19 9l-7 7-7-7"
 							/>
-						</svg>
+						</motion.svg>
 					</button>
-					<div
-						className={`overflow-hidden transition-all duration-300 ${expandedSections.privacy ? "max-h-96" : "max-h-0"}`}
-					>
-						<div className="p-3 sm:p-4 pt-1">
-							<p className="text-sm sm:text-base text-gray-300 leading-relaxed">
-								{t("game.instructions.privacyDescription")}
-							</p>
-							<p className="text-sm sm:text-base text-gray-300 leading-relaxed mt-2">
-								This project is open source and available on GitHub. You can
-								review our code, contribute, or report issues at{" "}
-								<a
-									href="https://github.com/blaisewf/TR"
-									target="_blank"
-									rel="noopener noreferrer"
-									className="text-blue-400 hover:text-blue-300 transition-colors duration-200"
-								>
-									github.com/blaisewf/TR
-								</a>
-								.
-							</p>
-						</div>
-					</div>
-				</div>
+					<AnimatePresence initial={false}>
+						{expandedSections.privacy && (
+							<motion.div
+								initial={{ height: 0, opacity: 0 }}
+								animate={{ height: "auto", opacity: 1 }}
+								exit={{ height: 0, opacity: 0 }}
+								transition={{ duration: 0.2 }}
+							>
+								<div className="p-3 sm:p-4 pt-1">
+									<p className="text-sm sm:text-base text-gray-300 leading-relaxed">
+										{t("game.instructions.privacyDescription")}
+									</p>
+									<p className="text-sm sm:text-base text-gray-300 leading-relaxed mt-2">
+										This project is open source and available on GitHub. You can
+										review our code, contribute, or report issues at{" "}
+										<a
+											href="https://github.com/blaisewf/TR"
+											target="_blank"
+											rel="noopener noreferrer"
+											className="text-blue-400 hover:text-blue-300 transition-colors duration-200"
+										>
+											github.com/blaisewf/TR
+										</a>
+										.
+									</p>
+								</div>
+							</motion.div>
+						)}
+					</AnimatePresence>
+				</motion.div>
 			</div>
 
 			<div className="h-px bg-gray-700/20 my-3"></div>
@@ -221,23 +264,36 @@ export default function GameInstructions({
 									onChange={handleVisibilityChange}
 									className="peer absolute inset-0 w-5 h-5 opacity-0 cursor-pointer z-10"
 								/>
-								<div className="w-5 h-5 border-2 border-gray-600 rounded-md bg-gray-800/30 backdrop-blur-sm peer-checked:bg-blue-400 peer-checked:border-blue-400 transition-all duration-200 flex items-center justify-center">
-									{hasVisibilityCondition && (
-										<svg
-											className="w-3 h-3 text-white"
-											viewBox="0 0 24 24"
-											fill="none"
-											stroke="currentColor"
-											strokeWidth="3"
-										>
-											<path
-												d="M20 6L9 17L4 12"
-												strokeLinecap="round"
-												strokeLinejoin="round"
-											/>
-										</svg>
-									)}
-								</div>
+								<motion.div 
+									className="w-5 h-5 border-2 rounded-md bg-gray-800/30 backdrop-blur-sm flex items-center justify-center"
+									animate={{ 
+										backgroundColor: hasVisibilityCondition ? "rgb(96, 165, 250)" : "rgba(31, 41, 55, 0.3)",
+										borderColor: hasVisibilityCondition ? "rgb(96, 165, 250)" : "rgb(75, 85, 99)"
+									}}
+									transition={{ duration: 0.2 }}
+								>
+									<AnimatePresence initial={false}>
+										{hasVisibilityCondition && (
+											<motion.svg
+												initial={{ scale: 0 }}
+												animate={{ scale: 1 }}
+												exit={{ scale: 0 }}
+												transition={{ duration: 0.2 }}
+												className="w-3 h-3 text-white"
+												viewBox="0 0 24 24"
+												fill="none"
+												stroke="currentColor"
+												strokeWidth="3"
+											>
+												<path
+													d="M20 6L9 17L4 12"
+													strokeLinecap="round"
+													strokeLinejoin="round"
+												/>
+											</motion.svg>
+										)}
+									</AnimatePresence>
+								</motion.div>
 							</div>
 							<label
 								htmlFor="visibility-condition"
@@ -247,108 +303,116 @@ export default function GameInstructions({
 							</label>
 						</div>
 
-						<div
-							className={`overflow-hidden transition-all duration-300 ${showVisibilityDetails ? "max-h-96 mt-4" : "max-h-0"}`}
-						>
-							<div className="space-y-4">
-								<div className="flex gap-4">
-									<div className="flex-1 p-3 bg-gray-800/10 rounded-lg border border-green-500/20">
-										<div className="flex items-center gap-2 mb-2">
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												height="20px"
-												viewBox="0 -960 960 960"
-												width="20px"
-												fill="#4ade80"
-											>
-												<path d="m382-354 339-339q12-12 28-12t28 12q12 12 12 28.5T777-636L410-268q-12 12-28 12t-28-12L182-440q-12-12-11.5-28.5T183-497q12-12 28.5-12t28.5 12l142 143Z" />
-											</svg>
-											<h3 className="text-green-400 text-sm font-medium">
-												{t("game.instructions.visibility.consideredConditions")}
-											</h3>
+						<AnimatePresence initial={false}>
+							{showVisibilityDetails && (
+								<motion.div
+									initial={{ height: 0, opacity: 0 }}
+									animate={{ height: "auto", opacity: 1 }}
+									exit={{ height: 0, opacity: 0 }}
+									transition={{ duration: 0.2 }}
+									className="mt-4"
+								>
+									<div className="space-y-4">
+										<div className="flex gap-4">
+											<div className="flex-1 p-3 bg-gray-800/10 rounded-lg border border-green-500/20">
+												<div className="flex items-center gap-2 mb-2">
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														height="20px"
+														viewBox="0 -960 960 960"
+														width="20px"
+														fill="#4ade80"
+													>
+														<path d="m382-354 339-339q12-12 28-12t28 12q12 12 12 28.5T777-636L410-268q-12 12-28 12t-28-12L182-440q-12-12-11.5-28.5T183-497q12-12 28.5-12t28.5 12l142 143Z" />
+													</svg>
+													<h3 className="text-green-400 text-sm font-medium">
+														{t("game.instructions.visibility.consideredConditions")}
+													</h3>
+												</div>
+												<ul className="space-y-1 text-xs text-gray-300">
+													<li className="flex items-center gap-2">
+														<span className="text-green-400">•</span>
+														{t(
+															"game.instructions.visibility.conditions.colorBlindness",
+														)}
+													</li>
+													<li className="flex items-center gap-2">
+														<span className="text-green-400">•</span>
+														{t(
+															"game.instructions.visibility.conditions.screenReaders",
+														)}
+													</li>
+													<li className="flex items-center gap-2">
+														<span className="text-green-400">•</span>
+														{t("game.instructions.visibility.conditions.lowVision")}
+													</li>
+													<li className="flex items-center gap-2">
+														<span className="text-green-400">•</span>
+														{t("game.instructions.visibility.conditions.blindness")}
+													</li>
+												</ul>
+											</div>
+
+											<div className="flex-1 p-3 bg-gray-800/10 rounded-lg border border-red-500/20">
+												<div className="flex items-center gap-2 mb-2">
+													<svg
+														xmlns="http://www.w3.org/2000/svg"
+														height="20px"
+														viewBox="0 -960 960 960"
+														width="20px"
+														fill="#f87171"
+													>
+														<path d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
+													</svg>
+													<h3 className="text-red-400 text-sm font-medium">
+														{t("game.instructions.visibility.notConsidered")}
+													</h3>
+												</div>
+												<ul className="space-y-1 text-xs text-gray-300">
+													<li className="flex items-center gap-2">
+														<span className="text-red-400">•</span>
+														{t(
+															"game.instructions.visibility.notConsideredConditions.glasses",
+														)}
+													</li>
+													<li className="flex items-center gap-2">
+														<span className="text-red-400">•</span>
+														{t(
+															"game.instructions.visibility.notConsideredConditions.temporary",
+														)}
+													</li>
+													<li className="flex items-center gap-2">
+														<span className="text-red-400">•</span>
+														{t(
+															"game.instructions.visibility.notConsideredConditions.eyeStrain",
+														)}
+													</li>
+												</ul>
+											</div>
 										</div>
-										<ul className="space-y-1 text-xs text-gray-300">
-											<li className="flex items-center gap-2">
-												<span className="text-green-400">•</span>
-												{t(
-													"game.instructions.visibility.conditions.colorBlindness",
-												)}
-											</li>
-											<li className="flex items-center gap-2">
-												<span className="text-green-400">•</span>
-												{t(
-													"game.instructions.visibility.conditions.screenReaders",
-												)}
-											</li>
-											<li className="flex items-center gap-2">
-												<span className="text-green-400">•</span>
-												{t("game.instructions.visibility.conditions.lowVision")}
-											</li>
-											<li className="flex items-center gap-2">
-												<span className="text-green-400">•</span>
-												{t("game.instructions.visibility.conditions.blindness")}
-											</li>
-										</ul>
-									</div>
 
-									<div className="flex-1 p-3 bg-gray-800/10 rounded-lg border border-red-500/20">
-										<div className="flex items-center gap-2 mb-2">
-											<svg
-												xmlns="http://www.w3.org/2000/svg"
-												height="20px"
-												viewBox="0 -960 960 960"
-												width="20px"
-												fill="#f87171"
+										<p className="text-xs text-gray-400 text-left">
+											{t("game.instructions.visibility.confirmMessage")}
+										</p>
+
+										<div className="flex justify-left gap-3">
+											<button
+												onClick={handleVisibilityConfirm}
+												className="bg-white backdrop-blur-md text-black hover:bg-white/70 font-medium py-1.5 px-4 rounded-full text-xs shadow-lg transition-all duration-300 cursor-pointer"
 											>
-												<path d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
-											</svg>
-											<h3 className="text-red-400 text-sm font-medium">
-												{t("game.instructions.visibility.notConsidered")}
-											</h3>
+												{t("game.instructions.visibility.confirm")}
+											</button>
+											<button
+												onClick={() => setShowVisibilityDetails(false)}
+												className="text-gray-400 hover:text-white text-xs transition-colors duration-200 cursor-pointer"
+											>
+												{t("game.instructions.visibility.cancel")}
+											</button>
 										</div>
-										<ul className="space-y-1 text-xs text-gray-300">
-											<li className="flex items-center gap-2">
-												<span className="text-red-400">•</span>
-												{t(
-													"game.instructions.visibility.notConsideredConditions.glasses",
-												)}
-											</li>
-											<li className="flex items-center gap-2">
-												<span className="text-red-400">•</span>
-												{t(
-													"game.instructions.visibility.notConsideredConditions.temporary",
-												)}
-											</li>
-											<li className="flex items-center gap-2">
-												<span className="text-red-400">•</span>
-												{t(
-													"game.instructions.visibility.notConsideredConditions.eyeStrain",
-												)}
-											</li>
-										</ul>
 									</div>
-								</div>
-
-								<p className="text-xs text-gray-400 text-left">
-									{t("game.instructions.visibility.confirmMessage")}
-								</p>
-
-								<div className="flex justify-left gap-3">
-									<button
-										onClick={handleVisibilityConfirm}
-										className="bg-white backdrop-blur-md text-black hover:bg-white/70 font-medium py-1.5 px-4 rounded-full text-xs shadow-lg transition-all duration-300 cursor-pointer"
-									>
-										{t("game.instructions.visibility.confirm")}
-									</button>
-									<button
-										onClick={() => setShowVisibilityDetails(false)}
-										className="text-gray-400 hover:text-white text-xs transition-colors duration-200 cursor-pointer"
-									>
-										{t("game.instructions.visibility.cancel")}
-									</button>
-								</div>
-							</div>
-						</div>
+								</motion.div>
+							)}
+						</AnimatePresence>
 					</div>
 				</div>
 
