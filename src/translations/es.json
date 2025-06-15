@@ -119,8 +119,9 @@
 			}
 		},
 		"users": {
-			"title": "Mejores usuarios",
+			"title": "Mejores Usuarios",
 			"description": "clasifica a los jugadores según su rendimiento y logros",
+			"searchPlaceholder": "Buscar por ID de jugador...",
 			"table": {
 				"playerId": "ID del jugador",
 				"bestLevel": "Mejor nivel",

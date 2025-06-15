@@ -2,7 +2,7 @@
 
 import Background from "@/components/layout/Background";
 import { getPlayerId } from "@/lib/utils/playerId";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import {
 	Bar,
@@ -20,6 +20,39 @@ import {
 	YAxis,
 } from "recharts";
 import type { LeaderboardData } from "../../types/leaderboard";
+import { motion, Variants } from "framer-motion";
+
+const containerVariants: Variants = {
+	hidden: { opacity: 0 },
+	visible: {
+		opacity: 1,
+		transition: {
+			staggerChildren: 0.1
+		}
+	}
+};
+
+const rowVariants: Variants = {
+	hidden: { opacity: 0, y: 10 },
+	visible: {
+		opacity: 1,
+		y: 0,
+		transition: {
+			duration: 0.3
+		}
+	}
+};
+
+const tableVariants: Variants = {
+	hidden: { opacity: 0 },
+	visible: {
+		opacity: 1,
+		transition: {
+			duration: 0.3,
+			ease: [0.4, 0, 0.2, 1]
+		}
+	}
+};
 
 export default function LeaderboardPage() {
 	const { t } = useTranslation();
@@ -28,34 +61,38 @@ export default function LeaderboardPage() {
 	const [error, setError] = useState<string | null>(null);
 	const [viewMode, setViewMode] = useState<"global" | "profile">("global");
 	const [currentPlayerId, setCurrentPlayerId] = useState<string | null>(null);
+	const [searchQuery, setSearchQuery] = useState("");
 
 	useEffect(() => {
 		setCurrentPlayerId(getPlayerId());
 	}, []);
 
-	useEffect(() => {
-		const fetchLeaderboardData = async () => {
-			try {
-				const url = new URL("/api/leaderboard", window.location.origin);
-				url.searchParams.set("view", viewMode);
-				if (viewMode === "profile" && currentPlayerId) {
-					url.searchParams.set("player", currentPlayerId);
-				}
-
-				const response = await fetch(url);
-				if (!response.ok) throw new Error("Failed to fetch leaderboard data");
-				const data = await response.json();
-				setData(data);
-			} catch (error) {
-				console.error("Error fetching leaderboard data:", error);
-				setError(t("leaderboard.error"));
-			} finally {
-				setLoading(false);
+	const fetchLeaderboardData = useCallback(async () => {
+		try {
+			const url = new URL("/api/leaderboard", window.location.origin);
+			url.searchParams.set("view", viewMode);
+			if (viewMode === "profile" && currentPlayerId) {
+				url.searchParams.set("player", currentPlayerId);
 			}
-		};
+			if (searchQuery) {
+				url.searchParams.set("search", searchQuery);
+			}
 
+			const response = await fetch(url);
+			if (!response.ok) throw new Error("Failed to fetch leaderboard data");
+			const data = await response.json();
+			setData(data);
+		} catch (error) {
+			console.error("Error fetching leaderboard data:", error);
+			setError(t("leaderboard.error"));
+		} finally {
+			setLoading(false);
+		}
+	}, [viewMode, currentPlayerId, searchQuery, t]);
+
+	useEffect(() => {
 		fetchLeaderboardData();
-	}, [t, viewMode, currentPlayerId]);
+	}, [fetchLeaderboardData]);
 
 	if (loading) {
 		return (
@@ -188,7 +225,12 @@ export default function LeaderboardPage() {
 				</div>
 
 				{/* Color Models Section */}
-				<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30">
+				<motion.div 
+					className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30"
+					variants={tableVariants}
+					initial="hidden"
+					animate="visible"
+				>
 					<h2 className="text-2xl font-bold mb-2 text-center text-white">
 						{t("leaderboard.colorModels.title")}
 					</h2>
@@ -260,7 +302,13 @@ export default function LeaderboardPage() {
 
 					{/* Original Table */}
 					<div className="overflow-x-auto">
-						<table className="min-w-full divide-y divide-gray-700">
+						<motion.table 
+							className="min-w-full divide-y divide-gray-700"
+							variants={containerVariants}
+							initial="hidden"
+							animate="visible"
+							style={{ overflow: 'hidden' }}
+						>
 							<thead>
 								<tr>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
@@ -284,9 +332,10 @@ export default function LeaderboardPage() {
 								{data?.colorModels
 									.sort((a, b) => (b.accuracy || 0) - (a.accuracy || 0))
 									.map((model, index) => (
-										<tr
+										<motion.tr
 											key={model.model}
 											className="hover:bg-gray-700/30 transition-colors"
+											variants={rowVariants}
 										>
 											<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400">
 												{index + 1}
@@ -303,15 +352,20 @@ export default function LeaderboardPage() {
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
 												{model.avgTime?.toFixed(3) ?? "0"}s
 											</td>
-										</tr>
+										</motion.tr>
 									))}
 							</tbody>
-						</table>
+						</motion.table>
 					</div>
-				</div>
+				</motion.div>
 
 				{/* Color Families Section */}
-				<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30">
+				<motion.div 
+					className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30"
+					variants={tableVariants}
+					initial="hidden"
+					animate="visible"
+				>
 					<h2 className="text-2xl font-bold mb-2 text-center text-white">
 						{t("leaderboard.colorFamilies.title")}
 					</h2>
@@ -369,7 +423,13 @@ export default function LeaderboardPage() {
 
 					{/* Original Table */}
 					<div className="overflow-x-auto">
-						<table className="min-w-full divide-y divide-gray-700">
+						<motion.table 
+							className="min-w-full divide-y divide-gray-700"
+							variants={containerVariants}
+							initial="hidden"
+							animate="visible"
+							style={{ overflow: 'hidden' }}
+						>
 							<thead>
 								<tr>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
@@ -391,9 +451,10 @@ export default function LeaderboardPage() {
 							</thead>
 							<tbody className="divide-y divide-gray-700">
 								{data?.colorFamilies?.map((family, index) => (
-									<tr
+									<motion.tr
 										key={family.name}
 										className="hover:bg-gray-700/30 transition-colors"
+										variants={rowVariants}
 									>
 										<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400">
 											{index + 1}
@@ -418,23 +479,53 @@ export default function LeaderboardPage() {
 										<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
 											{family.avgTime?.toFixed(2) ?? "0"}s
 										</td>
-									</tr>
+									</motion.tr>
 								))}
 							</tbody>
-						</table>
+						</motion.table>
 					</div>
-				</div>
+				</motion.div>
 
 				{/* Users Section */}
-				<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30">
+				<motion.div 
+					className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30"
+					variants={tableVariants}
+					initial="hidden"
+					animate="visible"
+				>
 					<h2 className="text-2xl font-bold mb-2 text-center text-white">
 						{t("leaderboard.users.title")}
 					</h2>
 					<p className="text-sm text-gray-400 text-center mb-6">
 						{t("leaderboard.users.description")}
 					</p>
+
+					{/* Search Input */}
+					<div className="mb-6">
+						<div className="relative">
+							<input
+								type="text"
+								value={searchQuery}
+								onChange={(e) => setSearchQuery(e.target.value)}
+								placeholder={t("leaderboard.users.searchPlaceholder")}
+								className="w-full bg-gray-800/50 border border-gray-700/30 rounded-lg py-2 px-4 pl-10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent"
+							/>
+							<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+								<svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+								</svg>
+							</div>
+						</div>
+					</div>
+
 					<div className="overflow-x-auto">
-						<table className="min-w-full divide-y divide-gray-700">
+						<motion.table 
+							className="min-w-full divide-y divide-gray-700"
+							variants={containerVariants}
+							initial="hidden"
+							animate="visible"
+							style={{ overflow: 'hidden' }}
+						>
 							<thead>
 								<tr>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
@@ -462,10 +553,16 @@ export default function LeaderboardPage() {
 							</thead>
 							<tbody className="divide-y divide-gray-700">
 								{data?.users?.length ? (
-									data.users.map((user) => (
-										<tr
+									data.users
+										.filter(user => 
+											user.player_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+											user.deviceType.toLowerCase().includes(searchQuery.toLowerCase())
+										)
+										.map((user) => (
+										<motion.tr
 											key={user.player_id}
 											className="hover:bg-gray-700/30 transition-colors"
+											variants={rowVariants}
 										>
 											<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400">
 												{user.rank}
@@ -490,25 +587,32 @@ export default function LeaderboardPage() {
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
 												{user.accuracy?.toFixed(1) ?? "0"}%
 											</td>
-										</tr>
+										</motion.tr>
 									))
 								) : (
-									<tr>
+									<motion.tr
+										variants={rowVariants}
+									>
 										<td
-											colSpan={6}
+											colSpan={7}
 											className="px-6 py-4 text-center text-sm text-gray-400"
 										>
 											{t("leaderboard.users.noData")}
 										</td>
-									</tr>
+									</motion.tr>
 								)}
 							</tbody>
-						</table>
+						</motion.table>
 					</div>
-				</div>
+				</motion.div>
 
 				{/* Recent Sessions Section */}
-				<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30">
+				<motion.div 
+					className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30"
+					variants={tableVariants}
+					initial="hidden"
+					animate="visible"
+				>
 					<h2 className="text-2xl font-bold mb-2 text-center text-white">
 						{t("leaderboard.sessions.title")}
 					</h2>
@@ -610,7 +714,13 @@ export default function LeaderboardPage() {
 
 					{/* Original Table */}
 					<div className="overflow-x-auto">
-						<table className="min-w-full divide-y divide-gray-700">
+						<motion.table 
+							className="min-w-full divide-y divide-gray-700"
+							variants={containerVariants}
+							initial="hidden"
+							animate="visible"
+							style={{ overflow: 'hidden' }}
+						>
 							<thead>
 								<tr>
 									<th className="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
@@ -633,9 +743,10 @@ export default function LeaderboardPage() {
 							<tbody className="divide-y divide-gray-700">
 								{data?.sessions?.length ? (
 									data.sessions.slice(0, 10).map((session) => (
-										<tr
+										<motion.tr
 											key={session.session_id}
 											className="hover:bg-gray-700/30 transition-colors"
+											variants={rowVariants}
 										>
 											<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
 												{session.player_id}
@@ -654,22 +765,24 @@ export default function LeaderboardPage() {
 													? t("leaderboard.sessions.deviceTypes.mobile")
 													: t("leaderboard.sessions.deviceTypes.desktop")}
 											</td>
-										</tr>
+										</motion.tr>
 									))
 								) : (
-									<tr>
+									<motion.tr
+										variants={rowVariants}
+									>
 										<td
 											colSpan={5}
 											className="px-6 py-4 text-center text-sm text-gray-400"
 										>
 											{t("leaderboard.sessions.noData")}
 										</td>
-									</tr>
+									</motion.tr>
 								)}
 							</tbody>
-						</table>
+						</motion.table>
 					</div>
-				</div>
+				</motion.div>
 			</div>
 		</div>
 	);

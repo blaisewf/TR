@@ -119,8 +119,9 @@
 			}
 		},
 		"users": {
-			"title": "Millors usuaris",
+			"title": "Millors Usuaris",
 			"description": "classifica els jugadors segons el seu rendiment i assoliments",
+			"searchPlaceholder": "Cercar per ID de jugador...",
 			"table": {
 				"playerId": "ID del jugador",
 				"bestLevel": "Millor nivell",

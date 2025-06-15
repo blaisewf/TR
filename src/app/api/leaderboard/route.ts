@@ -46,6 +46,7 @@ export async function GET(request: Request) {
 		const { searchParams } = new URL(request.url);
 		const view = searchParams.get("view") || "global";
 		const playerId = searchParams.get("player");
+		const searchQuery = searchParams.get("search")?.toLowerCase();
 
 		// fetch all sessions
 		const { data: sessions, error } = await supabase
@@ -241,8 +242,17 @@ export async function GET(request: Request) {
 			}),
 		);
 
+		// filter users by search query if provided
+		let filteredUserData = userData;
+		if (searchQuery) {
+			filteredUserData = userData.filter(user => 
+				user.player_id.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
+				user.deviceType.toLowerCase().startsWith(searchQuery.toLowerCase())
+			);
+		}
+
 		// sort by best level (descending) first, then by accuracy (descending)
-		const sortedUserData = userData
+		const sortedUserData = filteredUserData
 			.sort((a, b) => {
 				if (b.bestLevel !== a.bestLevel) {
 					return b.bestLevel - a.bestLevel;

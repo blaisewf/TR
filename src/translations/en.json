@@ -121,6 +121,7 @@
 		"users": {
 			"title": "Top Users",
 			"description": "ranks players based on their performance and achievements",
+			"searchPlaceholder": "Search by player ID...",
 			"table": {
 				"playerId": "Player ID",
 				"bestLevel": "Best Level",
