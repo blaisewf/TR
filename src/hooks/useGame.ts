@@ -113,7 +113,7 @@ export const useGame = () => {
 	}, [level, preloadedRound, generateRound, preloadNextRound]);
 
 	// initialize game
-	const startGame = useCallback((hasVisibilityCondition: boolean) => {
+	const startGame = useCallback((hasVisibilityCondition: boolean = false) => {
 		setGameState("playing");
 		setLevel(1);
 		setScore(0);
