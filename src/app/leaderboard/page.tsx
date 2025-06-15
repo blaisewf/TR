@@ -563,48 +563,48 @@ export default function LeaderboardPage() {
 							</thead>
 							<tbody className="divide-y divide-gray-700">
 								{data?.users?.length ? (
-									data.users
-										.filter(
-											(user) =>
-												user.player_id
-													.toLowerCase()
-													.includes(searchQuery.toLowerCase()) ||
-												user.deviceType
-													.toLowerCase()
-													.includes(searchQuery.toLowerCase()),
-										)
-										.slice(0, 10)
-										.map((user) => (
-											<motion.tr
-												key={user.player_id}
-												className="hover:bg-gray-700/30 transition-colors"
-												variants={rowVariants}
-											>
-												<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400">
-													{user.rank}
-												</td>
-												<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
-													{user.player_id.split("-")[0]}
-												</td>
-												<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-													{user.bestLevel}
-												</td>
-												<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-													{user.totalPlayTime
-														? `${Math.floor(user.totalPlayTime / 60)}m ${Math.round(user.totalPlayTime % 60)}s`
-														: "0m 0s"}
-												</td>
-												<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-													{user.totalGames || 0}
-												</td>
-												<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-													{user.deviceType}
-												</td>
-												<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-													{user.accuracy?.toFixed(1) ?? "0"}%
-												</td>
-											</motion.tr>
-										))
+									(searchQuery
+										? data.users.filter(
+												(user) =>
+													user.player_id
+														.toLowerCase()
+														.includes(searchQuery.toLowerCase()) ||
+													user.deviceType
+														.toLowerCase()
+														.includes(searchQuery.toLowerCase()),
+										  )
+										: data.users.slice(0, 10)
+									).map((user) => (
+										<motion.tr
+											key={user.player_id}
+											className="hover:bg-gray-700/30 transition-colors"
+											variants={rowVariants}
+										>
+											<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400">
+												{user.rank}
+											</td>
+											<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+												{user.player_id.split("-")[0]}
+											</td>
+											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+												{user.bestLevel}
+											</td>
+											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+												{user.totalPlayTime
+													? `${Math.floor(user.totalPlayTime / 60)}m ${Math.round(user.totalPlayTime % 60)}s`
+													: "0m 0s"}
+											</td>
+											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+												{user.totalGames || 0}
+											</td>
+											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+												{user.deviceType}
+											</td>
+											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+												{user.accuracy?.toFixed(1) ?? "0"}%
+											</td>
+										</motion.tr>
+									))
 								) : (
 									<motion.tr variants={rowVariants}>
 										<td
