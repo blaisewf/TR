@@ -105,27 +105,12 @@ export default function GameInstructions({
 								transition={{ duration: 0.2 }}
 							>
 								<div className="p-3 sm:p-4 pt-1">
-									<ul className="list-none space-y-1.5 sm:space-y-2.5 text-sm sm:text-base text-gray-300 leading-relaxed">
-										<li className="flex items-center gap-2">
-											<span className="text-gray-300">•</span>
-											{t("game.instructions.steps.1")}
-										</li>
-										<li className="flex items-center gap-2">
-											<span className="text-gray-300">•</span>
-											{t("game.instructions.steps.2")}
-										</li>
-										<li className="flex items-center gap-2">
-											<span className="text-gray-300">•</span>
-											{t("game.instructions.steps.3")}
-										</li>
-										<li className="flex items-center gap-2">
-											<span className="text-gray-300">•</span>
-											{t("game.instructions.steps.4")}
-										</li>
-										<li className="flex items-center gap-2">
-											<span className="text-gray-300">•</span>
-											{t("game.instructions.steps.5")}
-										</li>
+									<ul className="list-disc pl-4 space-y-1.5 sm:space-y-2.5 text-sm sm:text-base text-gray-300 leading-relaxed">
+										<li>{t("game.instructions.steps.1")}</li>
+										<li>{t("game.instructions.steps.2")}</li>
+										<li>{t("game.instructions.steps.3")}</li>
+										<li>{t("game.instructions.steps.4")}</li>
+										<li>{t("game.instructions.steps.5")}</li>
 									</ul>
 								</div>
 							</motion.div>
@@ -347,31 +332,11 @@ export default function GameInstructions({
 														)}
 													</h3>
 												</div>
-												<ul className="space-y-1 text-xs text-gray-300">
-													<li className="flex items-center gap-2">
-														<span className="text-green-400">•</span>
-														{t(
-															"game.instructions.visibility.conditions.colorBlindness",
-														)}
-													</li>
-													<li className="flex items-center gap-2">
-														<span className="text-green-400">•</span>
-														{t(
-															"game.instructions.visibility.conditions.screenReaders",
-														)}
-													</li>
-													<li className="flex items-center gap-2">
-														<span className="text-green-400">•</span>
-														{t(
-															"game.instructions.visibility.conditions.lowVision",
-														)}
-													</li>
-													<li className="flex items-center gap-2">
-														<span className="text-green-400">•</span>
-														{t(
-															"game.instructions.visibility.conditions.blindness",
-														)}
-													</li>
+												<ul className="list-disc pl-4 space-y-1 text-xs text-gray-300">
+													<li>{t("game.instructions.visibility.conditions.colorBlindness")}</li>
+													<li>{t("game.instructions.visibility.conditions.screenReaders")}</li>
+													<li>{t("game.instructions.visibility.conditions.lowVision")}</li>
+													<li>{t("game.instructions.visibility.conditions.blindness")}</li>
 												</ul>
 											</div>
 
@@ -390,25 +355,10 @@ export default function GameInstructions({
 														{t("game.instructions.visibility.notConsidered")}
 													</h3>
 												</div>
-												<ul className="space-y-1 text-xs text-gray-300">
-													<li className="flex items-center gap-2">
-														<span className="text-red-400">•</span>
-														{t(
-															"game.instructions.visibility.notConsideredConditions.glasses",
-														)}
-													</li>
-													<li className="flex items-center gap-2">
-														<span className="text-red-400">•</span>
-														{t(
-															"game.instructions.visibility.notConsideredConditions.temporary",
-														)}
-													</li>
-													<li className="flex items-center gap-2">
-														<span className="text-red-400">•</span>
-														{t(
-															"game.instructions.visibility.notConsideredConditions.eyeStrain",
-														)}
-													</li>
+												<ul className="list-disc pl-4 space-y-1 text-xs text-gray-300">
+													<li>{t("game.instructions.visibility.notConsideredConditions.glasses")}</li>
+													<li>{t("game.instructions.visibility.notConsideredConditions.temporary")}</li>
+													<li>{t("game.instructions.visibility.notConsideredConditions.eyeStrain")}</li>
 												</ul>
 											</div>
 										</div>
