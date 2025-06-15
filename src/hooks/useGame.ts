@@ -202,20 +202,26 @@ export const useGame = () => {
 		if (gameState === "playing") {
 			const interval = setInterval(() => {
 				const now = Date.now();
-				setElapsedTime((now - gameStartTime) / 1000);
-
+				const newElapsedTime = (now - gameStartTime) / 1000;
 				const elapsedSinceRoundStart = (now - roundStartTime.current) / 1000;
 				const remaining = Math.max(0, LEVEL_TIMER - elapsedSinceRoundStart);
 
+				// batch state updates
 				if (remaining === 0) {
 					handleTimeout();
 				} else {
-					setTimeRemaining(remaining);
+					// only update if there's a significant change
+					if (Math.abs(newElapsedTime - elapsedTime) >= 0.1) {
+						setElapsedTime(newElapsedTime);
+					}
+					if (Math.abs(remaining - timeRemaining) >= 0.1) {
+						setTimeRemaining(remaining);
+					}
 				}
 			}, 100);
 			return () => clearInterval(interval);
 		}
-	}, [gameState, gameStartTime, handleTimeout]);
+	}, [gameState, gameStartTime, handleTimeout, elapsedTime, timeRemaining]);
 
 	return {
 		gameState,

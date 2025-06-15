@@ -5,8 +5,9 @@ import GameInstructions from "@/components/game/GameInstructions";
 import GameOver from "@/components/game/GameOver";
 import Background from "@/components/layout/Background";
 import { useGame } from "@/hooks/useGame";
+import { memo } from "react";
 
-export default function ColorPerceptionGame() {
+const ColorPerceptionGame = memo(function ColorPerceptionGame() {
 	const {
 		gameState,
 		currentRound,
@@ -50,4 +51,6 @@ export default function ColorPerceptionGame() {
 			</div>
 		</div>
 	);
-}
+});
+
+export default ColorPerceptionGame;

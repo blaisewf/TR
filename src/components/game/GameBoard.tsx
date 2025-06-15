@@ -3,6 +3,7 @@ import { COLOR_MODEL_DISPLAY_NAMES } from "@/types/game";
 import { useTranslation } from "react-i18next";
 import ColorGrid from "./ColorGrid";
 import GameStats from "./GameStats";
+import { memo } from "react";
 
 interface GameBoardProps {
 	currentRound: GameRound;
@@ -13,7 +14,7 @@ interface GameBoardProps {
 	onSquareClick: (position: [number, number], coords: [number, number]) => void;
 }
 
-export default function GameBoard({
+function GameBoard({
 	currentRound,
 	level,
 	score,
@@ -55,3 +56,5 @@ export default function GameBoard({
 		</div>
 	);
 }
+
+export default memo(GameBoard);

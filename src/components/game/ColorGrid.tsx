@@ -2,7 +2,7 @@
 
 import { rgbToCss } from "@/lib/utils/colorGenerator";
 import { motion } from "framer-motion";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
 interface ColorGridProps {
@@ -33,7 +33,7 @@ export default function ColorGrid({
 		setHasClicked(false);
 	}, [changedPosition]);
 
-	const handleSquareClick = (
+	const handleSquareClick = useCallback((
 		row: number,
 		col: number,
 		event: React.MouseEvent,
@@ -46,9 +46,9 @@ export default function ColorGrid({
 
 		setHasClicked(true);
 		onSquareClick([row, col], [Math.round(x), Math.round(y)]);
-	};
+	}, [disabled, hasClicked, isColorsUpdated, onSquareClick]);
 
-	const getSquareColor = (
+	const getSquareColor = useCallback((
 		row: number,
 		col: number,
 	): [number, number, number] => {
@@ -56,7 +56,35 @@ export default function ColorGrid({
 			return changedColor;
 		}
 		return baseColor;
-	};
+	}, [changedPosition, changedColor, baseColor]);
+
+	const gridSquares = useMemo(() => {
+		return Array.from({ length: gridSize * gridSize }, (_, index) => {
+			const row = Math.floor(index / gridSize);
+			const col = index % gridSize;
+			const color = getSquareColor(row, col);
+
+			return (
+				<motion.button
+					key={`${row}-${col}`}
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1 }}
+					whileTap={{ scale: 0.95 }}
+					className={`
+						w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 border border-gray-700/50 rounded-lg
+						${disabled ? "cursor-not-allowed" : "cursor-pointer"}
+					`}
+					style={{ backgroundColor: rgbToCss(color) }}
+					onClick={(e) => handleSquareClick(row, col, e)}
+					disabled={disabled}
+					aria-label={t("game.grid.squareLabel", {
+						row: row + 1,
+						col: col + 1,
+					})}
+				/>
+			);
+		});
+	}, [gridSize, getSquareColor, handleSquareClick, disabled, t]);
 
 	return (
 		<div
@@ -68,41 +96,7 @@ export default function ColorGrid({
 			}}
 			key={`grid-${changedPosition[0]}-${changedPosition[1]}`}
 		>
-			{Array.from({ length: gridSize * gridSize }, (_, index) => {
-				const row = Math.floor(index / gridSize);
-				const col = index % gridSize;
-				const color = getSquareColor(row, col);
-
-				return (
-					<motion.button
-						key={`${row}-${col}`}
-						initial={{ opacity: 0 }}
-						animate={{
-							opacity: 1,
-							transition: {
-								duration: 0.2,
-								ease: "easeOut",
-							},
-						}}
-						whileHover={{
-							scale: 1.05,
-							transition: { duration: 0.15 },
-						}}
-						whileTap={{ scale: 0.95 }}
-						className={`
-              w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 border border-gray-700/50 rounded-lg
-              ${disabled ? "cursor-not-allowed" : "cursor-pointer hover:shadow-lg"}
-            `}
-						style={{ backgroundColor: rgbToCss(color) }}
-						onClick={(e) => handleSquareClick(row, col, e)}
-						disabled={disabled}
-						aria-label={t("game.grid.squareLabel", {
-							row: row + 1,
-							col: col + 1,
-						})}
-					/>
-				);
-			})}
+			{gridSquares}
 		</div>
 	);
 }
