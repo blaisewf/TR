@@ -333,10 +333,26 @@ export default function GameInstructions({
 													</h3>
 												</div>
 												<ul className="list-disc pl-4 space-y-1 text-xs text-gray-300">
-													<li>{t("game.instructions.visibility.conditions.colorBlindness")}</li>
-													<li>{t("game.instructions.visibility.conditions.screenReaders")}</li>
-													<li>{t("game.instructions.visibility.conditions.lowVision")}</li>
-													<li>{t("game.instructions.visibility.conditions.blindness")}</li>
+													<li>
+														{t(
+															"game.instructions.visibility.conditions.colorBlindness",
+														)}
+													</li>
+													<li>
+														{t(
+															"game.instructions.visibility.conditions.screenReaders",
+														)}
+													</li>
+													<li>
+														{t(
+															"game.instructions.visibility.conditions.lowVision",
+														)}
+													</li>
+													<li>
+														{t(
+															"game.instructions.visibility.conditions.blindness",
+														)}
+													</li>
 												</ul>
 											</div>
 
@@ -356,9 +372,21 @@ export default function GameInstructions({
 													</h3>
 												</div>
 												<ul className="list-disc pl-4 space-y-1 text-xs text-gray-300">
-													<li>{t("game.instructions.visibility.notConsideredConditions.glasses")}</li>
-													<li>{t("game.instructions.visibility.notConsideredConditions.temporary")}</li>
-													<li>{t("game.instructions.visibility.notConsideredConditions.eyeStrain")}</li>
+													<li>
+														{t(
+															"game.instructions.visibility.notConsideredConditions.glasses",
+														)}
+													</li>
+													<li>
+														{t(
+															"game.instructions.visibility.notConsideredConditions.temporary",
+														)}
+													</li>
+													<li>
+														{t(
+															"game.instructions.visibility.notConsideredConditions.eyeStrain",
+														)}
+													</li>
 												</ul>
 											</div>
 										</div>
