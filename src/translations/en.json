@@ -5,8 +5,6 @@
 	},
 	"navigation": {
 		"home": "Home",
-		"about": "About",
-		"contact": "Contact",
 		"leaderboard": "Leaderboard"
 	},
 	"buttons": {
@@ -22,7 +20,7 @@
 	"game": {
 		"instructions": {
 			"title": "Color Perception Test",
-			"projectContext": "This is part of a Treball de Recerca (Research Project) for high school (Bachillerat) in Catalonia, studying how humans and machines perceive colors differently.",
+			"projectContext": "This is part of a Treball de Recerca (Research Project) for Bachillerat (high school) in Catalonia, studying how humans and machines perceive colors differently.",
 			"description": "In this test, you'll be shown a grid of colors. Your task is to identify the color that appears most different from the others.",
 			"hasVisibilityCondition": "I have a visual condition (e.g., color blindness, reduced vision)",
 			"steps": {
@@ -58,14 +56,14 @@
 			}
 		},
 		"stats": {
-			"score": "Score",
+			"level": "Level",
 			"time": "Time",
 			"accuracy": "Accuracy",
 			"colorModel": "Color Model",
 			"timeLeft": "Time Left: {{time}}s"
 		},
 		"gameOver": {
-			"title": "Test Complete!",
+			"title": "Test Completed!",
 			"congratulations": "Congratulations!",
 			"finalScore": "Your Final Score",
 			"accuracy": "Accuracy",
@@ -75,7 +73,8 @@
 			"playAgain": "Play Again",
 			"home": "Return to Home",
 			"shareText": "I completed level {{level}} with a score of {{score}} in {{time}}! Try it yourself!",
-			"thankYou": "Thank you for participating in our color perception study! Your anonymous data helps us understand human color perception better."
+			"thankYou": "Thank you for participating in our color perception study! Your anonymous data helps us understand human color perception better.",
+			"autoRestart": "New game starting in {{seconds}} seconds"
 		},
 		"board": {
 			"loading": "Loading...",

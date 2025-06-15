@@ -23,6 +23,7 @@ export default function GameOver({
 	const [showConfetti, setShowConfetti] = useState(true);
 	const [shareError, setShareError] = useState(false);
 	const [confettiOpacity, setConfettiOpacity] = useState(0);
+	const [countdown, setCountdown] = useState(7);
 
 	useEffect(() => {
 		// set initial dimensions
@@ -51,6 +52,28 @@ export default function GameOver({
 			clearTimeout(timer);
 		};
 	}, []);
+
+	useEffect(() => {
+		const countdownTimer = setInterval(() => {
+			setCountdown((prev) => {
+				if (prev <= 1) {
+					clearInterval(countdownTimer);
+					return 0;
+				}
+				return prev - 1;
+			});
+		}, 1000);
+
+		return () => {
+			clearInterval(countdownTimer);
+		};
+	}, []);
+
+	useEffect(() => {
+		if (countdown === 0) {
+			onRestart();
+		}
+	}, [countdown, onRestart]);
 
 	const formatTime = (seconds: number): string => {
 		const mins = Math.floor(seconds / 60);
@@ -116,12 +139,16 @@ export default function GameOver({
 		}, 2000);
 	};
 
+	const handlePlayAgain = () => {
+		onRestart();
+	};
+
 	return (
 		<>
-			<div className="max-w-2xl mx-auto p-4 sm:p-6 md:p-10 relative">
+			<div className="max-w-2xl mx-auto p-4 sm:p-6 md:p-10 relative z-10">
 				{showConfetti && (
 					<div
-						className="absolute inset-0 overflow-hidden transition-opacity duration-1000"
+						className="absolute inset-0 overflow-hidden transition-opacity duration-1000 pointer-events-none"
 						style={{ opacity: confettiOpacity }}
 					>
 						<Confetti
@@ -133,6 +160,21 @@ export default function GameOver({
 						/>
 					</div>
 				)}
+
+				{/* Play Again Button */}
+				<div className="flex flex-col items-center gap-2 mb-8">
+					<button
+						onClick={handlePlayAgain}
+						className="w-full sm:w-auto bg-gray-800/20 backdrop-blur-md border border-gray-700/20 text-white hover:bg-gray-700/30 font-medium py-3 px-6 sm:px-8 rounded-full text-sm shadow-lg transition-all duration-300 cursor-pointer"
+					>
+						{t("game.gameOver.playAgain")}
+					</button>
+					<div className="text-gray-400 text-sm">
+						{t("game.gameOver.autoRestart", { seconds: countdown })}
+					</div>
+				</div>
+				<div className="h-px bg-gray-700/20 my-6 sm:my-8"></div>
+
 				<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-4 sm:mb-6 md:mb-8 text-white">
 					{t("game.gameOver.title")}
 				</h1>
@@ -142,10 +184,10 @@ export default function GameOver({
 						<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 							<div className="text-center">
 								<div className="text-2xl sm:text-3xl font-bold text-white">
-									{totalScore}
+									{finalLevel}
 								</div>
 								<div className="text-xs sm:text-sm text-gray-400 mt-1">
-									{t("game.stats.score")}
+									{t("game.stats.level")}
 								</div>
 							</div>
 							<div className="text-center">
@@ -169,15 +211,7 @@ export default function GameOver({
 					</div>
 				</div>
 
-				<div className="h-px bg-gray-700/20 my-6 sm:my-8"></div>
 				<div className="flex flex-col items-center gap-3 sm:gap-4">
-					<button
-						onClick={onRestart}
-						className="w-full sm:w-auto bg-gray-800/20 backdrop-blur-md border border-gray-700/20 text-white hover:bg-gray-700/30 font-medium py-2 px-6 sm:px-8 rounded-full text-sm shadow-lg transition-all duration-300 cursor-pointer"
-					>
-						{t("game.gameOver.playAgain")}
-					</button>
-
 					<button
 						onClick={handleShare}
 						className="text-gray-400 hover:text-white text-sm transition-colors duration-300 flex items-center gap-2 cursor-pointer"

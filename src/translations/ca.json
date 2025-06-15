@@ -1,171 +1,171 @@
 {
 	"common": {
-		"copied": "Copiat!",
-		"copyFailed": "Error en copiar"
+	  "copied": "Copiat!",
+	  "copyFailed": "No s'ha pogut copiar"
 	},
 	"navigation": {
-		"home": "Inici",
-		"about": "Sobre",
-		"contact": "Contacte",
-		"leaderboard": "Classificació"
+	  "home": "Inici",
+	  "leaderboard": "Classificació"
 	},
 	"buttons": {
-		"submit": "Enviar",
-		"cancel": "Cancel·lar",
-		"save": "Desar",
-		"delete": "Eliminar",
-		"start": "Iniciar Joc",
-		"restart": "Reiniciar",
-		"next": "Següent",
-		"back": "Enrere"
+	  "submit": "Envia",
+	  "cancel": "Cancel·la",
+	  "save": "Desa",
+	  "delete": "Esborra",
+	  "start": "Comença el joc",
+	  "restart": "Torna a començar",
+	  "next": "Següent",
+	  "back": "Enrere"
 	},
 	"game": {
-		"instructions": {
-			"title": "Test de Percepció de Color",
-			"projectContext": "Això és part d'un Treball de Recerca per a batxillerat a Catalunya, estudiant com els humans i les màquines perceben els colors de manera diferent.",
-			"description": "En aquesta prova, se't mostrarà una graella de colors. La teva tasca és identificar el color que sembla més diferent dels altres.",
-			"hasVisibilityCondition": "Tinc una condició visual (per exemple, daltonisme, visió reduïda)",
-			"steps": {
-				"1": "Observa amb cura la graella de colors",
-				"2": "Identifica el color que destaca més",
-				"3": "Fes clic al color que creus que és diferent",
-				"4": "Tindràs múltiples rondes per provar la teva percepció",
-				"5": "Tens 30 segons per trobar el color diferent a cada ronda"
-			},
-			"ready": "Estàs preparat per començar?",
-			"howToPlay": "Com Jugar",
-			"whatWeStudy": "Què Estem Estudiant",
-			"studyDescription": "Diferents models de color (RGB, CIELAB, Oklab, JzAzBz) representen els colors de diverses maneres. Estem recopilant dades per entendre quins models coincideixen millor amb la percepció humana del color.",
-			"privacy": "Privacitat",
-			"privacyDescription": "Les teves dades es recopilen de forma anònima. Només emmagatzemem les teves respostes, temps i informació bàsica del dispositiu. No es recopila informació personal.",
-			"visibility": {
-				"consideredConditions": "Condicions Considerades",
-				"notConsidered": "No Considerades",
-				"conditions": {
-					"colorBlindness": "Daltonisme",
-					"screenReaders": "Discapacitats visuals que requereixen lectors de pantalla",
-					"lowVision": "Baixa visió",
-					"blindness": "Ceguesa"
-				},
-				"notConsideredConditions": {
-					"glasses": "Portar ulleres o lentilles",
-					"temporary": "Problemes de visió temporals",
-					"eyeStrain": "Fatiga visual"
-				},
-				"confirmMessage": "Si us plau, confirma si tens una condició de visibilitat permanent que afecta com percebes i interactues amb el contingut digital.",
-				"confirm": "Confirmar",
-				"cancel": "Cancel·lar"
-			}
+	  "instructions": {
+		"title": "Test de percepció del color",
+		"projectContext": "Aquest projecte forma part d'un Treball de Recerca de Batxillerat a Catalunya, i estudia com perceben els colors els humans i les màquines.",
+		"description": "En aquest test se’t mostrarà una graella de colors. La teva tasca és identificar el color que és més diferent dels altres.",
+		"hasVisibilityCondition": "Tinc una condició visual (p. ex., daltonisme, visió reduïda)",
+		"steps": {
+		  "1": "Observa la graella de colors amb atenció",
+		  "2": "Identifica el color que més destaca",
+		  "3": "Fes clic en el color que creus que és diferent",
+		  "4": "Hi haurà diverses rondes per posar a prova la teva percepció",
+		  "5": "Tens 30 segons per trobar el color diferent en cada ronda"
 		},
-		"stats": {
-			"score": "Puntuació",
-			"time": "Temps",
-			"accuracy": "Precisió",
-			"colorModel": "Model de Color",
-			"timeLeft": "Temps Restant: {{time}}s"
-		},
-		"gameOver": {
-			"title": "Test completat!",
-			"congratulations": "Enhorabona!",
-			"finalScore": "Puntuació final",
-			"accuracy": "Precisió",
-			"timeSpent": "Temps utilitzat",
-			"roundsCompleted": "Rondes completades",
-			"share": "Comparteix els teus resultats",
-			"playAgain": "Torna a jugar",
-			"home": "Torna a l'inici",
-			"shareText": "He completat el nivell {{level}} amb una puntuació de {{score}} en {{time}}! Prova-ho tu també!",
-			"thankYou": "Gràcies per participar en el nostre estudi sobre la percepció del color! Les teves dades anònimes ens ajuden a entendre millor la percepció humana del color."
-		},
-		"board": {
-			"loading": "Carregant...",
-			"error": "S'ha produït un error. Torna-ho a intentar.",
-			"findDifferent": "Troba el quadrat de color diferent",
-			"wrongAnswers": "Respostes incorrectes: {{count}}/3"
-		},
-		"grid": {
-			"squareLabel": "Quadrat de color a la fila {{row}}, columna {{col}}"
+		"ready": "Estàs preparat per començar?",
+		"howToPlay": "Com jugar",
+		"whatWeStudy": "Què estem estudiant",
+		"studyDescription": "Els diferents models de color (RGB, CIELAB, Oklab, JzAzBz) representen els colors de manera diferent. Recollim dades per entendre quin model s'ajusta millor a la percepció humana.",
+		"privacy": "Privacitat",
+		"privacyDescription": "Les teves dades es recullen de manera anònima. Només emmagatzemem les respostes, el temps i informació bàsica del dispositiu. No es recull cap dada personal.",
+		"visibility": {
+		  "consideredConditions": "Condicions considerades",
+		  "notConsidered": "No considerades",
+		  "conditions": {
+			"colorBlindness": "Daltonisme",
+			"screenReaders": "Discapacitats visuals que requereixen lectors de pantalla",
+			"lowVision": "Condicions de visió reduïda",
+			"blindness": "Ceguesa"
+		  },
+		  "notConsideredConditions": {
+			"glasses": "Portar ulleres o lents de contacte",
+			"temporary": "Problemes de visió temporals",
+			"eyeStrain": "Fatiga visual"
+		  },
+		  "confirmMessage": "Si us plau, confirma si tens una condició visual permanent que afecta com perceps i interactues amb el contingut digital.",
+		  "confirm": "Confirma",
+		  "cancel": "Cancel·la"
 		}
+	  },
+	  "stats": {
+		"level": "Nivell",
+		"time": "Temps",
+		"accuracy": "Precisió",
+		"colorModel": "Model de color",
+		"timeLeft": "Temps restant: {{time}}s"
+	  },
+	  "gameOver": {
+		"title": "Test completat!",
+		"congratulations": "Enhorabona!",
+		"finalScore": "Puntuació final",
+		"accuracy": "Precisió",
+		"timeSpent": "Temps emprat",
+		"roundsCompleted": "Rondes completades",
+		"share": "Comparteix els teus resultats",
+		"playAgain": "Torna a jugar",
+		"home": "Torna a l'inici",
+		"shareText": "He completat el nivell {{level}} amb una puntuació de {{score}} en {{time}}! Prova-ho tu també!",
+		"thankYou": "Gràcies per participar en el nostre estudi de percepció del color! Les teves dades anònimes ens ajuden a entendre millor la percepció humana.",
+		"autoRestart": "Nou joc començant en {{seconds}} segons"
+	  },
+	  "board": {
+		"loading": "Carregant...",
+		"error": "S'ha produït un error. Torna-ho a intentar.",
+		"findDifferent": "Troba el quadrat de color diferent",
+		"wrongAnswers": "Respostes incorrectes: {{count}}/3"
+	  },
+	  "grid": {
+		"squareLabel": "Quadrat de color a la fila {{row}}, columna {{col}}"
+	  }
 	},
 	"antiCheat": {
-		"warning": "Avís",
-		"messages": {
-			"1": "S'han detectat eines de desenvolupador! Tanca-les i actualitza la pàgina per continuar.",
-			"2": "Si us plau, no intentis fer trampes! Aquest experiment requereix la teva participació honesta"
-		},
-		"accept": "Ho entenc"
+	  "warning": "Avís",
+	  "messages": {
+		"1": "S'han detectat eines de desenvolupador! Tanca-les i actualitza la pàgina per continuar.",
+		"2": "Si us plau, no intentis fer trampes! Aquest experiment requereix la teva participació honesta"
+	  },
+	  "accept": "Ho entenc"
 	},
 	"leaderboard": {
-		"loading": "Carregant...",
-		"error": "No s'han pogut carregar les dades de la classificació. Torna-ho a provar més tard.",
-		"viewMode": {
-			"global": "Global",
-			"profile": "Perfil"
-		},
-		"profile": {
-			"noPlayerId": "No s'ha trobat cap ID de jugador. Juga una partida primer.",
-			"noData": {
-				"title": "No hi ha dades disponibles",
-				"message": "Encara no tenim cap dada de joc del teu perfil. Comença a jugar per veure les teves estadístiques!",
-				"info": "Les teves dades es guarden de manera anònima per dispositiu i sessió. Cada cop que juguis, farem un seguiment del teu progrés i el mostrarem aquí.",
-				"playNow": "Juga ara"
-			}
-		},
-		"stats": {
-			"totalGames": "Total de partides",
-			"totalPlayTime": "Temps total de joc",
-			"totalPlayers": "Total de jugadors",
-			"averageAccuracy": "Precisió mitjana"
-		},
-		"colorModels": {
-			"title": "Rendiment dels models de color",
-			"description": "mostra com de bé funciona cada model de color per identificar colors",
-			"table": {
-				"model": "Model",
-				"tests": "Tests",
-				"accuracy": "Precisió",
-				"avgTime": "Temps mitjà"
-			}
-		},
-		"colorFamilies": {
-			"title": "Rendiment per famílies de colors",
-			"description": "mostra com de bé s'identifiquen diferents famílies de colors",
-			"table": {
-				"family": "Família de color",
-				"tests": "Tests",
-				"accuracy": "Precisió",
-				"avgTime": "Temps mitjà"
-			}
-		},
-		"users": {
-			"title": "Millors Usuaris",
-			"description": "classifica els jugadors segons el seu rendiment i assoliments",
-			"searchPlaceholder": "Cercar per ID de jugador...",
-			"table": {
-				"playerId": "ID del jugador",
-				"bestLevel": "Millor nivell",
-				"totalTime": "Temps total",
-				"games": "Partides",
-				"device": "Dispositiu",
-				"accuracy": "Precisió"
-			},
-			"noData": "Encara no hi ha dades d'usuaris disponibles"
-		},
-		"sessions": {
-			"title": "Sessions recents",
-			"description": "mostra les últimes partides jugades per tots els jugadors",
-			"table": {
-				"playerId": "ID del jugador",
-				"date": "Data",
-				"level": "Nivell",
-				"time": "Temps",
-				"device": "Dispositiu"
-			},
-			"noData": "Encara no hi ha dades de sessions disponibles",
-			"deviceTypes": {
-				"mobile": "Mòbil",
-				"desktop": "Ordinador"
-			}
+	  "loading": "Carregant...",
+	  "error": "No s'han pogut carregar les dades de la classificació. Torna-ho a provar més tard.",
+	  "viewMode": {
+		"global": "Global",
+		"profile": "Perfil"
+	  },
+	  "profile": {
+		"noPlayerId": "No s'ha trobat cap ID de jugador. Juga una partida primer.",
+		"noData": {
+		  "title": "No hi ha dades disponibles",
+		  "message": "Encara no tenim cap dada de joc per al teu perfil. Comença a jugar per veure les teves estadístiques!",
+		  "info": "Les teves dades de joc es desen de manera anònima per dispositiu i sessió. Cada vegada que juguis, seguirem el teu progrés i el mostrarem aquí.",
+		  "playNow": "Juga ara"
 		}
+	  },
+	  "stats": {
+		"totalGames": "Partides totals",
+		"totalPlayTime": "Temps total jugat",
+		"totalPlayers": "Total de jugadors",
+		"averageAccuracy": "Precisió mitjana"
+	  },
+	  "colorModels": {
+		"title": "Rendiment dels models de color",
+		"description": "mostra com de bé funciona cada model de color per identificar colors",
+		"table": {
+		  "model": "Model",
+		  "tests": "Tests",
+		  "accuracy": "Precisió",
+		  "avgTime": "Temps mitjà"
+		}
+	  },
+	  "colorFamilies": {
+		"title": "Rendiment de les famílies de color",
+		"description": "mostra com es reconeixen les diferents famílies de color",
+		"table": {
+		  "family": "Família de color",
+		  "tests": "Tests",
+		  "accuracy": "Precisió",
+		  "avgTime": "Temps mitjà"
+		}
+	  },
+	  "users": {
+		"title": "Millors usuaris",
+		"description": "classifica els jugadors segons el seu rendiment i assoliments",
+		"searchPlaceholder": "Cerca per ID de jugador...",
+		"table": {
+		  "playerId": "ID del jugador",
+		  "bestLevel": "Millor nivell",
+		  "totalTime": "Temps total",
+		  "games": "Partides",
+		  "device": "Dispositiu",
+		  "accuracy": "Precisió"
+		},
+		"noData": "Encara no hi ha dades d'usuaris disponibles"
+	  },
+	  "sessions": {
+		"title": "Sessions recents",
+		"description": "mostra les darreres sessions de joc de tots els jugadors",
+		"table": {
+		  "playerId": "ID del jugador",
+		  "date": "Data",
+		  "level": "Nivell",
+		  "time": "Temps",
+		  "device": "Dispositiu"
+		},
+		"noData": "Encara no hi ha dades de sessions disponibles",
+		"deviceTypes": {
+		  "mobile": "Mòbil",
+		  "desktop": "Escriptori"
+		}
+	  }
 	}
-}
+  }
+  
