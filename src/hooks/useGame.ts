@@ -43,6 +43,11 @@ export const useGame = () => {
 
 	// end game and save session
 	const endGame = useCallback(async () => {
+		if (level <= 1) {
+			setGameState("game-over");
+			return;
+		}
+
 		const totalTime = (Date.now() - gameStartTime) / 1000;
 		const completeSessionData: GameSessionData = {
 			session_id: sessionId,
