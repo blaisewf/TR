@@ -19,6 +19,32 @@ const jabMod = Math.cbrt(jabVol);
 
 // generate a random RGB color
 export function generateRandomRGBColor(): [number, number, number] {
+	// use a weighted random approach to ensure better distribution
+	const colorSpace = Math.random();
+	
+	// 10% chance for very bright colors (whites)
+	if (colorSpace < 0.1) {
+		const base = 200 + Math.random() * 55; // 200-255 range
+		const variation = Math.random() * 20; // variation
+		return [
+			Math.round(base - variation),
+			Math.round(base - variation),
+			Math.round(base - variation)
+		];
+	}
+	
+	// 10% chance for very dark colors (blacks)
+	if (colorSpace < 0.2) {
+		const base = Math.random() * 60; // 0-60 range
+		const variation = Math.random() * 20; // variation
+		return [
+			Math.round(base + variation),
+			Math.round(base + variation),
+			Math.round(base + variation)
+		];
+	}
+	
+	// 80% chance for regular colors
 	const color = randomColor();
 	const rgbColor = rgb(color);
 	return [

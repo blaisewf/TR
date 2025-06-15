@@ -127,75 +127,90 @@ export async function GET(request: Request) {
 					colorModelStats[model].correct++;
 				}
 
-				// update color family stats
-				const [r, g, b] = round.base_color;
-				let family = "Other";
-				let hexColor = "#A0522D";
+				// update color family stats for both base and changed colors
+				const processColor = (color: number[], isChangedColor: boolean) => {
+					const [r, g, b] = color;
+					let family = "Other";
+					let hexColor = "#A0522D";
 
-				// determine color family based on RGB values with more inclusive thresholds
-				if (r > g && r > b && r > 120) {
-					if (g > 100 && b < 100) {
-						family = "Orange";
-						hexColor = "#FFA500";
-					} else if (b > 100 && g < 100) {
-						family = "Magenta";
-						hexColor = "#FF00FF";
-					} else {
-						family = "Red";
-						hexColor = "#FF0000";
+					// determine color family based on RGB values with more inclusive thresholds
+					if (r > g && r > b && r > 120) {
+						if (g > 100 && b < 100) {
+							family = "Orange";
+							hexColor = "#FFA500";
+						} else if (b > 100 && g < 100) {
+							family = "Magenta";
+							hexColor = "#FF00FF";
+						} else {
+							family = "Red";
+							hexColor = "#FF0000";
+						}
+					} else if (g > r && g > b && g > 120) {
+						if (r > 100 && b < 100) {
+							family = "Lime";
+							hexColor = "#9ACD32";
+						} else if (b > 100 && r < 100) {
+							family = "Cyan";
+							hexColor = "#00FFFF";
+						} else {
+							family = "Green";
+							hexColor = "#00FF00";
+						}
+					} else if (b > r && b > g && b > 120) {
+						if (r > 100 && g < 100) {
+							family = "Purple";
+							hexColor = "#800080";
+						} else if (g > 100 && r < 100) {
+							family = "Aqua";
+							hexColor = "#008B8B";
+						} else {
+							family = "Blue";
+							hexColor = "#0000FF";
+						}
+					} else if (r > 200 && g > 200 && b > 200) {
+						family = "White";
+						hexColor = "#FFFFFF";
+					} else if (r > 180 && g > 180 && b > 180 && 
+						Math.abs(r - g) < 20 && 
+						Math.abs(g - b) < 20 && 
+						Math.abs(r - b) < 20) {
+						family = "White";
+						hexColor = "#FFFFFF";
+					} else if (r < 60 && g < 60 && b < 60) {
+						family = "Black";
+						hexColor = "#000000";
+					} else if (
+						Math.abs(r - g) < 30 &&
+						Math.abs(g - b) < 30 &&
+						Math.abs(r - b) < 30
+					) {
+						family = "Gray";
+						hexColor = "#808080";
 					}
-				} else if (g > r && g > b && g > 120) {
-					if (r > 100 && b < 100) {
-						family = "Lime";
-						hexColor = "#9ACD32";
-					} else if (b > 100 && r < 100) {
-						family = "Cyan";
-						hexColor = "#00FFFF";
-					} else {
-						family = "Green";
-						hexColor = "#00FF00";
-					}
-				} else if (b > r && b > g && b > 120) {
-					if (r > 100 && g < 100) {
-						family = "Purple";
-						hexColor = "#800080";
-					} else if (g > 100 && r < 100) {
-						family = "Aqua";
-						hexColor = "#008B8B";
-					} else {
-						family = "Blue";
-						hexColor = "#0000FF";
-					}
-				} else if (r > 140 && g > 140 && b > 140) {
-					family = "White";
-					hexColor = "#FFFFFF";
-				} else if (r < 60 && g < 60 && b < 60) {
-					family = "Black";
-					hexColor = "#000000";
-				} else if (
-					Math.abs(r - g) < 30 &&
-					Math.abs(g - b) < 30 &&
-					Math.abs(r - b) < 30
-				) {
-					family = "Gray";
-					hexColor = "#808080";
-				}
 
-				if (!colorFamilyStats.has(family)) {
-					colorFamilyStats.set(family, {
-						total: 0,
-						correct: 0,
-						avgTime: 0,
-						totalTime: 0,
-						hexColor,
-					});
-				}
-				const colorFamily = colorFamilyStats.get(family)!;
-				colorFamily.total++;
-				colorFamily.totalTime += round.time;
-				if (round.correct) {
-					colorFamily.correct++;
-				}
+					if (!colorFamilyStats.has(family)) {
+						colorFamilyStats.set(family, {
+							total: 0,
+							correct: 0,
+							avgTime: 0,
+							totalTime: 0,
+							hexColor,
+						});
+					}
+					const colorFamily = colorFamilyStats.get(family)!;
+					colorFamily.total++;
+					// Only add time and correctness for the changed color
+					if (isChangedColor) {
+						colorFamily.totalTime += round.time;
+						if (round.correct) {
+							colorFamily.correct++;
+						}
+					}
+				};
+
+				// Process both base and changed colors
+				processColor(round.base_color, false);
+				processColor(round.changed_color, true);
 
 				// update user stats
 				user.totalTests++;
