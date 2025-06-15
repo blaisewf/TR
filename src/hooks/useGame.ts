@@ -17,7 +17,7 @@ import {
 	type GameState,
 	MAX_WRONG_ANSWERS,
 } from "@/types/game";
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 const LEVEL_TIMER = 30; // 30 seconds per level
 
@@ -113,21 +113,24 @@ export const useGame = () => {
 	}, [level, preloadedRound, generateRound, preloadNextRound]);
 
 	// initialize game
-	const startGame = useCallback((hasVisibilityCondition: boolean = false) => {
-		setGameState("playing");
-		setLevel(1);
-		setScore(0);
-		setWrongAnswers(0);
-		setHasVisibilityCondition(hasVisibilityCondition);
-		const now = Date.now();
-		setGameStartTime(now);
-		roundStartTime.current = now;
-		setSessionId(generateUUID());
-		setRounds([]);
-		setElapsedTime(0);
-		setTimeRemaining(LEVEL_TIMER);
-		startNewRound();
-	}, [startNewRound]);
+	const startGame = useCallback(
+		(hasVisibilityCondition = false) => {
+			setGameState("playing");
+			setLevel(1);
+			setScore(0);
+			setWrongAnswers(0);
+			setHasVisibilityCondition(hasVisibilityCondition);
+			const now = Date.now();
+			setGameStartTime(now);
+			roundStartTime.current = now;
+			setSessionId(generateUUID());
+			setRounds([]);
+			setElapsedTime(0);
+			setTimeRemaining(LEVEL_TIMER);
+			startNewRound();
+		},
+		[startNewRound],
+	);
 
 	// handle timeout
 	const handleTimeout = useCallback(() => {
@@ -147,7 +150,7 @@ export const useGame = () => {
 
 		setRounds((prev) => [...prev, roundData]);
 		setWrongAnswers((prev) => prev + 1);
-		
+
 		if (wrongAnswers + 1 >= MAX_WRONG_ANSWERS) {
 			endGame();
 		} else {
@@ -200,10 +203,10 @@ export const useGame = () => {
 			const interval = setInterval(() => {
 				const now = Date.now();
 				setElapsedTime((now - gameStartTime) / 1000);
-				
+
 				const elapsedSinceRoundStart = (now - roundStartTime.current) / 1000;
 				const remaining = Math.max(0, LEVEL_TIMER - elapsedSinceRoundStart);
-				
+
 				if (remaining === 0) {
 					handleTimeout();
 				} else {

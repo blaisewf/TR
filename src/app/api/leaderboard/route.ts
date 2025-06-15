@@ -245,9 +245,10 @@ export async function GET(request: Request) {
 		// filter users by search query if provided
 		let filteredUserData = userData;
 		if (searchQuery) {
-			filteredUserData = userData.filter(user => 
-				user.player_id.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
-				user.deviceType.toLowerCase().startsWith(searchQuery.toLowerCase())
+			filteredUserData = userData.filter(
+				(user) =>
+					user.player_id.toLowerCase().startsWith(searchQuery.toLowerCase()) ||
+					user.deviceType.toLowerCase().startsWith(searchQuery.toLowerCase()),
 			);
 		}
 
