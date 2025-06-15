@@ -311,10 +311,10 @@ export default function GameInstructions({
 									animate={{ height: "auto", opacity: 1 }}
 									exit={{ height: 0, opacity: 0 }}
 									transition={{ duration: 0.2 }}
-									className="mt-4"
+									className="mt-4 bg-gray-800/20 backdrop-blur-sm rounded-lg border border-gray-700/20"
 								>
-									<div className="space-y-4">
-										<div className="flex gap-4">
+									<div className="space-y-4 p-4">
+										<div className="flex flex-col sm:flex-row gap-4">
 											<div className="flex-1 p-3 bg-gray-800/10 rounded-lg border border-green-500/20">
 												<div className="flex items-center gap-2 mb-2">
 													<svg
@@ -367,7 +367,7 @@ export default function GameInstructions({
 											{t("game.instructions.visibility.confirmMessage")}
 										</p>
 
-										<div className="flex justify-left gap-3">
+										<div className="flex flex-col sm:flex-row justify-left gap-3">
 											<button
 												onClick={handleVisibilityConfirm}
 												className="bg-white backdrop-blur-md text-black hover:bg-white/70 font-medium py-1.5 px-4 rounded-full text-xs shadow-lg transition-all duration-300 cursor-pointer"
