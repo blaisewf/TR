@@ -47,7 +47,7 @@ export default function GameInstructions({
 				{t("game.instructions.title")}
 			</h1>
 
-			<div className="space-y-4 sm:space-y-8 text-white/90 mb-6">
+			<div className="space-y-4 text-white/90 mb-6">
 				<p className="text-sm sm:text-lg text-gray-300 leading-relaxed">
 					{t("game.instructions.projectContext")}
 				</p>
