@@ -94,7 +94,7 @@ export default function LeaderboardPage() {
 	return (
 		<div className="min-h-screen bg-black/50 pt-24 pb-12 px-4 flex items-center justify-center relative overflow-hidden">
 			<Background />
-			<div className="max-w-6xl w-full mx-auto space-y-8 relative">
+			<div className="max-w-6xl w-full mx-auto space-y-4 relative">
 				{/* View Mode Toggle */}
 				<div className="flex justify-end mb-4">
 					<div className="bg-gray-800/20 backdrop-blur-md border border-gray-700/20 rounded-full p-2 shadow-lg">
@@ -126,7 +126,7 @@ export default function LeaderboardPage() {
 				{/* No Data Card */}
 				{viewMode === "profile" &&
 					(!data?.users?.length || !data?.sessions?.length) && (
-						<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30 mb-8">
+						<div className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30">
 							<h2 className="text-2xl font-bold mb-2 text-center text-white">
 								{t("leaderboard.profile.noData.title")}
 							</h2>
@@ -136,10 +136,10 @@ export default function LeaderboardPage() {
 							<p className="text-xs text-gray-500 text-center mb-6">
 								{t("leaderboard.profile.noData.info")}
 							</p>
-							<div className="flex justify-center">
+							<div className="text-center">
 								<a
 									href="/"
-									className="w-full sm:w-auto bg-gray-800/20 backdrop-blur-md border border-gray-700/20 text-white hover:bg-gray-700/30 font-medium py-2 px-6 sm:px-8 rounded-full text-sm shadow-lg transition-all duration-300 cursor-pointer"
+									className="w-full sm:w-auto bg-gray-800/20 backdrop-blur-md border border-gray-700/20 text-white hover:bg-gray-700/30 font-medium py-3 px-6 sm:px-8 rounded-full text-sm shadow-lg transition-all duration-300 cursor-pointer"
 								>
 									{t("leaderboard.profile.noData.playNow")}
 								</a>
