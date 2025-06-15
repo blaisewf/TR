@@ -30,19 +30,24 @@ export default function GameOver({
 		// fetch global ranking
 		const fetchRanking = async () => {
 			try {
-				const response = await fetch('/api/leaderboard');
-				if (!response.ok) throw new Error('Failed to fetch ranking');
+				const response = await fetch("/api/leaderboard");
+				if (!response.ok) throw new Error("Failed to fetch ranking");
 				const data = await response.json();
-				
+
 				// get all sessions and sort them by final_level
 				const allSessions = data.sessions;
-				const sortedSessions = [...allSessions].sort((a, b) => b.final_level - a.final_level);
-				
+				const sortedSessions = [...allSessions].sort(
+					(a, b) => b.final_level - a.final_level,
+				);
+
 				// find the position of this game's finalLevel
-				const rank = sortedSessions.findIndex(session => session.final_level <= finalLevel) + 1;
+				const rank =
+					sortedSessions.findIndex(
+						(session) => session.final_level <= finalLevel,
+					) + 1;
 				setGameRank(rank);
 			} catch (error) {
-				console.error('Error fetching ranking:', error);
+				console.error("Error fetching ranking:", error);
 			}
 		};
 
@@ -224,7 +229,7 @@ export default function GameOver({
 							</div>
 							<div className="text-center">
 								<div className="text-2xl sm:text-3xl font-bold text-white">
-									{gameRank ? `#${gameRank}` : '-'}
+									{gameRank ? `#${gameRank}` : "-"}
 								</div>
 								<div className="text-xs sm:text-sm text-gray-400 mt-1">
 									{t("game.stats.globalRanking")}
