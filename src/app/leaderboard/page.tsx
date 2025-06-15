@@ -2,7 +2,8 @@
 
 import Background from "@/components/layout/Background";
 import { getPlayerId } from "@/lib/utils/playerId";
-import { useEffect, useState, useCallback } from "react";
+import { type Variants, motion } from "framer-motion";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
 	Bar,
@@ -20,16 +21,15 @@ import {
 	YAxis,
 } from "recharts";
 import type { LeaderboardData } from "../../types/leaderboard";
-import { motion, Variants } from "framer-motion";
 
 const containerVariants: Variants = {
 	hidden: { opacity: 0 },
 	visible: {
 		opacity: 1,
 		transition: {
-			staggerChildren: 0.1
-		}
-	}
+			staggerChildren: 0.1,
+		},
+	},
 };
 
 const rowVariants: Variants = {
@@ -38,9 +38,9 @@ const rowVariants: Variants = {
 		opacity: 1,
 		y: 0,
 		transition: {
-			duration: 0.3
-		}
-	}
+			duration: 0.3,
+		},
+	},
 };
 
 const tableVariants: Variants = {
@@ -49,9 +49,9 @@ const tableVariants: Variants = {
 		opacity: 1,
 		transition: {
 			duration: 0.3,
-			ease: [0.4, 0, 0.2, 1]
-		}
-	}
+			ease: [0.4, 0, 0.2, 1],
+		},
+	},
 };
 
 export default function LeaderboardPage() {
@@ -225,7 +225,7 @@ export default function LeaderboardPage() {
 				</div>
 
 				{/* Color Models Section */}
-				<motion.div 
+				<motion.div
 					className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30"
 					variants={tableVariants}
 					initial="hidden"
@@ -302,12 +302,12 @@ export default function LeaderboardPage() {
 
 					{/* Original Table */}
 					<div className="overflow-x-auto">
-						<motion.table 
+						<motion.table
 							className="min-w-full divide-y divide-gray-700"
 							variants={containerVariants}
 							initial="hidden"
 							animate="visible"
-							style={{ overflow: 'hidden' }}
+							style={{ overflow: "hidden" }}
 						>
 							<thead>
 								<tr>
@@ -360,7 +360,7 @@ export default function LeaderboardPage() {
 				</motion.div>
 
 				{/* Color Families Section */}
-				<motion.div 
+				<motion.div
 					className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30"
 					variants={tableVariants}
 					initial="hidden"
@@ -423,12 +423,12 @@ export default function LeaderboardPage() {
 
 					{/* Original Table */}
 					<div className="overflow-x-auto">
-						<motion.table 
+						<motion.table
 							className="min-w-full divide-y divide-gray-700"
 							variants={containerVariants}
 							initial="hidden"
 							animate="visible"
-							style={{ overflow: 'hidden' }}
+							style={{ overflow: "hidden" }}
 						>
 							<thead>
 								<tr>
@@ -487,7 +487,7 @@ export default function LeaderboardPage() {
 				</motion.div>
 
 				{/* Users Section */}
-				<motion.div 
+				<motion.div
 					className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30"
 					variants={tableVariants}
 					initial="hidden"
@@ -511,20 +511,30 @@ export default function LeaderboardPage() {
 								className="w-full bg-gray-800/50 border border-gray-700/30 rounded-lg py-2 px-4 pl-10 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-transparent"
 							/>
 							<div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-								<svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+								<svg
+									className="h-5 w-5 text-gray-400"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+								>
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth={2}
+										d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+									/>
 								</svg>
 							</div>
 						</div>
 					</div>
 
 					<div className="overflow-x-auto">
-						<motion.table 
+						<motion.table
 							className="min-w-full divide-y divide-gray-700"
 							variants={containerVariants}
 							initial="hidden"
 							animate="visible"
-							style={{ overflow: 'hidden' }}
+							style={{ overflow: "hidden" }}
 						>
 							<thead>
 								<tr>
@@ -554,45 +564,48 @@ export default function LeaderboardPage() {
 							<tbody className="divide-y divide-gray-700">
 								{data?.users?.length ? (
 									data.users
-										.filter(user => 
-											user.player_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-											user.deviceType.toLowerCase().includes(searchQuery.toLowerCase())
+										.filter(
+											(user) =>
+												user.player_id
+													.toLowerCase()
+													.includes(searchQuery.toLowerCase()) ||
+												user.deviceType
+													.toLowerCase()
+													.includes(searchQuery.toLowerCase()),
 										)
 										.map((user) => (
-										<motion.tr
-											key={user.player_id}
-											className="hover:bg-gray-700/30 transition-colors"
-											variants={rowVariants}
-										>
-											<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400">
-												{user.rank}
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
-												{user.player_id}
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-												{user.bestLevel}
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-												{user.totalPlayTime
-													? `${Math.floor(user.totalPlayTime / 60)}m ${Math.round(user.totalPlayTime % 60)}s`
-													: "0m 0s"}
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-												{user.totalGames || 0}
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-												{user.deviceType}
-											</td>
-											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-												{user.accuracy?.toFixed(1) ?? "0"}%
-											</td>
-										</motion.tr>
-									))
+											<motion.tr
+												key={user.player_id}
+												className="hover:bg-gray-700/30 transition-colors"
+												variants={rowVariants}
+											>
+												<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-400">
+													{user.rank}
+												</td>
+												<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">
+													{user.player_id}
+												</td>
+												<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+													{user.bestLevel}
+												</td>
+												<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+													{user.totalPlayTime
+														? `${Math.floor(user.totalPlayTime / 60)}m ${Math.round(user.totalPlayTime % 60)}s`
+														: "0m 0s"}
+												</td>
+												<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+													{user.totalGames || 0}
+												</td>
+												<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+													{user.deviceType}
+												</td>
+												<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+													{user.accuracy?.toFixed(1) ?? "0"}%
+												</td>
+											</motion.tr>
+										))
 								) : (
-									<motion.tr
-										variants={rowVariants}
-									>
+									<motion.tr variants={rowVariants}>
 										<td
 											colSpan={7}
 											className="px-6 py-4 text-center text-sm text-gray-400"
@@ -607,7 +620,7 @@ export default function LeaderboardPage() {
 				</motion.div>
 
 				{/* Recent Sessions Section */}
-				<motion.div 
+				<motion.div
 					className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30"
 					variants={tableVariants}
 					initial="hidden"
@@ -714,12 +727,12 @@ export default function LeaderboardPage() {
 
 					{/* Original Table */}
 					<div className="overflow-x-auto">
-						<motion.table 
+						<motion.table
 							className="min-w-full divide-y divide-gray-700"
 							variants={containerVariants}
 							initial="hidden"
 							animate="visible"
-							style={{ overflow: 'hidden' }}
+							style={{ overflow: "hidden" }}
 						>
 							<thead>
 								<tr>
@@ -768,9 +781,7 @@ export default function LeaderboardPage() {
 										</motion.tr>
 									))
 								) : (
-									<motion.tr
-										variants={rowVariants}
-									>
+									<motion.tr variants={rowVariants}>
 										<td
 											colSpan={5}
 											className="px-6 py-4 text-center text-sm text-gray-400"

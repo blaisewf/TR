@@ -191,7 +191,8 @@ export default function GameInstructions({
 								{t("game.instructions.privacyDescription")}
 							</p>
 							<p className="text-sm sm:text-base text-gray-300 leading-relaxed mt-2">
-								This project is open source and available on GitHub. You can review our code, contribute, or report issues at{" "}
+								This project is open source and available on GitHub. You can
+								review our code, contribute, or report issues at{" "}
 								<a
 									href="https://github.com/blaisewf/TR"
 									target="_blank"
@@ -222,8 +223,18 @@ export default function GameInstructions({
 								/>
 								<div className="w-5 h-5 border-2 border-gray-600 rounded-md bg-gray-800/30 backdrop-blur-sm peer-checked:bg-blue-400 peer-checked:border-blue-400 transition-all duration-200 flex items-center justify-center">
 									{hasVisibilityCondition && (
-										<svg className="w-3 h-3 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-											<path d="M20 6L9 17L4 12" strokeLinecap="round" strokeLinejoin="round" />
+										<svg
+											className="w-3 h-3 text-white"
+											viewBox="0 0 24 24"
+											fill="none"
+											stroke="currentColor"
+											strokeWidth="3"
+										>
+											<path
+												d="M20 6L9 17L4 12"
+												strokeLinecap="round"
+												strokeLinejoin="round"
+											/>
 										</svg>
 									)}
 								</div>
@@ -236,24 +247,38 @@ export default function GameInstructions({
 							</label>
 						</div>
 
-						<div className={`overflow-hidden transition-all duration-300 ${showVisibilityDetails ? "max-h-96 mt-4" : "max-h-0"}`}>
+						<div
+							className={`overflow-hidden transition-all duration-300 ${showVisibilityDetails ? "max-h-96 mt-4" : "max-h-0"}`}
+						>
 							<div className="space-y-4">
 								<div className="flex gap-4">
 									<div className="flex-1 p-3 bg-gray-800/10 rounded-lg border border-green-500/20">
 										<div className="flex items-center gap-2 mb-2">
-											<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#4ade80">
-												<path d="m382-354 339-339q12-12 28-12t28 12q12 12 12 28.5T777-636L410-268q-12 12-28 12t-28-12L182-440q-12-12-11.5-28.5T183-497q12-12 28.5-12t28.5 12l142 143Z"/>
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												height="20px"
+												viewBox="0 -960 960 960"
+												width="20px"
+												fill="#4ade80"
+											>
+												<path d="m382-354 339-339q12-12 28-12t28 12q12 12 12 28.5T777-636L410-268q-12 12-28 12t-28-12L182-440q-12-12-11.5-28.5T183-497q12-12 28.5-12t28.5 12l142 143Z" />
 											</svg>
-											<h3 className="text-green-400 text-sm font-medium">{t("game.instructions.visibility.consideredConditions")}</h3>
+											<h3 className="text-green-400 text-sm font-medium">
+												{t("game.instructions.visibility.consideredConditions")}
+											</h3>
 										</div>
 										<ul className="space-y-1 text-xs text-gray-300">
 											<li className="flex items-center gap-2">
 												<span className="text-green-400">•</span>
-												{t("game.instructions.visibility.conditions.colorBlindness")}
+												{t(
+													"game.instructions.visibility.conditions.colorBlindness",
+												)}
 											</li>
 											<li className="flex items-center gap-2">
 												<span className="text-green-400">•</span>
-												{t("game.instructions.visibility.conditions.screenReaders")}
+												{t(
+													"game.instructions.visibility.conditions.screenReaders",
+												)}
 											</li>
 											<li className="flex items-center gap-2">
 												<span className="text-green-400">•</span>
@@ -268,23 +293,37 @@ export default function GameInstructions({
 
 									<div className="flex-1 p-3 bg-gray-800/10 rounded-lg border border-red-500/20">
 										<div className="flex items-center gap-2 mb-2">
-											<svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#f87171">
-												<path d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z"/>
+											<svg
+												xmlns="http://www.w3.org/2000/svg"
+												height="20px"
+												viewBox="0 -960 960 960"
+												width="20px"
+												fill="#f87171"
+											>
+												<path d="M480-424 284-228q-11 11-28 11t-28-11q-11-11-11-28t11-28l196-196-196-196q-11-11-11-28t11-28q11-11 28-11t28 11l196 196 196-196q11-11 28-11t28 11q11 11 11 28t-11 28L536-480l196 196q11 11 11 28t-11 28q-11 11-28 11t-28-11L480-424Z" />
 											</svg>
-											<h3 className="text-red-400 text-sm font-medium">{t("game.instructions.visibility.notConsidered")}</h3>
+											<h3 className="text-red-400 text-sm font-medium">
+												{t("game.instructions.visibility.notConsidered")}
+											</h3>
 										</div>
 										<ul className="space-y-1 text-xs text-gray-300">
 											<li className="flex items-center gap-2">
 												<span className="text-red-400">•</span>
-												{t("game.instructions.visibility.notConsideredConditions.glasses")}
+												{t(
+													"game.instructions.visibility.notConsideredConditions.glasses",
+												)}
 											</li>
 											<li className="flex items-center gap-2">
 												<span className="text-red-400">•</span>
-												{t("game.instructions.visibility.notConsideredConditions.temporary")}
+												{t(
+													"game.instructions.visibility.notConsideredConditions.temporary",
+												)}
 											</li>
 											<li className="flex items-center gap-2">
 												<span className="text-red-400">•</span>
-												{t("game.instructions.visibility.notConsideredConditions.eyeStrain")}
+												{t(
+													"game.instructions.visibility.notConsideredConditions.eyeStrain",
+												)}
 											</li>
 										</ul>
 									</div>

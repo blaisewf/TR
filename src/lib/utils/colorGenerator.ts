@@ -1,9 +1,4 @@
-import {
-	converter,
-	inGamut,
-	random as randomColor,
-	rgb,
-} from "culori";
+import { converter, inGamut, random as randomColor, rgb } from "culori";
 
 export type ColorModel = "RGB" | "CIELAB" | "JzAzBz" | "Oklab";
 
