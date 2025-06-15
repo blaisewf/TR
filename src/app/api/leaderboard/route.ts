@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/database/supabase";
+import { supabase, getTableName } from "@/lib/database/supabase";
 import { NextResponse } from "next/server";
 
 // configure edge runtime
@@ -50,7 +50,7 @@ export async function GET(request: Request) {
 
 		// fetch all sessions
 		const { data: sessions, error } = await supabase
-			.from("data")
+			.from(getTableName())
 			.select("*")
 			.order("saved_at", { ascending: false });
 

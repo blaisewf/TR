@@ -5,6 +5,10 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
+export const getTableName = () => {
+	return process.env.NODE_ENV === "development" ? "dev_data" : "data";
+};
+
 export type RoundData = {
 	level: number;
 	base_color: [number, number, number];
@@ -39,7 +43,7 @@ export type GameSessionData = {
 export async function saveCompleteSession(sessionData: GameSessionData) {
 	try {
 		const { data, error } = await supabase
-			.from("data")
+			.from(getTableName())
 			.insert([
 				{
 					session_id: sessionData.session_id,
