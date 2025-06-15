@@ -5,7 +5,6 @@ import { useTranslation } from "react-i18next";
 
 export default function AntiCheat() {
 	const [showWarning, setShowWarning] = useState(false);
-	const [isDevToolsOpen, setIsDevToolsOpen] = useState(false);
 	const [isKeybindWarning, setIsKeybindWarning] = useState(false);
 	const { t } = useTranslation();
 
@@ -39,25 +38,12 @@ export default function AntiCheat() {
 			e.preventDefault();
 		};
 
-		// prevent devtools detection
-		const handleDevTools = () => {
-			if (window.innerWidth - document.documentElement.clientWidth > 0) {
-				setShowWarning(true);
-				setIsDevToolsOpen(true);
-				setIsKeybindWarning(false);
-			} else {
-				setIsDevToolsOpen(false);
-			}
-		};
-
 		window.addEventListener("keydown", handleKeyDown);
 		window.addEventListener("contextmenu", handleContextMenu);
-		window.addEventListener("resize", handleDevTools);
 
 		return () => {
 			window.removeEventListener("keydown", handleKeyDown);
 			window.removeEventListener("contextmenu", handleContextMenu);
-			window.removeEventListener("resize", handleDevTools);
 		};
 	}, []);
 
@@ -70,12 +56,10 @@ export default function AntiCheat() {
 					{t("antiCheat.warning")}
 				</h2>
 				<p className="text-gray-300 text-center mb-6">
-					{isDevToolsOpen
-						? t("antiCheat.messages.1")
-						: t("antiCheat.messages.2")}
+					{t("antiCheat.message")}
 				</p>
 				<div className="text-center">
-					{isKeybindWarning && !isDevToolsOpen && (
+					{isKeybindWarning && (
 						<button
 							onClick={() => setShowWarning(false)}
 							className="bg-gray-800/20 backdrop-blur-md border border-gray-700/20 text-white hover:bg-gray-700/30 font-medium py-2 px-6 rounded-full text-sm shadow-lg transition-all duration-300 cursor-pointer"

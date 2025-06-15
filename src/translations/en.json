@@ -89,10 +89,7 @@
 	},
 	"antiCheat": {
 		"warning": "Warning",
-		"messages": {
-			"1": "Developer tools detected! Please close them and refresh the page to continue.",
-			"2": "Please don't try to cheat! This experiment requires your honest participation"
-		},
+		"message": "Please don't try to cheat! This experiment requires your honest participation",
 		"accept": "I Understand"
 	},
 	"leaderboard": {

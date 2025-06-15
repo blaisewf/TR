@@ -89,10 +89,7 @@
 	},
 	"antiCheat": {
 	  "warning": "Avís",
-	  "messages": {
-		"1": "S'han detectat eines de desenvolupador! Tanca-les i actualitza la pàgina per continuar.",
-		"2": "Si us plau, no intentis fer trampes! Aquest experiment requereix la teva participació honesta"
-	  },
+	  "message": "Si us plau, no intentis fer trampes! Aquest experiment requereix la teva participació honesta",
 	  "accept": "Ho entenc"
 	},
 	"leaderboard": {

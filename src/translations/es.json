@@ -89,10 +89,7 @@
 	},
 	"antiCheat": {
 	  "warning": "Advertencia",
-	  "messages": {
-		"1": "¡Se han detectado herramientas de desarrollador! Ciérralas y actualiza la página para continuar.",
-		"2": "¡Por favor, no intentes hacer trampa! Este experimento requiere tu participación honesta."
-	  },
+	  "message": "¡Por favor, no intentes hacer trampa! Este experimento requiere tu participación honesta.",
 	  "accept": "Lo entiendo"
 	},
 	"leaderboard": {
