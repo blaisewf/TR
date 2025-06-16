@@ -1,4 +1,4 @@
-import { supabase, getTableName } from "@/lib/database/supabase";
+import { getTableName, supabase } from "@/lib/database/supabase";
 import { NextResponse } from "next/server";
 
 // configure edge runtime
@@ -170,10 +170,14 @@ export async function GET(request: Request) {
 					} else if (r > 200 && g > 200 && b > 200) {
 						family = "White";
 						hexColor = "#FFFFFF";
-					} else if (r > 180 && g > 180 && b > 180 && 
-						Math.abs(r - g) < 20 && 
-						Math.abs(g - b) < 20 && 
-						Math.abs(r - b) < 20) {
+					} else if (
+						r > 180 &&
+						g > 180 &&
+						b > 180 &&
+						Math.abs(r - g) < 20 &&
+						Math.abs(g - b) < 20 &&
+						Math.abs(r - b) < 20
+					) {
 						family = "White";
 						hexColor = "#FFFFFF";
 					} else if (r < 60 && g < 60 && b < 60) {

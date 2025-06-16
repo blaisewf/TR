@@ -572,7 +572,7 @@ export default function LeaderboardPage() {
 													user.deviceType
 														.toLowerCase()
 														.includes(searchQuery.toLowerCase()),
-										  )
+											)
 										: data.users.slice(0, 10)
 									).map((user) => (
 										<motion.tr
