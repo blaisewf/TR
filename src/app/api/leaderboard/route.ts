@@ -1,5 +1,5 @@
-import { getTableName, supabase } from "@/lib/database/supabase";
 import { NextResponse } from "next/server";
+import { getTableName, supabase } from "@/lib/database/supabase";
 
 // configure edge runtime
 export const runtime = "edge";
