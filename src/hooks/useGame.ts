@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
 	type GameSessionData,
 	type RoundData,
@@ -12,12 +13,11 @@ import { getPlayerId } from "@/lib/utils/playerId";
 import { generateUUID } from "@/lib/utils/uuidGenerator";
 import {
 	COLOR_MODELS,
-	GRID_SIZE,
 	type GameRound,
 	type GameState,
+	GRID_SIZE,
 	MAX_WRONG_ANSWERS,
 } from "@/types/game";
-import { useCallback, useEffect, useRef, useState } from "react";
 
 const LEVEL_TIMER = 30; // 30 seconds per level
 

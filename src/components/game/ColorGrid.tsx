@@ -1,9 +1,9 @@
 "use client";
 
-import { rgbToCss } from "@/lib/utils/colorGenerator";
 import { motion } from "framer-motion";
-import React, { useRef, useState, useMemo, useCallback } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { rgbToCss } from "@/lib/utils/colorGenerator";
 
 interface ColorGridProps {
 	gridSize: number;

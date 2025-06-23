@@ -1,8 +1,6 @@
 "use client";
 
-import Background from "@/components/layout/Background";
-import { getPlayerId } from "@/lib/utils/playerId";
-import { type Variants, motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -20,6 +18,8 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
+import Background from "@/components/layout/Background";
+import { getPlayerId } from "@/lib/utils/playerId";
 import type { LeaderboardData } from "../../types/leaderboard";
 
 const containerVariants: Variants = {
@@ -387,9 +387,10 @@ export default function LeaderboardPage() {
 									label={({
 										name,
 										percent,
-									}: { name: string; percent: number }) =>
-										`${name} ${(percent * 100).toFixed(0)}%`
-									}
+									}: {
+										name: string;
+										percent: number;
+									}) => `${name} ${(percent * 100).toFixed(0)}%`}
 									labelLine={{ stroke: "rgba(75, 85, 99, 0.3)" }}
 								>
 									{data?.colorFamilies?.map((entry, index) => (
