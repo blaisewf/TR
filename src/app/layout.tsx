@@ -1,6 +1,6 @@
+import { Databuddy } from "@databuddy/sdk";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import { Databuddy } from '@databuddy/sdk';
 import Script from "next/script";
 import "../styles/globals.css";
 import AntiCheat from "@/components/layout/AntiCheat";
@@ -68,13 +68,14 @@ export default function RootLayout({
 					<main>{children}</main>
 				</I18nProvider>
 				<Databuddy
-        clientId="U1zlhnBmUMfjekIatqtn4"
-        trackEngagement={true}
-        trackExitIntent={true}
-        trackBounceRate={true}
-        trackErrors={true}
-        enableBatching={true}
-      />			</body>
+					clientId="U1zlhnBmUMfjekIatqtn4"
+					trackEngagement={true}
+					trackExitIntent={true}
+					trackBounceRate={true}
+					trackErrors={true}
+					enableBatching={true}
+				/>{" "}
+			</body>
 		</html>
 	);
 }
