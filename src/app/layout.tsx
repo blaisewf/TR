@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Databuddy } from '@databuddy/sdk';
 import Script from "next/script";
 import "../styles/globals.css";
 import AntiCheat from "@/components/layout/AntiCheat";
@@ -66,8 +67,14 @@ export default function RootLayout({
 					<Navigation />
 					<main>{children}</main>
 				</I18nProvider>
-				<Script src="https://scripts.simpleanalyticscdn.com/latest.js" />
-			</body>
+				<Databuddy
+        clientId="U1zlhnBmUMfjekIatqtn4"
+        trackEngagement={true}
+        trackExitIntent={true}
+        trackBounceRate={true}
+        trackErrors={true}
+        enableBatching={true}
+      />			</body>
 		</html>
 	);
 }

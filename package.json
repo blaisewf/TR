@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@databuddy/sdk": "^1.4.0",
     "@supabase/supabase-js": "^2.50.0",
     "culori": "^4.0.1",
     "framer-motion": "^12.18.1",
