@@ -96,7 +96,8 @@
 		"error": "No se pudieron cargar los datos de clasificación. Inténtalo más tarde.",
 		"viewMode": {
 			"global": "Global",
-			"profile": "Perfil"
+			"profile": "Perfil",
+			"native": "Nativo"
 		},
 		"profile": {
 			"noPlayerId": "No se encontró ID de jugador. Juega una partida primero.",
@@ -115,7 +116,7 @@
 		},
 		"colorModels": {
 			"title": "Rendimiento de los modelos de color",
-			"description": "muestra qué tan bien identifica los colores cada modelo de color",
+			"description": "Muestra qué tan bien identifica los colores cada modelo de color",
 			"table": {
 				"model": "Modelo",
 				"tests": "Pruebas",
@@ -125,7 +126,7 @@
 		},
 		"colorFamilies": {
 			"title": "Rendimiento de familias de color",
-			"description": "muestra cómo se reconocen distintas familias de color",
+			"description": "Muestra cómo se reconocen distintas familias de color",
 			"table": {
 				"family": "Familia de color",
 				"tests": "Pruebas",
@@ -135,7 +136,7 @@
 		},
 		"users": {
 			"title": "Mejores jugadores",
-			"description": "clasifica a los jugadores según su rendimiento y logros",
+			"description": "Clasifica a los jugadores según su rendimiento y logros",
 			"searchPlaceholder": "Buscar por ID de jugador...",
 			"table": {
 				"playerId": "ID del jugador",
@@ -149,7 +150,7 @@
 		},
 		"sessions": {
 			"title": "Sesiones recientes",
-			"description": "muestra las últimas sesiones de juego de todos los jugadores",
+			"description": "Muestra las últimas sesiones de juego de todos los jugadores",
 			"table": {
 				"playerId": "ID del jugador",
 				"date": "Fecha",
@@ -162,6 +163,10 @@
 				"mobile": "Móvil",
 				"desktop": "Escritorio"
 			}
+		},
+		"failurePlots": {
+			"title": "Gráficas de Fallos de Modelos de Color",
+			"description": "Gráficas 3d de los fallos de coincidencia de color para cada modelo"
 		}
 	}
 }

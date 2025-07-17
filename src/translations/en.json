@@ -96,7 +96,8 @@
 		"error": "Failed to load leaderboard data. Please try again later.",
 		"viewMode": {
 			"global": "Global",
-			"profile": "Profile"
+			"profile": "Profile",
+			"native": "Native"
 		},
 		"profile": {
 			"noPlayerId": "No player ID found. Please play a game first.",
@@ -115,7 +116,7 @@
 		},
 		"colorModels": {
 			"title": "Color Model Performance",
-			"description": "shows how well each color model performs in identifying colors",
+			"description": "Shows how well each color model performs in identifying colors",
 			"table": {
 				"model": "Model",
 				"tests": "Tests",
@@ -125,7 +126,7 @@
 		},
 		"colorFamilies": {
 			"title": "Color Family Performance",
-			"description": "shows how well different color families are identified",
+			"description": "Shows how well different color families are identified",
 			"table": {
 				"family": "Color Family",
 				"tests": "Tests",
@@ -135,7 +136,7 @@
 		},
 		"users": {
 			"title": "Top Users",
-			"description": "ranks players based on their performance and achievements",
+			"description": "Ranks players based on their performance and achievements",
 			"searchPlaceholder": "Search by player ID...",
 			"table": {
 				"playerId": "Player ID",
@@ -149,7 +150,7 @@
 		},
 		"sessions": {
 			"title": "Recent Sessions",
-			"description": "shows the latest gameplay sessions from all players",
+			"description": "Shows the latest gameplay sessions from all players",
 			"table": {
 				"playerId": "Player ID",
 				"date": "Date",
@@ -162,6 +163,10 @@
 				"mobile": "Mobile",
 				"desktop": "Desktop"
 			}
+		},
+		"failurePlots": {
+			"title": "Color Model Failure Plots",
+			"description": "3D scatter plots of failed color matches for each color model"
 		}
 	}
 }

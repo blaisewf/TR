@@ -96,7 +96,8 @@
 		"error": "No s'han pogut carregar les dades de la classificació. Torna-ho a provar més tard.",
 		"viewMode": {
 			"global": "Global",
-			"profile": "Perfil"
+			"profile": "Perfil",
+			"native": "Natiu"
 		},
 		"profile": {
 			"noPlayerId": "No s'ha trobat cap ID de jugador. Juga una partida primer.",
@@ -115,7 +116,7 @@
 		},
 		"colorModels": {
 			"title": "Rendiment dels models de color",
-			"description": "mostra com de bé funciona cada model de color per identificar colors",
+			"description": "Mostra com de bé funciona cada model de color per identificar colors",
 			"table": {
 				"model": "Model",
 				"tests": "Tests",
@@ -125,7 +126,7 @@
 		},
 		"colorFamilies": {
 			"title": "Rendiment de les famílies de color",
-			"description": "mostra com es reconeixen les diferents famílies de color",
+			"description": "Mostra com es reconeixen les diferents famílies de color",
 			"table": {
 				"family": "Família de color",
 				"tests": "Tests",
@@ -135,7 +136,7 @@
 		},
 		"users": {
 			"title": "Millors usuaris",
-			"description": "classifica els jugadors segons el seu rendiment i assoliments",
+			"description": "Classifica els jugadors segons el seu rendiment i assoliments",
 			"searchPlaceholder": "Cerca per ID de jugador...",
 			"table": {
 				"playerId": "ID del jugador",
@@ -149,7 +150,7 @@
 		},
 		"sessions": {
 			"title": "Sessions recents",
-			"description": "mostra les darreres sessions de joc de tots els jugadors",
+			"description": "Mostra les darreres sessions de joc de tots els jugadors",
 			"table": {
 				"playerId": "ID del jugador",
 				"date": "Data",
@@ -162,6 +163,10 @@
 				"mobile": "Mòbil",
 				"desktop": "Escriptori"
 			}
+		},
+		"failurePlots": {
+			"title": "Gràfiques d'Errors de Models de Color",
+			"description": "Gràfiques 3d dels errors de coincidència de color per a cada model"
 		}
 	}
 }

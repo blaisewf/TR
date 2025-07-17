@@ -21,6 +21,7 @@ import {
 import Background from "@/components/layout/Background";
 import { getPlayerId } from "@/lib/utils/playerId";
 import type { LeaderboardData } from "../../types/leaderboard";
+import FailurePlots from "@/components/leaderboard/FailurePlots";
 
 const containerVariants: Variants = {
 	hidden: { opacity: 0 },
@@ -795,6 +796,20 @@ export default function LeaderboardPage() {
 							</tbody>
 						</motion.table>
 					</div>
+				</motion.div>
+
+				{/* color model failure plots */}
+				<motion.div
+					className="bg-gray-800/30 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-gray-700/30"
+					variants={tableVariants}
+					initial="hidden"
+					animate="visible"
+				>
+					<h2 className="text-2xl font-bold mb-4 text-center text-white">{t("leaderboard.failurePlots.title")}</h2>
+					<p className="text-sm text-gray-400 text-center mb-6">
+						{t("leaderboard.failurePlots.description")}
+					</p>
+					<FailurePlots />
 				</motion.div>
 			</div>
 		</div>
