@@ -19,9 +19,9 @@ import {
 	YAxis,
 } from "recharts";
 import Background from "@/components/layout/Background";
+import FailurePlots from "@/components/leaderboard/FailurePlots";
 import { getPlayerId } from "@/lib/utils/playerId";
 import type { LeaderboardData } from "../../types/leaderboard";
-import FailurePlots from "@/components/leaderboard/FailurePlots";
 
 const containerVariants: Variants = {
 	hidden: { opacity: 0 },
@@ -805,7 +805,9 @@ export default function LeaderboardPage() {
 					initial="hidden"
 					animate="visible"
 				>
-					<h2 className="text-2xl font-bold mb-4 text-center text-white">{t("leaderboard.failurePlots.title")}</h2>
+					<h2 className="text-2xl font-bold mb-4 text-center text-white">
+						{t("leaderboard.failurePlots.title")}
+					</h2>
 					<p className="text-sm text-gray-400 text-center mb-6">
 						{t("leaderboard.failurePlots.description")}
 					</p>
