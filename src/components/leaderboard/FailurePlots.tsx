@@ -2,7 +2,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
+const Plot = dynamic(() => import("react-plotly.js"), { ssr: false }) as unknown as React.FC<any>;
 
 const rgbSpecs = { range: [[0, 1], [0, 1], [0, 1]], labels: ["R", "G", "B"] };
 const nativeSpecs = {
