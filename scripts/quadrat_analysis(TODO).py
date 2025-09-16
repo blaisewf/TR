@@ -1,20 +1,29 @@
+import matplotlib
+matplotlib.use('TkAgg')
+from matplotlib import pyplot as plt
 import numpy as np
 import csv,json
+from tqdm import tqdm
 from scripts.constants import FILE, MODELS
 
-resolution = 4
+resolution = 2
 
 def quadrats(res, points):
     cuboids = np.zeros(res**3)
 
     for point in points:
-        print(point)
-        print(((point[0]*res)//255),((point[1]*res)//255)*res,((point[2]*res)//255)*res**2)
-        cuboids[int(((point[0]*res)//255)+((point[1]*res)//255)*res+((point[2]*res)//255)*res**2)]+=1
+        cuboids[int((np.ceil(point[0]*res/255)-1)+(np.ceil(point[1]*res/255)-1)*res+(np.ceil(point[2]*res/255)-1)*res**2)]+=1
 
-    return cuboids
+    cuboids-=np.ones_like(cuboids)*(len(points)/len(cuboids))
 
-with open('data/'+FILE,'r') as r:
+    cuboids = np.abs(cuboids)
+
+    if sum(cuboids) != 0:
+        return sum(cuboids)/len(points)
+    else:
+        return 1*10**(-16)
+
+with open('../data/' + FILE,'r') as r:
     data = np.array(list(csv.reader(r))[1:])
 
 rounds = [json.JSONDecoder().decode(r) for r in data[:,5]]
@@ -30,9 +39,14 @@ for g in rounds:
 mistakes = {model:(np.array(data)[:,0]+np.array(data)[:,1])/2 for model,data in mistakes.items()}
 total = {model:(np.array(data)[:,0]+np.array(data)[:,1])/2 for model,data in total.items()}
 
-print(quadrats(resolution, mistakes['RGB']))
+fig,ax = plt.subplots()
 
+x = np.arange(1,255)
+for model in MODELS:
+    y = [abs(quadrats(r,mistakes[model])/quadrats(r,total[model])) for r in tqdm(x)]
+    print(f'{model}: {sum(y)}')
+    plt.plot(x,y,label=model)
 
-#fig,ax = plt.subplots()
-#plt.savefig('plots/mistakes_by_level.png', dpi=300, bbox_inches='tight')
-#plt.close()
+plt.legend()
+plt.savefig('../plots/'+'quadrat_analysis.png', dpi=300, bbox_inches='tight')
+plt.show()
