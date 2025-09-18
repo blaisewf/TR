@@ -63,4 +63,4 @@ if data:
   if results:
             results = sorted(results, key=lambda x: x['std_deviation'])
             for r in results:
-                print(f"{r['model']}: {r['std_deviation']:.0f}")
+                print(f"{r['model']}: {r['std_deviation']:.2f}")

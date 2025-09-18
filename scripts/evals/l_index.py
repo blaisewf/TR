@@ -171,7 +171,7 @@ for model in MODELS:
 print(values)
 
 for m in values:
-    print(f'{m[0]}: {sum(m[1])}')
+    print(f'{m[0]}: {sum(m[1]):.2f}')
 
 plt.plot(distr,[0 for t in distr],label='expected')
 

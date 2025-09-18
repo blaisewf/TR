@@ -33,4 +33,4 @@ mistakes = {i:(np.array(j)[:,0]+np.array(j)[:,1])/2 for i,j in mistakes.items()}
 total = {i:(np.array(j)[:,0]+np.array(j)[:,1])/2 for i,j in total.items()}
 
 for model in MODELS:
-    print(f"{model}: {1/abs(1-Uniformity(mistakes[model])/Uniformity(total[model]))}")
+    print(f"{model}: {1/abs(1-Uniformity(mistakes[model])/Uniformity(total[model])):.2f}")

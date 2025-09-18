@@ -49,7 +49,7 @@ fig,ax = plt.subplots()
 x = np.arange(1,255)
 for model in MODELS:
     y = [abs(quadrats(r,mistakes[model])/quadrats(r,total[model])) for r in tqdm(x)]
-    print(f'{model}: {sum(y)}')
+    print(f'{model}: {sum(y):.2f}')
     plt.plot(x,y,label=model)
 
 plt.legend()
