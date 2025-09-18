@@ -1,3 +1,4 @@
+"""
 import matplotlib
 matplotlib.use('TkAgg') #open plot viewer
 import matplotlib.pyplot as plt
@@ -36,3 +37,4 @@ def F(points, location, r):
 #fig,ax = plt.subplots()
 #plt.legend()
 #plt.show()
+"""
