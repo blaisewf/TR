@@ -2,8 +2,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import csv
 from constants import FILE
+import sys, os
 
-with open('../data/' + FILE,'r') as r:
+now_dir = os.getcwd()
+sys.path.append(now_dir)
+
+with open('data/' + FILE,'r') as r:
     data = np.array(list(csv.reader(r))[1:])
 
 levels = []
@@ -29,5 +33,5 @@ plt.bar(x,y,color='blue',label='regular')
 plt.bar(x2,y2,color='red',label='visual condition (1:27)')
 
 plt.legend()
-plt.savefig('../plots/'+'games_comparison_by_levels.png', dpi=300, bbox_inches='tight')
+plt.savefig('plots/'+'games_comparison_by_levels.png', dpi=300, bbox_inches='tight')
 plt.show()

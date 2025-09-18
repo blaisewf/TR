@@ -1,10 +1,10 @@
 @echo off
-echo Running all Python scripts in the scripts folder...
+echo Running all Python scripts in scripts and scripts\evals...
 echo.
 
 cd /d "%~dp0"
 
-for %%f in (scripts\*.py) do (
+for %%f in (scripts\*.py scripts\evals\*.py) do (
     echo Running %%f...
     python "%%f"
     if errorlevel 1 (
