@@ -5,7 +5,7 @@ echo
 
 cd "$(dirname "$0")"
 
-for script in scripts/*.py; do
+for script in scripts/*.py scripts/evals/*.py; do
     if [ -f "$script" ]; then
         echo "Running $script..."
         python3 "$script"
