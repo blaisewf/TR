@@ -62,5 +62,5 @@ if data:
                 results.append(r)
   if results:
             results = sorted(results, key=lambda x: x['std_deviation'])
-            for i, r in enumerate(results, 1):
-                print(f"{i}. {r['model']:<8}: {r['std_deviation']:.4f}")
+            for r in results:
+                print(f"{r['model']}: {r['std_deviation']:.0f}")
