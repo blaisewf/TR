@@ -1,3 +1,3 @@
-MODELS = ['RGB', 'CIELAB', 'JzAzBz', 'Oklab']
+MODELS = ["RGB", "CIELAB", "JzAzBz", "Oklab"]
 
-FILE= "03-09-25.csv"
+FILE = "03-09-25.csv"
