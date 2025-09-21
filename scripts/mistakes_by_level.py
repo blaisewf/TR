@@ -30,12 +30,14 @@ plt.bar(x, y)
 plt.savefig("plots/" + "mistakes_by_level.png", dpi=300, bbox_inches="tight")
 
 matplotlib.use("pgf")
-matplotlib.rcParams.update({
-    "pgf.texsystem": "pdflatex",
-    'font.family': 'serif',
-    'text.usetex': True,
-    'pgf.rcfonts': False,
-})
+matplotlib.rcParams.update(
+    {
+        "pgf.texsystem": "pdflatex",
+        "font.family": "serif",
+        "text.usetex": True,
+        "pgf.rcfonts": False,
+    }
+)
 plt.savefig("plots/tex/" + "mistakes_by_level.pgf", dpi=300, bbox_inches="tight")
 
 plt.show()
