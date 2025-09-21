@@ -37,12 +37,16 @@ plt.legend()
 plt.savefig("plots/" + "games_comparison_by_levels.png", dpi=300, bbox_inches="tight")
 
 matplotlib.use("pgf")
-matplotlib.rcParams.update({
-    "pgf.texsystem": "pdflatex",
-    'font.family': 'serif',
-    'text.usetex': True,
-    'pgf.rcfonts': False,
-})
-plt.savefig("plots/tex/" + "games_comparison_by_levels.pgf", dpi=300, bbox_inches="tight")
+matplotlib.rcParams.update(
+    {
+        "pgf.texsystem": "pdflatex",
+        "font.family": "serif",
+        "text.usetex": True,
+        "pgf.rcfonts": False,
+    }
+)
+plt.savefig(
+    "plots/tex/" + "games_comparison_by_levels.pgf", dpi=300, bbox_inches="tight"
+)
 
 plt.show()
