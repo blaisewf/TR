@@ -9,9 +9,9 @@ const toOklab = converter("oklab");
 const toJab = converter("jab");
 
 // color space volumes, used to keep uniformity between models
-const labVol = 824204.547378;
-const oklabVol = 0.054198192;
-const jabVol = 0.004623475;
+const labVol = 831904.2345;
+const oklabVol = 0.05409040566;
+const jabVol = 0.004616139661;
 
 const labMod = Math.cbrt(labVol);
 const oklabMod = Math.cbrt(oklabVol);
