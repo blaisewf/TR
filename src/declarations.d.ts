@@ -1,4 +1,4 @@
-declare module 'react-plotly.js' {
-  const Plot: any;
-  export default Plot;
-} 
+declare module "react-plotly.js" {
+	const Plot: any;
+	export default Plot;
+}
