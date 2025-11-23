@@ -1,9 +1,13 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "";
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const isDatabaseAvailable = !!(supabaseUrl && supabaseAnonKey);
+
+export const supabase = isDatabaseAvailable
+	? createClient(supabaseUrl, supabaseAnonKey)
+	: null;
 
 export const getTableName = () => {
 	return process.env.NODE_ENV === "development" ? "dev_data" : "data";
@@ -41,6 +45,11 @@ export type GameSessionData = {
 };
 
 export async function saveCompleteSession(sessionData: GameSessionData) {
+	if (!isDatabaseAvailable || !supabase) {
+		console.log("Database not configured, skipping session save");
+		return null;
+	}
+
 	try {
 		const { data, error } = await supabase
 			.from(getTableName())

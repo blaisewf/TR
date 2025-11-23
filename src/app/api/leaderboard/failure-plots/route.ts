@@ -1,13 +1,17 @@
+import { getTableName, supabase } from "@/lib/database/supabase";
 import type { Rgb } from "culori";
 import { converter } from "culori";
 import { NextResponse } from "next/server";
-import { getTableName, supabase } from "@/lib/database/supabase";
 
 const toLab = converter("lab");
 const toOklab = converter("oklab");
 const toJab = converter("jab");
 
 export async function GET() {
+	if (!supabase) {
+		return NextResponse.json({ rgb: {}, native: {} });
+	}
+
 	const { data: sessions, error } = await supabase
 		.from(getTableName())
 		.select("*")

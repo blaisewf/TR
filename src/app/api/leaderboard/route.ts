@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import { getTableName, supabase } from "@/lib/database/supabase";
+import { NextResponse } from "next/server";
 
 // configure edge runtime
 export const runtime = "edge";
@@ -42,6 +42,21 @@ interface Session {
 
 export async function GET(request: Request) {
 	try {
+		if (!supabase) {
+			return NextResponse.json({
+				colorModels: [],
+				colorFamilies: [],
+				users: [],
+				sessions: [],
+				generalStats: {
+					totalGames: 0,
+					totalPlayTime: 0,
+					totalPlayers: 0,
+					averageAccuracy: 0,
+				},
+			});
+		}
+
 		// get the view parameter from the URL
 		const { searchParams } = new URL(request.url);
 		const view = searchParams.get("view") || "global";
