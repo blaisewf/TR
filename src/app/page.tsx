@@ -1,11 +1,11 @@
 "use client";
 
-import { memo } from "react";
 import GameBoard from "@/components/game/GameBoard";
 import GameInstructions from "@/components/game/GameInstructions";
 import GameOver from "@/components/game/GameOver";
 import Background from "@/components/layout/Background";
 import { useGame } from "@/hooks/useGame";
+import { memo } from "react";
 
 const ColorPerceptionGame = memo(function ColorPerceptionGame() {
 	const {
@@ -15,13 +15,27 @@ const ColorPerceptionGame = memo(function ColorPerceptionGame() {
 		score,
 		wrongAnswers,
 		elapsedTime,
+		feedback,
 		startGame,
 		handleSquareClick,
 	} = useGame();
 
 	return (
-		<div className="min-h-screen bg-black/50 pt-24 pb-12 px-4 flex items-center justify-center relative overflow-hidden">
-			<Background />
+		<>
+			<div
+				className={`fixed inset-0 pointer-events-none z-0 transition-all duration-500 ease-out ${
+					feedback === "correct"
+						? "shadow-[inset_0_0_120px_40px_rgba(34,197,94,0.4)] backdrop-blur-sm"
+						: feedback === "wrong"
+							? "shadow-[inset_0_0_120px_40px_rgba(239,68,68,0.4)] backdrop-blur-sm"
+							: "opacity-0"
+				}`}
+				style={{
+					willChange: feedback ? "opacity, box-shadow" : "auto",
+				}}
+			/>
+			<div className="min-h-screen bg-black/50 pt-24 pb-12 px-4 flex items-center justify-center relative overflow-hidden">
+				<Background />
 			<div className="max-w-4xl w-full mx-auto space-y-8 relative">
 				{gameState === "instructions" && (
 					<GameInstructions onStartGame={startGame} />
@@ -50,6 +64,7 @@ const ColorPerceptionGame = memo(function ColorPerceptionGame() {
 				)}
 			</div>
 		</div>
+		</>
 	);
 });
 
