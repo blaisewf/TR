@@ -1,23 +1,23 @@
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
-    type GameSessionData,
-    type RoundData,
-    saveCompleteSession,
+	type GameSessionData,
+	type RoundData,
+	saveCompleteSession,
 } from "@/lib/database/supabase";
 import {
-    createPerceptualDifference,
-    generateRandomRGBColor,
+	createPerceptualDifference,
+	generateRandomRGBColor,
 } from "@/lib/utils/colorGenerator";
 import { getDeviceInfo } from "@/lib/utils/deviceClassifier";
 import { getPlayerId } from "@/lib/utils/playerId";
 import { generateUUID } from "@/lib/utils/uuidGenerator";
 import {
-    COLOR_MODELS,
-    type GameRound,
-    type GameState,
-    GRID_SIZE,
-    MAX_WRONG_ANSWERS,
+	COLOR_MODELS,
+	type GameRound,
+	type GameState,
+	GRID_SIZE,
+	MAX_WRONG_ANSWERS,
 } from "@/types/game";
-import { useCallback, useEffect, useRef, useState } from "react";
 
 const LEVEL_TIMER = 30; // 30 seconds per level
 
@@ -185,26 +185,26 @@ export const useGame = () => {
 				correct: isCorrect,
 			};
 
-		setRounds((prev) => [...prev, roundData]);
+			setRounds((prev) => [...prev, roundData]);
 
-		setFeedback(isCorrect ? "correct" : "wrong");
-		setTimeout(() => setFeedback(null), 600);
+			setFeedback(isCorrect ? "correct" : "wrong");
+			setTimeout(() => setFeedback(null), 600);
 
-		if (isCorrect) {
-			setScore((prev) => prev + 1);
-			setLevel((prev) => prev + 1);
-			setTimeout(() => startNewRound(), 400);
-		} else {
-			setWrongAnswers((prev) => prev + 1);
-			if (wrongAnswers + 1 >= MAX_WRONG_ANSWERS) {
-				setTimeout(() => endGame(), 400);
-			} else {
+			if (isCorrect) {
+				setScore((prev) => prev + 1);
+				setLevel((prev) => prev + 1);
 				setTimeout(() => startNewRound(), 400);
+			} else {
+				setWrongAnswers((prev) => prev + 1);
+				if (wrongAnswers + 1 >= MAX_WRONG_ANSWERS) {
+					setTimeout(() => endGame(), 400);
+				} else {
+					setTimeout(() => startNewRound(), 400);
+				}
 			}
-		}
-	},
-	[currentRound, wrongAnswers, startNewRound, endGame],
-);	// update elapsed time and level timer
+		},
+		[currentRound, wrongAnswers, startNewRound, endGame],
+	); // update elapsed time and level timer
 	useEffect(() => {
 		if (gameState === "playing") {
 			const interval = setInterval(() => {
