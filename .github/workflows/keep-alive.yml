@@ -1,0 +1,39 @@
+name: Keep Supabase Database Alive
+
+on:
+  schedule:
+    # Runs every 24 hours at 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Ping Leaderboard API
+        run: |
+          echo "Making request to leaderboard endpoint..."
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://treballderecerca.cat/api/leaderboard)
+          echo "Leaderboard API response code: $response"
+          if [ $response -eq 200 ]; then
+            echo "✓ Leaderboard API is alive"
+          else
+            echo "⚠ Warning: Leaderboard API returned status $response"
+          fi
+
+      - name: Ping Failure Plots API
+        run: |
+          echo "Making request to failure plots endpoint..."
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://treballderecerca.cat/api/leaderboard/failure-plots)
+          echo "Failure Plots API response code: $response"
+          if [ $response -eq 200 ]; then
+            echo "✓ Failure Plots API is alive"
+          else
+            echo "⚠ Warning: Failure Plots API returned status $response"
+          fi
+
+      - name: Health Check Summary
+        run: |
+          echo "Database keep-alive ping completed at $(date)"
+          echo "Next scheduled run: 24 hours from now"
