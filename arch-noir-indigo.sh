@@ -152,7 +152,7 @@ cat > "$JS" <<JS
     p.addWidget('org.kde.plasma.kickoff');
     let task=p.addWidget('org.kde.plasma.icontasks');
     task.currentConfigGroup=['General'];
-    task.writeConfig('showOnlyCurrentScreen',true);
+    task.writeConfig('showOnlyCurrentScreen',false);
     task.writeConfig('showOnlyCurrentDesktop',false);
     task.writeConfig('groupingStrategy',1);
     task.writeConfig('launchers','applications:org.kde.dolphin.desktop,applications:org.kde.konsole.desktop');
