@@ -186,7 +186,7 @@ fi
 kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group "$P0" --key lastScreen "$S0"
 kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group "$P1" --key lastScreen "$S1"
 for p in "$P0" "$P1"; do
-  kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel $p" --key floating 1
+  kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel $p" --key floating 0
   kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel $p" --group Defaults --key thickness 46
 done
 if systemctl --user list-unit-files plasma-plasmashell.service >/dev/null 2>&1; then
