@@ -6,7 +6,7 @@ say(){ printf '\n\033[1;35m==> %s\033[0m\n' "$*"; }
 warn(){ printf '\nAVISO: %s\n' "$*" >&2; }
 [[ "$EUID" -ne 0 ]] || { echo "Ejecuta esto como usuario normal, sin sudo." >&2; exit 1; }
 command -v pacman >/dev/null || { echo "Se requiere Arch Linux." >&2; exit 1; }
-[[ -n "\${DBUS_SESSION_BUS_ADDRESS:-}" ]] || { echo "Ejecuta dentro de tu sesión gráfica KDE." >&2; exit 1; }
+[[ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ]] || { echo "Ejecuta dentro de tu sesión gráfica KDE." >&2; exit 1; }
 
 backup="$HOME/.local/state/colloid-kde/$(date +%Y%m%d-%H%M%S)"
 mkdir -p "$backup"
@@ -14,8 +14,8 @@ files=()
 for f in .config/kdeglobals .config/kwinrc .config/Kvantum/kvantum.kvconfig .config/plasmashellrc; do
   if [[ -f "$HOME/$f" ]]; then files+=("$f"); fi
 done
-if (("\${#files[@]}" > 0)); then
-  tar -czf "$backup/config-before.tar.gz" -C "$HOME" "\${files[@]}"
+if ((${#files[@]} > 0)); then
+  tar -czf "$backup/config-before.tar.gz" -C "$HOME" "${files[@]}"
 fi
 cat > "$backup/restore.sh" <<'RESTORE'
 #!/usr/bin/env bash
@@ -112,7 +112,7 @@ if command -v plasma-apply-desktoptheme >/dev/null; then
     warn 'No se pudo activar el estilo de panel Colloid; conservamos el panel anterior.'
   fi
 fi
-kwriteconfig6 --file kvantum.kvconfig --group General --key theme Colloid
+kwriteconfig6 --file Kvantum/kvantum.kvconfig --group General --key theme Colloid
 kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle kvantum
 # Mantener los controles Win-like de Noir Indigo, Inter y Geist Mono.
 # No aplicar el Global Theme: esa opción reemplazaría paneles y fondos.
