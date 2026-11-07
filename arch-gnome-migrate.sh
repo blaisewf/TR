@@ -97,6 +97,8 @@ try_setting org.gnome.shell enabled-extensions \
 # Super abre ArcMenu cuando la versión instalada soporta este ajuste.
 if gsettings list-keys org.gnome.shell.extensions.arcmenu 2>/dev/null | grep -qx arcmenu-hotkey; then
   try_setting org.gnome.shell.extensions.arcmenu arcmenu-hotkey "['Super_L', 'Super_R']"
+  try_setting org.gnome.shell.extensions.arcmenu arcmenu-hotkey-overlay-key-enabled true
+  try_setting org.gnome.shell.extensions.arcmenu multi-monitor true
 fi
 
 say 'Configurar GNOME Terminal con Geist Mono y fondo oscuro'
