@@ -26,12 +26,14 @@ get() {
 if [[ "$mode" == --full ]]; then get arch-kde-setup-v3.sh; fi
 get arch-noir-indigo.sh
 get arch-noir-indigo-menu-konsole.sh
+get arch-orchis-kde.sh
 
 echo
 echo "Scripts descargados; se ejecutarán en el siguiente orden:"
 if [[ "$mode" == --full ]]; then echo "1. Aplicaciones y herramientas autorizadas"; fi
 echo "2. Tema Noir Indigo, barras inferiores, fondos, ajustes del cursor y esquinas"
 echo "3. AppGrid y Konsole con Geist Mono + Starship"
+echo "4. Tema Orchis Dark; barras inferiores fijas a pantalla completa; fondos negros"
 echo
 echo "Se guardarán copias de seguridad de Plasma y Konsole."
 echo "La instalación completa puede pedir confirmaciones para paquetes de AUR."
@@ -43,4 +45,5 @@ if [[ "$mode" == --full ]]; then
 fi
 bash "$temp/arch-noir-indigo.sh"
 bash "$temp/arch-noir-indigo-menu-konsole.sh"
+bash "$temp/arch-orchis-kde.sh"
 printf '\nInstalación Noir Indigo finalizada. Cierra sesión y vuelve a entrar.\n'
