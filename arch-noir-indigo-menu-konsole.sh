@@ -17,7 +17,7 @@ for path in "$HOME/.config/konsolerc" "$HOME/.config/starship.toml" "$HOME/.bash
 done
 msg "Backup en $backup"
 msg "Instalando fuente y prompt"
-sudo pacman -S --needed git base-devel ttf-jetbrains-mono-nerd starship konsole
+sudo pacman -S --needed git base-devel otf-geist-mono-nerd starship konsole
 
 msg "Instalando AppGrid desde el AUR mantenido por su autor"
 if ! pacman -Qq plasma6-applets-appgrid >/dev/null 2>&1; then
@@ -92,7 +92,7 @@ Name=Noir Indigo
 Parent=FALLBACK/
 [Appearance]
 ColorScheme=NoirIndigo
-Font=JetBrainsMono Nerd Font,11,-1,5,50,0,0,0,0,0
+Font=GeistMono Nerd Font Mono,11,-1,5,50,0,0,0,0,0
 [Scrolling]
 HistoryMode=2
 HistorySize=10000
