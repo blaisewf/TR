@@ -109,7 +109,7 @@ kwriteconfig6 --file kwinrc --group Plugins --key blurEnabled true
 kwriteconfig6 --file kwinrc --group Plugins --key contrastEnabled true
 kwriteconfig6 --file kdeglobals --group General --key accentColorFromWallpaper false
 
-notice 'Preparando los paneles y el fondo para los dos monitores'
+notice 'Preparando los paneles verticales y el fondo para los dos monitores'
 JS="$BACKUP/plasma-layout.js"
 # Path quoted safely as JSON/JS string
 BACKGROUND_URL=$(python3 - "$BLACK" <<'PY'
@@ -137,8 +137,8 @@ cat > "$JS" <<JS
   const oldPanels=panels();
   function createPanel() {
     let p=new Panel;
-    p.location='bottom';
-    p.height=46;
+    p.location='left';
+    p.height=50;
     p.lengthMode='fill';
     p.alignment='center';
     p.hiding='none';
@@ -188,7 +188,7 @@ kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containment
 kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group "$P1" --key lastScreen "$S1"
 for p in "$P0" "$P1"; do
   kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel $p" --key floating 1
-  kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel $p" --group Defaults --key thickness 46
+  kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel $p" --group Defaults --key thickness 50
 done
 if systemctl --user list-unit-files plasma-plasmashell.service >/dev/null 2>&1; then
     systemctl --user start plasma-plasmashell.service || { nohup plasmashell --replace >/dev/null 2>&1 & }
