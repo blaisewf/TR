@@ -111,6 +111,9 @@ kwriteconfig6 --file kwinrc --group Plugins --key contrastEnabled true
 kwriteconfig6 --file kwinrc --group EdgeBarrier --key EdgeBarrier 0
 kwriteconfig6 --file kwinrc --group EdgeBarrier --key CornerBarrier false
 kwriteconfig6 --file kwinrc --group Plugins --key shakecursorEnabled false
+# Desactivar esquina activa (Vista general / Overview de KWin)
+kwriteconfig6 --file kwinrc --group Effect-overview --key BorderActivate 9
+kwriteconfig6 --file kwinrc --group ElectricBorders --key TopLeft None
 kwriteconfig6 --file kdeglobals --group General --key accentColorFromWallpaper false
 
 notice 'Preparando los paneles inferiores fijos para los monitores conectados'
