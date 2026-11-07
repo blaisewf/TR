@@ -137,13 +137,12 @@ cat > "$JS" <<JS
   const oldPanels=panels();
   function createPanel() {
     let p=new Panel;
-    p.location='left';
-    p.height=50;
+    p.location='bottom';
+    p.height=46;
     p.lengthMode='fill';
     p.alignment='center';
     p.hiding='none';
     p.addWidget('org.kde.plasma.kickoff');
-    p.addWidget('org.kde.plasma.panelspacer');
     let task=p.addWidget('org.kde.plasma.icontasks');
     task.currentConfigGroup=['General'];
     task.writeConfig('showOnlyCurrentScreen',true);
@@ -188,7 +187,7 @@ kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containment
 kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group "$P1" --key lastScreen "$S1"
 for p in "$P0" "$P1"; do
   kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel $p" --key floating 1
-  kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel $p" --group Defaults --key thickness 50
+  kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel $p" --group Defaults --key thickness 46
 done
 if systemctl --user list-unit-files plasma-plasmashell.service >/dev/null 2>&1; then
     systemctl --user start plasma-plasmashell.service || { nohup plasmashell --replace >/dev/null 2>&1 & }
