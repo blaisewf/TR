@@ -19,7 +19,7 @@ sudo pacman -Syu --needed \
   gdm gnome-shell gnome-session gnome-control-center gnome-settings-daemon \
   gnome-keyring gnome-extensions-app gnome-tweaks \
   gnome-shell-extension-dash-to-panel gnome-shell-extension-arc-menu \
-  gnome-menus nautilus gnome-terminal gvfs \
+  gnome-menus nautilus gvfs \
   xdg-desktop-portal-gnome xdg-user-dirs-gtk \
   dconf gsettings-desktop-schemas \
   inter-font otf-geist-mono-nerd papirus-icon-theme \
@@ -101,23 +101,6 @@ if gsettings list-keys org.gnome.shell.extensions.arcmenu 2>/dev/null | grep -qx
   try_setting org.gnome.shell.extensions.arcmenu multi-monitor true
 fi
 
-say 'Configurar GNOME Terminal con Geist Mono y fondo oscuro'
-if gsettings list-schemas | grep -qx 'org.gnome.Terminal.ProfilesList'; then
-  UUID="$(gsettings get org.gnome.Terminal.ProfilesList default | tr -d "'")"
-  if [[ -z "$UUID" || "$UUID" == none ]]; then
-    UUID="$(cat /proc/sys/kernel/random/uuid)"
-    gsettings set org.gnome.Terminal.ProfilesList list "['$UUID']"
-    gsettings set org.gnome.Terminal.ProfilesList default "$UUID"
-  fi
-  PROFILE="org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:$UUID/"
-  try_setting "$PROFILE" visible-name 'GNOME Noir'
-  try_setting "$PROFILE" use-system-font false
-  try_setting "$PROFILE" font 'GeistMono Nerd Font Mono 11'
-  try_setting "$PROFILE" use-theme-colors false
-  try_setting "$PROFILE" background-color 'rgb(17,19,27)'
-  try_setting "$PROFILE" foreground-color 'rgb(227,233,245)'
-fi
-
 if [[ ! -f "$HOME/.config/starship.toml" ]]; then
   mkdir -p "$HOME/.config"
   cat > "$HOME/.config/starship.toml" <<'EOF'
@@ -178,6 +161,17 @@ else
   warn 'No se pudo descargar el tema GNOME Noir.'
 fi
 rm -f -- "$theme_script"
+
+say 'Instalando Kitty y retirando GNOME Terminal y Konsole'
+kitty_script="$(mktemp)"
+if curl --proto '=https' --tlsv1.2 -fL --retry 3 \
+  https://raw.githubusercontent.com/blaisewf/TR/arch-kde-setup/arch-gnome-kitty.sh \
+  -o "$kitty_script"; then
+  bash -n "$kitty_script" && bash "$kitty_script" || warn 'Kitty no se pudo configurar completamente.'
+else
+  warn 'No se pudo descargar la configuración de Kitty.'
+fi
+rm -f -- "$kitty_script"
 
 say 'Migración preparada'
 echo 'El próximo arranque usará GDM y GNOME.'
