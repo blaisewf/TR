@@ -114,6 +114,11 @@ if command -v plasma-apply-desktoptheme >/dev/null; then
 fi
 kwriteconfig6 --file Kvantum/kvantum.kvconfig --group General --key theme Colloid
 kwriteconfig6 --file kdeglobals --group KDE --key widgetStyle kvantum
+# Decoración de ventanas Colloid: no cambia el orden de los botones establecido en Noir Indigo.
+if [[ -f "$HOME/.local/share/aurorae/themes/Colloid-dark-round/metadata.desktop" ]]; then
+  kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key library org.kde.kwin.aurorae
+  kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key theme __aurorae__svg__Colloid-dark-round
+fi
 # Mantener los controles Win-like de Noir Indigo, Inter y Geist Mono.
 # No aplicar el Global Theme: esa opción reemplazaría paneles y fondos.
 qdbus6 org.kde.KWin /KWin reconfigure >/dev/null 2>&1 || true
