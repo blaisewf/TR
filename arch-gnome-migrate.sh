@@ -168,6 +168,17 @@ if (("${#remove[@]}" > 0)); then
   fi
 fi
 
+say 'Aplicando el tema GNOME Noir y la nueva barra de tareas'
+theme_script="$(mktemp)"
+if curl --proto '=https' --tlsv1.2 -fL --retry 3 \
+  https://raw.githubusercontent.com/blaisewf/TR/arch-kde-setup/arch-gnome-noir-theme.sh \
+  -o "$theme_script"; then
+  bash -n "$theme_script" && bash "$theme_script" || warn 'El tema no se pudo aplicar completamente. Puedes ejecutarlo más tarde.'
+else
+  warn 'No se pudo descargar el tema GNOME Noir.'
+fi
+rm -f -- "$theme_script"
+
 say 'Migración preparada'
 echo 'El próximo arranque usará GDM y GNOME.'
 echo 'Tus documentos, juegos, apps, código y discos no se han formateado.'
