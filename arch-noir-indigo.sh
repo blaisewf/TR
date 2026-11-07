@@ -107,9 +107,13 @@ kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key ButtonsOnLeft ''
 kwriteconfig6 --file kwinrc --group org.kde.kdecoration2 --key ButtonsOnRight IAX
 kwriteconfig6 --file kwinrc --group Plugins --key blurEnabled true
 kwriteconfig6 --file kwinrc --group Plugins --key contrastEnabled true
+# Sin resistencia entre monitores y sin cursor gigante al agitar el ratón
+kwriteconfig6 --file kwinrc --group EdgeBarrier --key EdgeBarrier 0
+kwriteconfig6 --file kwinrc --group EdgeBarrier --key CornerBarrier false
+kwriteconfig6 --file kwinrc --group Plugins --key shakecursorEnabled false
 kwriteconfig6 --file kdeglobals --group General --key accentColorFromWallpaper false
 
-notice 'Preparando los paneles verticales y el fondo para los dos monitores'
+notice 'Preparando los paneles inferiores fijos para los monitores conectados'
 JS="$BACKUP/plasma-layout.js"
 # Path quoted safely as JSON/JS string
 BACKGROUND_URL=$(python3 - "$BLACK" <<'PY'
@@ -131,7 +135,7 @@ cat > "$JS" <<JS
     d.reloadConfig();
   }
   screens.sort((a,b)=>a-b);
-  if (screens.length < 2) { throw new Error('Plasma solo detecta un monitor. No se modifican los paneles.'); }
+  if (!screens.length) { throw new Error('No se detectaron monitores. No se modifican los paneles.'); }
   // Crear dos paneles nuevos. Los anteriores se sustituyen únicamente después de
   // comprobar que los nuevos tienen sus widgets.
   const oldPanels=panels();
@@ -155,13 +159,14 @@ cat > "$JS" <<JS
     p.addWidget('org.kde.plasma.showdesktop');
     return p;
   }
-  const a=createPanel(), b=createPanel();
+  const fresh = screens.map(() => createPanel());
   const state=ConfigFile('plasmashellrc');
   state.group='NoirIndigoLayout';
-  state.writeEntry('Panel0',String(a.id));
-  state.writeEntry('Panel1',String(b.id));
-  state.writeEntry('Screen0',String(screens[0]));
-  state.writeEntry('Screen1',String(screens[1]));
+  state.writeEntry('Count',String(fresh.length));
+  fresh.forEach((p,i)=>{
+    state.writeEntry('Panel'+i,String(p.id));
+    state.writeEntry('Screen'+i,String(screens[i]));
+  });
   for (const old of oldPanels) old.remove();
 })();
 JS
@@ -169,11 +174,8 @@ qdbus6 org.kde.plasmashell /PlasmaShell org.kde.PlasmaShell.evaluateScript "$(ca
 sleep 2
 STATE="$CFG/plasmashellrc"
 readcfg() { kreadconfig6 --file plasmashellrc --group NoirIndigoLayout --key "$1" 2>/dev/null || true; }
-P0=$(readcfg Panel0)
-P1=$(readcfg Panel1)
-S0=$(readcfg Screen0)
-S1=$(readcfg Screen1)
-[[ "$P0" =~ ^[0-9]+$ && "$P1" =~ ^[0-9]+$ && "$S0" =~ ^[0-9]+$ && "$S1" =~ ^[0-9]+$ ]] || fail "No pude identificar los paneles creados. Restaura desde $BACKUP/restore.sh"
+COUNT=$(readcfg Count)
+[[ "$COUNT" =~ ^[1-9][0-9]*$ && "$COUNT" -le 8 ]] || fail "No pude identificar los paneles creados. Restaura desde $BACKUP/restore.sh"
 
 notice 'Asignando cada barra a su monitor (solución para Plasma 6.8)'
 # Es importante parar plasmashell antes de escribir lastScreen o sobrescribe el valor.
@@ -183,9 +185,11 @@ else
     kquitapp6 plasmashell || true
     sleep 2
 fi
-kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group "$P0" --key lastScreen "$S0"
-kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group "$P1" --key lastScreen "$S1"
-for p in "$P0" "$P1"; do
+for ((i=0; i<COUNT; i++)); do
+  p=$(readcfg "Panel$i")
+  screen=$(readcfg "Screen$i")
+  [[ "$p" =~ ^[0-9]+$ && "$screen" =~ ^[0-9]+$ ]] || fail "Panel o monitor no válido. Restaura desde $BACKUP/restore.sh"
+  kwriteconfig6 --file plasma-org.kde.plasma.desktop-appletsrc --group Containments --group "$p" --key lastScreen "$screen"
   kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel $p" --key floating 0
   kwriteconfig6 --file plasmashellrc --group PlasmaViews --group "Panel $p" --group Defaults --key thickness 46
 done
