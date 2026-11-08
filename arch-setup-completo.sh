@@ -406,6 +406,9 @@ with zipfile.ZipFile(archive) as z:
 PY
   then
     mkdir -p "$HOME/.local/share/gnome-shell/extensions"
+    if [[ -d "$clipboard_dir" ]]; then
+      mv "$clipboard_dir" "${clipboard_dir}.incomplete.$(date +%s)"
+    fi
     mv "$clipboard_extract" "$clipboard_dir"
     chmod -R u+rwX,go+rX "$clipboard_dir"
     if [[ -d "$clipboard_dir/schemas" ]]; then
