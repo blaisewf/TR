@@ -656,17 +656,21 @@ gset "$arc" menu-item-active-bg-color "rgba($RED_R,$RED_G,$RED_B,0.38)"
 gset "$arc" menu-item-active-fg-color 'rgb(255,255,255)'
 gset "$arc" menu-button-fg-color "(true, 'rgb($RED_R,$RED_G,$RED_B)')"
 
-say 'Tema GTK3 Adwaita Dark y controles alineados'
-python3 - "$HOME/.config/gtk-3.0/settings.ini" <<'PY'
+say 'Tema GTK3/GTK4 Adwaita Dark y controles alineados'
+# Este ajuste unifica tema/orden en GTK, no obliga a Electron/Chromium
+# a utilizar los mismos dibujos de cerrar, minimizar y maximizar.
+python3 - "$HOME/.config/gtk-3.0/settings.ini" "$HOME/.config/gtk-4.0/settings.ini" <<'PY'
 import configparser,pathlib,sys
-p=pathlib.Path(sys.argv[1]); p.parent.mkdir(parents=True,exist_ok=True)
-cfg=configparser.ConfigParser(interpolation=None); cfg.optionxform=str
-if p.exists(): cfg.read(p,encoding="utf-8")
-if not cfg.has_section("Settings"): cfg.add_section("Settings")
-cfg.set("Settings","gtk-theme-name","adw-gtk3-dark")
-cfg.set("Settings","gtk-decoration-layout",":minimize,maximize,close")
-cfg.set("Settings","gtk-application-prefer-dark-theme","true")
-with p.open("w",encoding="utf-8") as f: cfg.write(f,space_around_delimiters=False)
+for filename, theme in [(sys.argv[1], "adw-gtk3-dark"), (sys.argv[2], "Adwaita")]:
+    p=pathlib.Path(filename)
+    p.parent.mkdir(parents=True,exist_ok=True)
+    cfg=configparser.ConfigParser(interpolation=None); cfg.optionxform=str
+    if p.exists(): cfg.read(p,encoding="utf-8")
+    if not cfg.has_section("Settings"): cfg.add_section("Settings")
+    cfg.set("Settings","gtk-theme-name",theme)
+    cfg.set("Settings","gtk-decoration-layout",":minimize,maximize,close")
+    cfg.set("Settings","gtk-application-prefer-dark-theme","true")
+    with p.open("w",encoding="utf-8") as f: cfg.write(f,space_around_delimiters=False)
 PY
 
 say 'Kitty con Geist Mono y Starship'
@@ -698,6 +702,9 @@ color14 #afecf8
 color15 #ffffff
 background_opacity 1.0
 window_padding_width 12
+# La barra de título de Kitty sigue el tema y botones del sistema en Wayland.
+wayland_titlebar_color system
+hide_window_decorations no
 confirm_os_window_close 0
 enable_audio_bell no
 EOF
