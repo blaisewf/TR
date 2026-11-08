@@ -5,7 +5,7 @@
 # desarrollo, juegos/apps, Helium, Wolow, SignalRGB y splash Arch.
 # No instala KDE. Cada ejecución es repetible; no usa otros scripts del repo.
 # Opciones: --theme-only | --skip-boot | --skip-extras | --skip-aur | --help
-# Atajos: Alt+Shift+S para capturas, Super+Shift+V para historial del portapapeles.
+# Atajos: Super+Shift+S para capturas, Super+Shift+V para historial del portapapeles.
 set -Eeuo pipefail
 
 say(){ printf '\n\033[1;35m==> %s\033[0m\n' "$*"; }
@@ -372,9 +372,9 @@ if [[ -s "$WALL" ]]; then
 gsettings reset org.gnome.desktop.screensaver picture-uri 2>/dev/null || true
 fi
 gset org.gnome.shell disable-user-extensions false
-# Capturas nativas de GNOME 51: Alt+Shift+S abre selector interactivo.
+# Capturas nativas de GNOME 51: Super+Shift+S abre selector interactivo.
 # Conservamos Print para no perder el atajo predeterminado.
-gset org.gnome.shell.keybindings show-screenshot-ui "['<Shift><Alt>s', 'Print']"
+gset org.gnome.shell.keybindings show-screenshot-ui "['<Super><Shift>s', 'Print']"
 
 # Historial del portapapeles: versión 52 oficial, compatible con GNOME 51.
 # Se instala desde extensions.gnome.org, sin modificar metadatos de compatibilidad.
