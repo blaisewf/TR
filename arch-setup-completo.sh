@@ -446,6 +446,18 @@ gset "$arc" arcmenu-hotkey "['Super_L','Super_R']"
 gset "$arc" arcmenu-hotkey-overlay-key-enabled true
 gset "$arc" multi-monitor true
 gset "$arc" hide-overview-on-startup true
+# ArcMenu rojo sobre grafito, con bordes y selecciones usando la muestra real.
+gset "$arc" override-menu-theme true
+gset "$arc" menu-background-color 'rgba(22,16,19,0.98)'
+gset "$arc" menu-foreground-color 'rgb(238,233,236)'
+gset "$arc" menu-border-color "rgba($RED_R,$RED_G,$RED_B,0.30)"
+gset "$arc" menu-border-width 1
+gset "$arc" menu-border-radius 14
+gset "$arc" menu-item-hover-bg-color "rgba($RED_R,$RED_G,$RED_B,0.24)"
+gset "$arc" menu-item-hover-fg-color 'rgb(255,255,255)'
+gset "$arc" menu-item-active-bg-color "rgba($RED_R,$RED_G,$RED_B,0.38)"
+gset "$arc" menu-item-active-fg-color 'rgb(255,255,255)'
+gset "$arc" menu-button-fg-color "(true, 'rgb($RED_R,$RED_G,$RED_B)')"
 
 say 'Tema GTK3 Adwaita Dark y controles alineados'
 python3 - "$HOME/.config/gtk-3.0/settings.ini" <<'PY'
