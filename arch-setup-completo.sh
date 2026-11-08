@@ -4,7 +4,7 @@
 # Instala GNOME + GDM, GNOME Noir, Dash to Panel, ArcMenu, Kitty,
 # desarrollo, juegos/apps, Helium, Wolow, SignalRGB y splash Arch.
 # No instala KDE. Cada ejecución es repetible; no usa otros scripts del repo.
-# Opciones: --theme-only | --skip-boot | --skip-extras | --skip-aur | --help
+# Opciones: --theme-only | --lock-only | --skip-boot | --skip-extras | --skip-aur | --help
 # Atajos: Super+Shift+S para capturas, Super+Shift+V para historial del portapapeles.
 set -Eeuo pipefail
 
@@ -13,15 +13,16 @@ warn(){ printf '\n\033[1;33mAVISO: %s\033[0m\n' "$*" >&2; }
 fail(){ printf '\nERROR: %s\n' "$*" >&2; exit 1; }
 trap 'printf "\nERROR en línea %s. Revisa el mensaje anterior.\n" "$LINENO" >&2' ERR
 
-SKIP_BOOT=0; SKIP_EXTRAS=0; SKIP_AUR=0; THEME_ONLY=0
+SKIP_BOOT=0; SKIP_EXTRAS=0; SKIP_AUR=0; THEME_ONLY=0; LOCK_ONLY=0
 for arg in "$@"; do
   case "$arg" in
     --skip-boot) SKIP_BOOT=1;;
     --theme-only) THEME_ONLY=1; SKIP_BOOT=1;;
+    --lock-only) LOCK_ONLY=1; SKIP_BOOT=1;;
     --skip-extras) SKIP_EXTRAS=1;;
     --skip-aur) SKIP_AUR=1;;
     --help)
-      echo 'Uso: bash arch-setup-completo.sh [--theme-only] [--skip-boot] [--skip-extras] [--skip-aur]'
+      echo 'Uso: bash arch-setup-completo.sh [--theme-only|--lock-only] [--skip-boot] [--skip-extras] [--skip-aur]'
       echo 'Se ejecuta desde TTY o desde GNOME, después de archinstall.'
       exit 0;;
     *) fail "Opción desconocida: $arg";;
@@ -34,6 +35,71 @@ done
 command -v pacman >/dev/null || fail 'No se encontró pacman.'
 command -v sudo >/dev/null || fail 'El usuario debe tener acceso a sudo.'
 umask 022
+
+
+# GNOME 51 + NVIDIA: no apagar monitores al bloquear con Super+L.
+# Unblank Lock Screen oficial v41 declara GNOME 51 (sin modificar metadata).
+install_unblank_lock_screen() {
+  local uuid='unblank@sun.wxg@gmail.com'
+  local folder="$HOME/.local/share/gnome-shell/extensions/$uuid"
+  local tmp
+  say 'Unblank Lock Screen: conservar monitores encendidos al bloquear'
+  sudo pacman -S --needed git glib2 python
+  if [[ ! -f "$folder/metadata.json" ]]; then
+    tmp="$(mktemp -d)"
+    if git clone --depth 1 https://github.com/sunwxg/gnome-shell-extension-unblank.git "$tmp/unblank"; then
+      if python3 - "$tmp/unblank/unblank@sun.wxg@gmail.com/metadata.json" <<'PY'
+import json,sys
+with open(sys.argv[1], encoding="utf-8") as f: data=json.load(f)
+if data.get("uuid")!="unblank@sun.wxg@gmail.com":
+    raise SystemExit("UUID inesperado: abortando")
+if "51" not in data.get("shell-version",[]):
+    raise SystemExit("La rama descargada no declara GNOME 51")
+PY
+      then
+        mkdir -p "$HOME/.local/share/gnome-shell/extensions"
+        cp -a "$tmp/unblank/unblank@sun.wxg@gmail.com" "$folder"
+      else
+        warn 'La versión descargada no declara GNOME 51; se omite.'
+      fi
+    else
+      warn 'No se pudo descargar Unblank desde su repositorio oficial.'
+    fi
+    rm -rf -- "$tmp"
+  fi
+
+  if [[ -f "$folder/schemas/org.gnome.shell.extensions.unblank.gschema.xml" ]]; then
+    glib-compile-schemas "$folder/schemas"
+    local schema='org.gnome.shell.extensions.unblank'
+    GSETTINGS_SCHEMA_DIR="$folder/schemas" gsettings set "$schema" switch true
+    GSETTINGS_SCHEMA_DIR="$folder/schemas" gsettings set "$schema" time 0
+    GSETTINGS_SCHEMA_DIR="$folder/schemas" gsettings set "$schema" power false
+    GSETTINGS_SCHEMA_DIR="$folder/schemas" gsettings set "$schema" oled-content-opacity 100
+    # Mantener el reloj estable. En OLED conviene habilitar su movimiento protector.
+    GSETTINGS_SCHEMA_DIR="$folder/schemas" gsettings set "$schema" oled-shift false
+    python3 - <<'PY'
+import ast, subprocess
+schema="org.gnome.shell"; key="enabled-extensions"
+val=subprocess.check_output(["gsettings","get",schema,key],text=True).strip()
+if val.startswith("@as "):val=val[4:]
+items=ast.literal_eval(val)
+uuid="unblank@sun.wxg@gmail.com"
+if uuid not in items:
+    items.append(uuid)
+    subprocess.run(["gsettings","set",schema,key,repr(items)],check=True)
+PY
+    echo 'Unblank instalado y configurado: el monitor permanecerá encendido al bloquear.'
+    echo 'Cierra sesión y vuelve a entrar antes de probar Super+L.'
+  else
+    warn 'No se encontró el esquema de Unblank; no se cambió el bloqueo.'
+  fi
+}
+
+if ((LOCK_ONLY)); then
+  [[ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ]] || fail 'Usa --lock-only dentro de GNOME.'
+  install_unblank_lock_screen
+  exit 0
+fi
 
 if [[ "${GNOME_NOIR_RESUME:-0}" != 1 && "$THEME_ONLY" == 0 ]]; then
   say 'Actualizando Arch y preparando GNOME desde cero'
@@ -836,6 +902,8 @@ PY
   fi
 fi
 
+
+install_unblank_lock_screen
 
 say 'Configuración GNOME Noir completada'
 echo 'Instalación única finalizada: no se ha instalado KDE ni otro terminal.'
