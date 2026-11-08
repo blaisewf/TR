@@ -176,7 +176,10 @@ export default class ScreenshotAtPointer extends Extension {
     }
 }
 SCREENSHOT_CODE
-  gset org.gnome.shell.keybindings show-screenshot-ui "['<Super><Shift>s', 'Print']"
+  # --screenshot-only se ejecuta antes del helper gset del instalador.
+  if gsettings writable org.gnome.shell.keybindings show-screenshot-ui 2>/dev/null | grep -qx true; then
+    gsettings set org.gnome.shell.keybindings show-screenshot-ui "['<Super><Shift>s', 'Print']"
+  fi
   python3 - <<'SCREENSHOT_ENABLE'
 import ast, subprocess
 schema="org.gnome.shell"
