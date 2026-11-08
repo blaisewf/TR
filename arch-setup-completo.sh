@@ -128,7 +128,7 @@ if [[ "${GNOME_NOIR_RESUME:-0}" != 1 && "$THEME_ONLY" == 0 ]]; then
     kitty starship xdg-terminal-exec \
     networkmanager bluez bluez-utils \
     pipewire pipewire-alsa pipewire-pulse wireplumber \
-    base-devel git curl jq pciutils python python-pip python-pillow \
+    base-devel git github-cli curl jq pciutils python python-pip python-pillow \
     gcc gdb make cmake jdk-openjdk rustup uv nodejs npm pnpm \
     mesa vulkan-icd-loader lib32-mesa lib32-vulkan-icd-loader \
     fuse2 flatpak ethtool librsvg \
@@ -142,6 +142,26 @@ if [[ "${GNOME_NOIR_RESUME:-0}" != 1 && "$THEME_ONLY" == 0 ]]; then
   npm_path_line='export PATH="$HOME/.local/bin:$PATH"'
   if ! grep -qxF "$npm_path_line" "$HOME/.bashrc" 2>/dev/null; then
     printf '\n# Ejecutables npm globales del usuario\n%s\n' "$npm_path_line" >> "$HOME/.bashrc"
+  fi
+
+  # Identidad GitHub del propietario de este instalador (blaisewf).
+  # Usar email noreply, no el correo privado; los commits quedarán vinculados
+  # a la cuenta de GitHub sin exponer datos personales.
+  say 'Configurando Git y GitHub CLI para blaisewf'
+  git config --global user.name "Pascal Aznar"
+  git config --global user.email "133521603+blaisewf@users.noreply.github.com"
+  git config --global init.defaultBranch main
+  if command -v code >/dev/null 2>&1; then
+    git config --global core.editor "code --wait"
+  fi
+  # No almacenar tokens en scripts ni abrir login durante una instalación masiva.
+  # Si el usuario ya autorizó gh, conectar el ayudante de credenciales.
+  if gh auth status --hostname github.com >/dev/null 2>&1; then
+    gh auth setup-git || warn 'GitHub CLI no pudo registrar su helper Git.'
+  else
+    echo 'GitHub pendiente de autorizar:'
+    echo '  gh auth login --hostname github.com --git-protocol https --web'
+    echo '  gh auth setup-git'
   fi
 
   say 'Instalando TeX Live para matemáticas, TikZ, XeLaTeX y latexmk'
