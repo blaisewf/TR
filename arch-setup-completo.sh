@@ -4,7 +4,7 @@
 # Instala GNOME + GDM, GNOME Noir, Dash to Panel, ArcMenu, Kitty,
 # desarrollo, juegos/apps, Helium, Wolow, SignalRGB y splash Arch.
 # No instala KDE. Cada ejecución es repetible; no usa otros scripts del repo.
-# Opciones: --theme-only | --lock-only | --skip-boot | --skip-extras | --skip-aur | --help
+# Opciones: --theme-only | --lock-only | --screenshot-only | --skip-boot | --skip-extras | --skip-aur | --help
 # Atajos: Super+Shift+S para capturas, Super+Shift+V para historial del portapapeles.
 set -Eeuo pipefail
 
@@ -13,16 +13,17 @@ warn(){ printf '\n\033[1;33mAVISO: %s\033[0m\n' "$*" >&2; }
 fail(){ printf '\nERROR: %s\n' "$*" >&2; exit 1; }
 trap 'printf "\nERROR en línea %s. Revisa el mensaje anterior.\n" "$LINENO" >&2' ERR
 
-SKIP_BOOT=0; SKIP_EXTRAS=0; SKIP_AUR=0; THEME_ONLY=0; LOCK_ONLY=0
+SKIP_BOOT=0; SKIP_EXTRAS=0; SKIP_AUR=0; THEME_ONLY=0; LOCK_ONLY=0; SCREENSHOT_ONLY=0
 for arg in "$@"; do
   case "$arg" in
     --skip-boot) SKIP_BOOT=1;;
     --theme-only) THEME_ONLY=1; SKIP_BOOT=1;;
     --lock-only) LOCK_ONLY=1; SKIP_BOOT=1;;
+    --screenshot-only) SCREENSHOT_ONLY=1; SKIP_BOOT=1;;
     --skip-extras) SKIP_EXTRAS=1;;
     --skip-aur) SKIP_AUR=1;;
     --help)
-      echo 'Uso: bash arch-setup-completo.sh [--theme-only|--lock-only] [--skip-boot] [--skip-extras] [--skip-aur]'
+      echo 'Uso: bash arch-setup-completo.sh [--theme-only|--lock-only|--screenshot-only] [--skip-boot] [--skip-extras] [--skip-aur]'
       echo 'Se ejecuta desde TTY o desde GNOME, después de archinstall.'
       exit 0;;
     *) fail "Opción desconocida: $arg";;
@@ -98,6 +99,105 @@ PY
 if ((LOCK_ONLY)); then
   [[ -n "${DBUS_SESSION_BUS_ADDRESS:-}" ]] || fail 'Usa --lock-only dentro de GNOME.'
   install_unblank_lock_screen
+  exit 0
+fi
+
+
+# Ajuste específico para GNOME Shell 51: centrar la región de captura
+# en el cursor actual y NO recordar la posición del último recuadro.
+install_screenshot_cursor() {
+  local ext_dir="$HOME/.local/share/gnome-shell/extensions/screenshot-at-pointer@gnome-noir.local"
+  local shell_major
+  shell_major="$(gnome-shell --version 2>/dev/null | awk '{split($3,a,"."); print a[1]}')"
+  if [[ "$shell_major" != 51 ]]; then
+    warn "Screenshot-at-pointer solo está diseñado para GNOME 51 (detectado: $shell_major); se omite."
+    return 0
+  fi
+  say 'Capturas GNOME: cuadro centrado en el cursor (Super+Shift+S)'
+  mkdir -p "$ext_dir"
+  cat > "$ext_dir/metadata.json" <<'SCREENSHOT_METADATA'
+{
+  "uuid": "screenshot-at-pointer@gnome-noir.local",
+  "name": "GNOME Noir — Screenshot at Pointer",
+  "description": "Place the native screenshot selection around the current pointer instead of the last selection.",
+  "shell-version": ["51"]
+}
+SCREENSHOT_METADATA
+  cat > "$ext_dir/extension.js" <<'SCREENSHOT_CODE'
+import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+
+export default class ScreenshotAtPointer extends Extension {
+    enable() {
+        const ui = Main.screenshotUI;
+        if (!ui || !ui._areaSelector || typeof ui.open !== 'function')
+            return;
+
+        this._ui = ui;
+        this._originalOpen = ui.open;
+        const original = ui.open;
+
+        this._wrappedOpen = function (...args) {
+            if (!this.visible && !this._openingCoroutineInProgress) {
+                try {
+                    const selector = this._areaSelector;
+                    const [px, py] = global.get_pointer();
+                    const monitor = Main.layoutManager.monitors.find(
+                        m => px >= m.x && px < m.x + m.width &&
+                             py >= m.y && py < m.y + m.height);
+                    if (selector && monitor) {
+                        const width = Math.max(1, Math.floor(monitor.width / 4));
+                        const height = Math.max(1, Math.floor(monitor.height / 4));
+                        const x = Math.max(monitor.x, Math.min(
+                            Math.floor(px - width / 2), monitor.x + monitor.width - width));
+                        const y = Math.max(monitor.y, Math.min(
+                            Math.floor(py - height / 2), monitor.y + monitor.height - height));
+                        selector._startX = x;
+                        selector._startY = y;
+                        selector._lastX = x + width - 1;
+                        selector._lastY = y + height - 1;
+                        selector._updateSelectionRect();
+                    }
+                } catch (error) {
+                    console.warn('[ScreenshotAtPointer] ' + error);
+                }
+            }
+            return original.apply(this, args);
+        };
+        ui.open = this._wrappedOpen;
+    }
+
+    disable() {
+        if (this._ui?.open === this._wrappedOpen)
+            this._ui.open = this._originalOpen;
+        this._ui = null;
+        this._originalOpen = null;
+        this._wrappedOpen = null;
+    }
+}
+SCREENSHOT_CODE
+  gset org.gnome.shell.keybindings show-screenshot-ui "['<Super><Shift>s', 'Print']"
+  python3 - <<'SCREENSHOT_ENABLE'
+import ast, subprocess
+schema="org.gnome.shell"
+key="enabled-extensions"
+uuid="screenshot-at-pointer@gnome-noir.local"
+try:
+    raw=subprocess.check_output(["gsettings","get",schema,key],text=True).strip()
+    if raw.startswith("@as "): raw=raw[4:]
+    items=ast.literal_eval(raw)
+    if uuid not in items:
+        items.append(uuid)
+        subprocess.run(["gsettings","set",schema,key,repr(items)],check=True)
+except Exception as error:
+    print("AVISO: no se pudo registrar la extensión de capturas:",error)
+SCREENSHOT_ENABLE
+  echo 'El cambio se activará al cerrar sesión y volver a entrar en GNOME.'
+  echo 'Revertir: gnome-extensions disable screenshot-at-pointer@gnome-noir.local'
+}
+
+if ((SCREENSHOT_ONLY)); then
+  install_screenshot_cursor
   exit 0
 fi
 
@@ -965,6 +1065,8 @@ if [[ -n "$signalrgb_desktop" ]]; then
 else
   echo 'SignalRGB sin lanzador .desktop detectado: autoinicio omitido.'
 fi
+
+install_screenshot_cursor
 
 say 'Configuración GNOME Noir completada'
 echo 'Instalación única finalizada: no se ha instalado KDE ni otro terminal.'
