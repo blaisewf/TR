@@ -129,7 +129,7 @@ if [[ "${GNOME_NOIR_RESUME:-0}" != 1 && "$THEME_ONLY" == 0 ]]; then
     networkmanager bluez bluez-utils \
     pipewire pipewire-alsa pipewire-pulse wireplumber \
     base-devel git curl jq pciutils python python-pip python-pillow \
-    gcc gdb make cmake jdk-openjdk rustup uv \
+    gcc gdb make cmake jdk-openjdk rustup uv nodejs npm pnpm \
     mesa vulkan-icd-loader lib32-mesa lib32-vulkan-icd-loader \
     fuse2 flatpak ethtool librsvg \
     vlc vlc-plugins-extra okular spotify-launcher
