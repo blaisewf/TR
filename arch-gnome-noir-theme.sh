@@ -36,6 +36,18 @@ set_gsetting org.gnome.desktop.interface document-font-name 'Inter 10'
 set_gsetting org.gnome.desktop.interface monospace-font-name 'GeistMono Nerd Font Mono 11'
 set_gsetting org.gnome.desktop.interface enable-hot-corners 'false'
 set_gsetting org.gnome.desktop.wm.preferences button-layout ':minimize,maximize,close'
+# Homogeneizar controles de las ventanas GTK3 sin tocar ajustes de otras apps.
+python3 - "$HOME/.config/gtk-3.0/settings.ini" <<'PYGTK'
+import configparser, pathlib, sys
+p=pathlib.Path(sys.argv[1]); p.parent.mkdir(parents=True,exist_ok=True)
+c=configparser.ConfigParser(interpolation=None); c.optionxform=str
+if p.exists(): c.read(p,encoding="utf-8")
+if not c.has_section("Settings"): c.add_section("Settings")
+c.set("Settings","gtk-theme-name","adw-gtk3-dark")
+c.set("Settings","gtk-decoration-layout",":minimize,maximize,close")
+c.set("Settings","gtk-application-prefer-dark-theme","true")
+with p.open("w",encoding="utf-8") as f: c.write(f,space_around_delimiters=False)
+PYGTK
 
 # Conservar el fondo completamente oscuro; sin descargar wallpapers ni tocar monitores.
 black="$HOME/.local/share/backgrounds/gnome-noir/black.png"
