@@ -943,6 +943,29 @@ fi
 
 install_unblank_lock_screen
 
+# Iniciar SignalRGB en GNOME en cada inicio de sesión.
+# Usar el .desktop oficial, que conoce el ejecutable y sus argumentos.
+# No arrancar como root ni antes de disponer de una sesión gráfica.
+say 'Configurando inicio automático de SignalRGB (si está instalado)'
+signalrgb_desktop=''
+for desktop_dir in /usr/share/applications "$HOME/.local/share/applications"; do
+  if [[ -d "$desktop_dir" ]]; then
+    signalrgb_desktop="$(find "$desktop_dir" -maxdepth 1 -type f -iname '*signalrgb*.desktop' -print -quit)"
+    [[ -n "$signalrgb_desktop" ]] && break
+  fi
+done
+if [[ -n "$signalrgb_desktop" ]]; then
+  mkdir -p "$HOME/.config/autostart"
+  cp "$signalrgb_desktop" "$HOME/.config/autostart/signalrgb.desktop"
+  sed -i '/^Hidden=/d; /^X-GNOME-Autostart-enabled=/d' \
+    "$HOME/.config/autostart/signalrgb.desktop"
+  printf '\nX-GNOME-Autostart-enabled=true\n' \
+    >> "$HOME/.config/autostart/signalrgb.desktop"
+  echo 'SignalRGB se abrirá automáticamente al iniciar sesión en GNOME.'
+else
+  echo 'SignalRGB sin lanzador .desktop detectado: autoinicio omitido.'
+fi
+
 say 'Configuración GNOME Noir completada'
 echo 'Instalación única finalizada: no se ha instalado KDE ni otro terminal.'
 echo 'Reinicia cuando el instalador del kernel/boot haya terminado correctamente: sudo reboot'
