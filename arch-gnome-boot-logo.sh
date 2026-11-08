@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# GNOME Noir Boot: logo Plymouth negro/indigo basado en el diseño GNOME Noir.
+# GNOME Noir Boot: logotipo oficial Arch Linux en alta calidad sobre negro.
 # Soporta mkinitcpio o dracut + systemd-boot con entradas .conf tradicionales.
 # No altera firmware, BIOS, ESP de Windows ni sistemas UKI de forma automática.
 set -Eeuo pipefail
@@ -24,7 +24,7 @@ fi
 say "Generador de initramfs detectado: $generator"
 
 say 'Instalar Plymouth y herramientas para generar el logotipo'
-sudo pacman -S --needed plymouth python-pillow
+sudo pacman -S --needed plymouth librsvg curl
 
 theme='/usr/share/plymouth/themes/gnome-noir'
 sudo mkdir -p "$theme"
@@ -32,35 +32,21 @@ sudo mkdir -p "$theme"
 work="$(mktemp -d)"
 trap 'rm -rf -- "$work"' EXIT
 
-say 'Generar el logotipo Noir Indigo, desde cero'
-python3 - "$work/logo.png" <<'PY'
-from PIL import Image,ImageDraw,ImageFilter
-import sys
-S=4
-size=320
-sz=size*S
-mask=Image.new("L",(sz,sz),0)
-d=ImageDraw.Draw(mask)
-P=lambda pts:[(int(x*S),int(y*S)) for x,y in pts]
-# N geométrica formada por dos bandas y una diagonal ancha.
-d.polygon(P([(76,76),(113,76),(113,244),(76,244)]),fill=255)
-d.polygon(P([(207,76),(244,76),(244,244),(207,244)]),fill=255)
-d.polygon(P([(76,76),(119,76),(244,244),(201,244)]),fill=255)
-glow_mask=mask.filter(ImageFilter.GaussianBlur(35*S))
-glow=Image.new("RGBA",(sz,sz),(138,146,255,0))
-glow.putalpha(glow_mask.point(lambda a:int(a*.13)))
-im=Image.new("RGBA",(sz,sz),(0,0,0,0))
-im.alpha_composite(glow)
-solid=Image.new("RGBA",(sz,sz),(150,159,255,0))
-solid.putalpha(mask)
-im.alpha_composite(solid)
-im.resize((size,size),Image.Resampling.LANCZOS).save(sys.argv[1],"PNG",optimize=True)
-PY
+# Descarga SVG de la pagina oficial Arch Linux, no un logo reinterpretado.
+# Renderizamos a 1920px, y Plymouth lo reduce al tamaño de pantalla.
+say 'Obtener logotipo vectorial oficial de Arch Linux'
+curl --proto '=https' --tlsv1.2 -fL --retry 3 \
+  'https://archlinux.org/static/logos/archlinux-logo-light-scalable.svg' \
+  -o "$work/archlinux-logo.svg" || fail 'No se pudo descargar el logo SVG oficial; no se cambio Plymouth.'
+rsvg-convert --width=1920 --keep-aspect-ratio \
+  --output="$work/logo.png" "$work/archlinux-logo.svg" \
+  || fail 'No se pudo renderizar el SVG oficial.'
+[[ -s "$work/logo.png" ]] || fail 'El PNG generado esta vacio.'
 
 cat > "$work/gnome-noir.plymouth" <<'EOF'
 [Plymouth Theme]
 Name=GNOME Noir
-Description=Black boot splash with indigo geometric monogram
+Description=Black Plymouth screen with the official high resolution Arch Linux logo
 ModuleName=script
 
 [script]
@@ -73,7 +59,13 @@ cat > "$work/gnome-noir.script" <<'EOF'
 Window.SetBackgroundTopColor (0.0, 0.0, 0.0);
 Window.SetBackgroundBottomColor (0.0, 0.0, 0.0);
 
-logo_image = Image ("logo.png");
+logo_original = Image ("logo.png");
+# Imagen de origen de 1920 px; se muestra mas pequena sin pixelarse.
+target_width = Window.GetWidth() * 0.36;
+if (target_width > 820) target_width = 820;
+if (target_width < 320) target_width = 320;
+scale = target_width / logo_original.GetWidth();
+logo_image = logo_original.Scale(target_width, logo_original.GetHeight() * scale);
 logo_sprite = Sprite (logo_image);
 logo_sprite.SetPosition (
   Window.GetX() + (Window.GetWidth() - logo_image.GetWidth()) / 2,
@@ -208,6 +200,6 @@ else
   echo "Entradas de arranque configuradas: $count"
 fi
 
-say 'Logo de arranque GNOME Noir instalado'
+say 'Logo oficial Arch Linux en alta calidad instalado'
 echo 'Este splash aparece al arrancar Linux; el logotipo UEFI/BIOS no se modifica.'
 echo 'Reinicia solo después de comprobar que mkinitcpio/dracut terminó sin errores.'
