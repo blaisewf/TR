@@ -12,11 +12,12 @@ esac
 tmp="$(mktemp -d)"
 trap 'rm -rf -- "$tmp"' EXIT
 root='https://raw.githubusercontent.com/blaisewf/TR/arch-kde-setup'
-for file in arch-gnome-fixes.sh arch-gnome-boot-logo.sh; do
+for file in arch-gnome-fixes.sh arch-gnome-window-controls.sh arch-gnome-boot-logo.sh; do
   curl --proto '=https' --tlsv1.2 -fL --retry 3 "$root/$file" -o "$tmp/$file"
   bash -n "$tmp/$file"
 done
 bash "$tmp/arch-gnome-fixes.sh"
+bash "$tmp/arch-gnome-window-controls.sh"
 if [[ "${1:---without-boot}" == '--with-boot' ]]; then
   echo 'A continuación se configurará Plymouth y se reconstruirá initramfs.'
   echo 'Se conservarán copias de los archivos de arranque modificados.'
