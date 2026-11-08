@@ -535,8 +535,9 @@ if [[ -f "$clipboard_schema_dir/gschemas.compiled" ]]; then
   fi
 fi
 
-# Favoritos minimalistas; instalar apps no obliga a fijar todas.
-gset org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop','kitty.desktop','helium-official.desktop']"
+# Aplicaciones fijadas en ambos monitores, en este orden:
+# Archivos, Kitty, Spotify (spotify-launcher de Arch), Helium, Discord, VS Code.
+gset org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop','kitty.desktop','spotify-launcher.desktop','helium-official.desktop','discord.desktop','code.desktop']"
 
 dtp='org.gnome.shell.extensions.dash-to-panel'
 for setting in 'multi-monitors true' 'show-favorites-all-monitors true' 'panel-element-positions-monitors-sync true' \
@@ -549,13 +550,13 @@ for setting in 'isolate-monitors false' 'isolate-monitors-with-single-panel fals
   key="${setting%% *}"; value="${setting#* }"; gset "$dtp" "$key" "$value"
 done
 gset "$dtp" panel-position BOTTOM
-gset "$dtp" panel-size 52
+gset "$dtp" panel-size 46
 gset "$dtp" panel-side-margins 0
 gset "$dtp" panel-top-bottom-margins 0
 gset "$dtp" panel-side-padding 4
 gset "$dtp" panel-top-bottom-padding 2
-gset "$dtp" appicon-padding 7
-gset "$dtp" appicon-margin 5
+gset "$dtp" appicon-padding 5
+gset "$dtp" appicon-margin 3
 gset "$dtp" trans-use-custom-bg true
 gset "$dtp" trans-bg-color '#191215'
 gset "$dtp" trans-use-custom-opacity true
@@ -587,7 +588,7 @@ PY
 )"
 json_sizes="$(python3 - <<'PY'
 import json
-print(json.dumps({str(i):52 for i in range(8)},separators=(",",":")))
+print(json.dumps({str(i):46 for i in range(8)},separators=(",",":")))
 PY
 )"
 json_items="$(python3 - <<'PY'
