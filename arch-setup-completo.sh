@@ -4,7 +4,7 @@
 # Instala GNOME + GDM, GNOME Noir, Dash to Panel, ArcMenu, Kitty,
 # desarrollo, juegos/apps, Helium, Wolow, SignalRGB y splash Arch.
 # No instala KDE. Cada ejecución es repetible; no usa otros scripts del repo.
-# Opciones: --theme-only | --lock-only | --screenshot-only | --skip-boot | --skip-extras | --skip-aur | --help
+# Opciones: --theme-only | --lock-only | --screenshot-only | --avatar-only | --skip-boot | --skip-extras | --skip-aur | --help
 # Atajos: Super+Shift+S para capturas, Super+Shift+V para historial del portapapeles.
 set -Eeuo pipefail
 
@@ -13,17 +13,18 @@ warn(){ printf '\n\033[1;33mAVISO: %s\033[0m\n' "$*" >&2; }
 fail(){ printf '\nERROR: %s\n' "$*" >&2; exit 1; }
 trap 'printf "\nERROR en línea %s. Revisa el mensaje anterior.\n" "$LINENO" >&2' ERR
 
-SKIP_BOOT=0; SKIP_EXTRAS=0; SKIP_AUR=0; THEME_ONLY=0; LOCK_ONLY=0; SCREENSHOT_ONLY=0
+SKIP_BOOT=0; SKIP_EXTRAS=0; SKIP_AUR=0; THEME_ONLY=0; LOCK_ONLY=0; SCREENSHOT_ONLY=0; AVATAR_ONLY=0
 for arg in "$@"; do
   case "$arg" in
     --skip-boot) SKIP_BOOT=1;;
     --theme-only) THEME_ONLY=1; SKIP_BOOT=1;;
     --lock-only) LOCK_ONLY=1; SKIP_BOOT=1;;
     --screenshot-only) SCREENSHOT_ONLY=1; SKIP_BOOT=1;;
+    --avatar-only) AVATAR_ONLY=1; SKIP_BOOT=1;;
     --skip-extras) SKIP_EXTRAS=1;;
     --skip-aur) SKIP_AUR=1;;
     --help)
-      echo 'Uso: bash arch-setup-completo.sh [--theme-only|--lock-only|--screenshot-only] [--skip-boot] [--skip-extras] [--skip-aur]'
+      echo 'Uso: bash arch-setup-completo.sh [--theme-only|--lock-only|--screenshot-only|--avatar-only] [--skip-boot] [--skip-extras] [--skip-aur]'
       echo 'Se ejecuta desde TTY o desde GNOME, después de archinstall.'
       exit 0;;
     *) fail "Opción desconocida: $arg";;
@@ -37,6 +38,61 @@ command -v pacman >/dev/null || fail 'No se encontró pacman.'
 command -v sudo >/dev/null || fail 'El usuario debe tener acceso a sudo.'
 umask 022
 
+
+
+# Avatar de GitHub del usuario blaisewf para GNOME / GDM.
+# AccountsService administra la foto del usuario; no se edita su configuración
+# a mano ni se reinicia el gestor de sesiones.
+install_github_avatar() {
+  local target_dir="$HOME/.local/share/avatars"
+  local target="$target_dir/github-blaisewf.png"
+  local download
+  say 'Foto de perfil GNOME desde GitHub (blaisewf)'
+  if ! python3 -c 'from PIL import Image' >/dev/null 2>&1; then
+    sudo pacman -S --needed python-pillow || { warn 'Se necesita python-pillow para convertir el avatar.'; return 0; }
+  fi
+  mkdir -p "$target_dir"
+  download="$(mktemp)"
+  if ! curl --proto '=https' --tlsv1.2 -fLsS --retry 3 \
+    'https://avatars.githubusercontent.com/u/133521603?s=512' -o "$download"; then
+    warn 'No se pudo descargar el avatar de GitHub.'
+    rm -f "$download"
+    return 0
+  fi
+  if ! python3 - "$download" "$target" <<'AVATAR_PY'
+import sys
+from PIL import Image, ImageOps
+with Image.open(sys.argv[1]) as im:
+    if im.width < 48 or im.height < 48:
+        raise ValueError("Avatar demasiado pequeño")
+    avatar=ImageOps.fit(im.convert("RGB"), (512,512), method=Image.Resampling.LANCZOS)
+    avatar.save(sys.argv[2], format="PNG")
+AVATAR_PY
+  then
+    warn 'No se pudo convertir la imagen de GitHub a PNG.'
+    rm -f "$download"
+    return 0
+  fi
+  rm -f "$download"
+  chmod 644 "$target"
+  if busctl --system call org.freedesktop.Accounts \
+    "/org/freedesktop/Accounts/User$(id -u)" \
+    org.freedesktop.Accounts.User SetIconFile s "$target"; then
+    echo 'Avatar configurado en GNOME y GDM mediante AccountsService.'
+  elif sudo busctl --system call org.freedesktop.Accounts \
+    "/org/freedesktop/Accounts/User$(id -u)" \
+    org.freedesktop.Accounts.User SetIconFile s "$target"; then
+    echo 'Avatar configurado en GNOME y GDM mediante AccountsService.'
+  else
+    warn "La foto está descargada en $target, pero AccountsService no aceptó el cambio."
+    echo 'Puedes elegirla desde Configuración > Sistema > Usuarios.'
+  fi
+}
+
+if ((AVATAR_ONLY)); then
+  install_github_avatar
+  exit 0
+fi
 
 # GNOME 51 + NVIDIA: no apagar monitores al bloquear con Super+L.
 # Unblank Lock Screen oficial v41 declara GNOME 51 (sin modificar metadata).
@@ -1105,6 +1161,8 @@ else
 fi
 
 install_screenshot_cursor
+
+install_github_avatar
 
 say 'Configuración GNOME Noir completada'
 echo 'Instalación única finalizada: no se ha instalado KDE ni otro terminal.'
