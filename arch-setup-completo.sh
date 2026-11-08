@@ -134,6 +134,16 @@ if [[ "${GNOME_NOIR_RESUME:-0}" != 1 && "$THEME_ONLY" == 0 ]]; then
     fuse2 flatpak ethtool librsvg \
     vlc vlc-plugins-extra okular spotify-launcher
 
+  # Los paquetes npm -g nunca deben instalarse en /usr/lib/node_modules
+  # ni necesitar sudo; mantenemos un prefijo global en el directorio personal.
+  say 'Configurando npm global para el usuario (sin sudo)'
+  mkdir -p "$HOME/.local/bin"
+  npm config set prefix "$HOME/.local"
+  npm_path_line='export PATH="$HOME/.local/bin:$PATH"'
+  if ! grep -qxF "$npm_path_line" "$HOME/.bashrc" 2>/dev/null; then
+    printf '\n# Ejecutables npm globales del usuario\n%s\n' "$npm_path_line" >> "$HOME/.bashrc"
+  fi
+
   say 'Instalando TeX Live para matemáticas, TikZ, XeLaTeX y latexmk'
   sudo pacman -S --needed \
     texlive-latexrecommended texlive-latexextra texlive-fontsrecommended \
