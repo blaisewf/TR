@@ -332,7 +332,8 @@ with Image.open(sys.argv[1]) as src:
     im=src.convert("RGB")
     im.thumbnail((640,640))
 bins=collections.defaultdict(lambda:[0,0,0,0])
-for r,g,b in im.getdata():
+pixels=im.get_flattened_data() if hasattr(im,"get_flattened_data") else im.getdata()
+for r,g,b in pixels:
     h,s,v=rgb_to_hsv(r/255,g/255,b/255)
     if not (h<=0.075 or h>=0.955) or s<0.43 or v<0.27:
         continue
@@ -383,9 +384,21 @@ if [[ ! -f "$clipboard_dir/metadata.json" ]]; then
   say 'Instalando Clipboard History (GNOME 51 compatible)'
   clipboard_zip="$(mktemp)"
   clipboard_extract="$(mktemp -d)"
+  clipboard_info="$(mktemp)"
+  clipboard_url=''
+  # La API devuelve la URL exacta del build publicado para GNOME 51.
+  # 'version_tag' es un ID interno (pk), NO el número de versión 52.
   if curl --proto '=https' --tlsv1.2 -fL --retry 3 \
-    'https://extensions.gnome.org/download-extension/clipboard-history@alexsaveau.dev.shell-extension.zip?version_tag=52' \
-    -o "$clipboard_zip" && \
+    'https://extensions.gnome.org/extension-info/?pk=4839&shell_version=51' \
+    -o "$clipboard_info"; then
+    clipboard_path="$(jq -r '.download_url // empty' "$clipboard_info")"
+    if [[ "$clipboard_path" == /download-extension/* || "$clipboard_path" == /extension-data/* ]]; then
+      clipboard_url="https://extensions.gnome.org$clipboard_path"
+    fi
+  fi
+  rm -f -- "$clipboard_info"
+  if [[ -n "$clipboard_url" ]] && \
+    curl --proto '=https' --tlsv1.2 -fL --retry 3 "$clipboard_url" -o "$clipboard_zip" && \
     python3 - "$clipboard_zip" "$clipboard_extract" "$clipboard_uuid" <<'PY'
 import json, pathlib, sys, zipfile
 archive, dest, expected = sys.argv[1:]
@@ -823,52 +836,6 @@ PY
   fi
 fi
 
-
-# OpenBar (si ya está instalado): tema Islands oscuro y rojo elegido del fondo.
-# No forzamos una extensión sin soporte oficial en GNOME 50/51.
-openbar_dir="$HOME/.local/share/gnome-shell/extensions/openbar@neuromorph"
-if [[ -f "$openbar_dir/schemas/org.gnome.shell.extensions.openbar.gschema.xml" ]]; then
-  say 'Adaptar OpenBar al rojo del fondo'
-  if [[ ! -f "$openbar_dir/schemas/gschemas.compiled" ]]; then
-    glib-compile-schemas "$openbar_dir/schemas" || warn 'No se pudieron compilar los esquemas de OpenBar.'
-  fi
-  if [[ -f "$openbar_dir/schemas/gschemas.compiled" ]]; then
-    ob_schema='org.gnome.shell.extensions.openbar'
-    obset(){
-      GSETTINGS_SCHEMA_DIR="$openbar_dir/schemas" gsettings set "$ob_schema" "$1" "$2" \
-        || warn "Ajuste OpenBar no disponible: $1"
-    }
-    obrgb="$(python3 - "$RED_R" "$RED_G" "$RED_B" <<'PY'
-import sys
-vals=[str(round(int(c)/255,4)) for c in sys.argv[1:]]
-print("['"+"','".join(vals)+"']")
-PY
-)"
-    obset bartype Islands
-    obset position Bottom
-    obset monitors all
-    obset accent-color "$obrgb"
-    obset bgcolor "['0.098','0.071','0.078']"
-    obset iscolor "['0.14','0.09','0.11']"
-    obset bcolor "$obrgb"
-    obset hcolor "$obrgb"
-    obset mhcolor "$obrgb"
-    obset mscolor "$obrgb"
-    obset menustyle true
-    obset bradius 14.0
-    obset bwidth 1.0
-    obset neon false
-    obset shadow false
-    obset autotheme-refresh false
-    # No se habilita automáticamente: GNOME 50+ aún tiene incidencias de compatibilidad.
-    gnome_major="$(gnome-shell --version 2>/dev/null | grep -oE '[0-9]+' | head -1 || true)"
-    if [[ -n "$gnome_major" && "$gnome_major" -le 49 ]]; then
-      say 'OpenBar es compatible según su metadata; actívalo desde Extensiones de GNOME.'
-    else
-      warn 'OpenBar configurado pero no habilitado; comprueba su compatibilidad con tu versión de GNOME.'
-    fi
-  fi
-fi
 
 say 'Configuración GNOME Noir completada'
 echo 'Instalación única finalizada: no se ha instalado KDE ni otro terminal.'
