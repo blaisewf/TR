@@ -4,7 +4,7 @@
 # Instala GNOME + GDM, GNOME Noir, Dash to Panel, ArcMenu, Kitty,
 # desarrollo, juegos/apps, Helium, Wolow, SignalRGB y splash Arch.
 # No instala KDE. Cada ejecución es repetible; no usa otros scripts del repo.
-# Opciones: --skip-boot | --skip-extras | --skip-aur | --help
+# Opciones: --theme-only | --skip-boot | --skip-extras | --skip-aur | --help
 set -Eeuo pipefail
 
 say(){ printf '\n\033[1;35m==> %s\033[0m\n' "$*"; }
@@ -12,14 +12,15 @@ warn(){ printf '\n\033[1;33mAVISO: %s\033[0m\n' "$*" >&2; }
 fail(){ printf '\nERROR: %s\n' "$*" >&2; exit 1; }
 trap 'printf "\nERROR en línea %s. Revisa el mensaje anterior.\n" "$LINENO" >&2' ERR
 
-SKIP_BOOT=0; SKIP_EXTRAS=0; SKIP_AUR=0
+SKIP_BOOT=0; SKIP_EXTRAS=0; SKIP_AUR=0; THEME_ONLY=0
 for arg in "$@"; do
   case "$arg" in
     --skip-boot) SKIP_BOOT=1;;
+    --theme-only) THEME_ONLY=1; SKIP_BOOT=1;;
     --skip-extras) SKIP_EXTRAS=1;;
     --skip-aur) SKIP_AUR=1;;
     --help)
-      echo 'Uso: bash arch-setup-completo.sh [--skip-boot] [--skip-extras] [--skip-aur]'
+      echo 'Uso: bash arch-setup-completo.sh [--theme-only] [--skip-boot] [--skip-extras] [--skip-aur]'
       echo 'Se ejecuta desde TTY o desde GNOME, después de archinstall.'
       exit 0;;
     *) fail "Opción desconocida: $arg";;
@@ -33,7 +34,7 @@ command -v pacman >/dev/null || fail 'No se encontró pacman.'
 command -v sudo >/dev/null || fail 'El usuario debe tener acceso a sudo.'
 umask 022
 
-if [[ "${GNOME_NOIR_RESUME:-0}" != 1 ]]; then
+if [[ "${GNOME_NOIR_RESUME:-0}" != 1 && "$THEME_ONLY" == 0 ]]; then
   say 'Actualizando Arch y preparando GNOME desde cero'
   sudo -v
   sudo pacman -Syu
@@ -60,7 +61,7 @@ if [[ "${GNOME_NOIR_RESUME:-0}" != 1 ]]; then
     kitty starship xdg-terminal-exec \
     networkmanager bluez bluez-utils \
     pipewire pipewire-alsa pipewire-pulse wireplumber \
-    base-devel git curl jq pciutils python python-pip \
+    base-devel git curl jq pciutils python python-pip python-pillow \
     gcc gdb make cmake jdk-openjdk rustup uv \
     mesa vulkan-icd-loader lib32-mesa lib32-vulkan-icd-loader \
     fuse2 flatpak ethtool librsvg \
@@ -287,28 +288,85 @@ gset() {
   fi
 }
 
-WALL="$HOME/.local/share/backgrounds/gnome-noir/black.png"
-mkdir -p "$(dirname "$WALL")" "$HOME/.config/kitty" "$HOME/.config/gtk-3.0"
-python3 - "$WALL" <<'PY'
-import sys, struct, zlib
-def chunk(t,p): return struct.pack("!I",len(p))+t+p+struct.pack("!I",zlib.crc32(t+p)&0xffffffff)
-w=h=64; raw=(b"\x00"+b"\x00\x00\x00"*w)*h
-png=b"\x89PNG\r\n\x1a\n"+chunk(b"IHDR",struct.pack("!2I5B",w,h,8,2,0,0,0))+chunk(b"IDAT",zlib.compress(raw))+chunk(b"IEND",b"")
-with open(sys.argv[1],"wb") as f:f.write(png)
+# Fondo Wallhaven original y extracción real del rojo predominante mediante Pillow.
+# No usamos una paleta adivinada: en cada instalación se lee la propia imagen.
+if ! python3 -c 'from PIL import Image' 2>/dev/null; then
+  say 'Instalando Pillow para identificar el rojo del fondo (color picker)'
+  sudo pacman -S --needed python-pillow
+fi
+WALL="$HOME/.local/share/backgrounds/gnome-noir/wallhaven-xeko23.png"
+mkdir -p "$(dirname "$WALL")" "$HOME/.config/kitty" "$HOME/.config/gtk-3.0" "$HOME/.config/gnome-noir"
+if [[ ! -s "$WALL" ]]; then
+  say 'Descargando el fondo original desde Wallhaven (xeko23)'
+  wall_tmp="$(mktemp)"
+  if curl --proto '=https' --tlsv1.2 -fL --retry 3 \
+      -A 'Mozilla/5.0' -e 'https://wallhaven.cc/' \
+      'https://w.wallhaven.cc/full/xe/wallhaven-xeko23.png' -o "$wall_tmp" && \
+     python3 - "$wall_tmp" <<'PY'
+import sys
+from PIL import Image
+with Image.open(sys.argv[1]) as im:
+    im.verify()
+with Image.open(sys.argv[1]) as im:
+    assert im.format=="PNG" and im.width>=1280 and im.height>=720
 PY
+  then
+    mv -f "$wall_tmp" "$WALL"
+  else
+    warn 'Wallhaven no entregó el PNG completo; no se sustituirá tu fondo actual.'
+    rm -f "$wall_tmp"
+  fi
+fi
+
+RED_HEX="#D6293E"  # Solo se usa como respaldo cuando la imagen es inaccesible.
+RED_R=214; RED_G=41; RED_B=62
+if [[ -s "$WALL" ]]; then
+  # Agrupar los píxeles rojos saturados en celdas RGB de 8 valores.
+  # Elegir el grupo de mayor presencia y calcular su RGB medio real.
+  palette="$(python3 - "$WALL" <<'PY'
+import sys, collections
+from PIL import Image
+from colorsys import rgb_to_hsv
+with Image.open(sys.argv[1]) as src:
+    im=src.convert("RGB")
+    im.thumbnail((640,640))
+bins=collections.defaultdict(lambda:[0,0,0,0])
+for r,g,b in im.getdata():
+    h,s,v=rgb_to_hsv(r/255,g/255,b/255)
+    if not (h<=0.075 or h>=0.955) or s<0.43 or v<0.27:
+        continue
+    if r<g*1.25 or r<b*1.22: continue
+    key=(r//8,g//8,b//8)
+    acc=bins[key]
+    acc[0]+=1; acc[1]+=r; acc[2]+=g; acc[3]+=b
+if not bins: raise SystemExit(2)
+_,(n,rs,gs,bs)=max(bins.items(), key=lambda kv:kv[1][0])
+if n<12: raise SystemExit(2)
+r,g,b=round(rs/n),round(gs/n),round(bs/n)
+print(f"#{r:02X}{g:02X}{b:02X} {r} {g} {b}")
+PY
+)" && read -r RED_HEX RED_R RED_G RED_B <<< "$palette" || \
+    warn 'No se localizaron suficientes píxeles rojos; se usa rojo de respaldo.'
+fi
+printf 'RED_HEX=%q\nRED_R=%q\nRED_G=%q\nRED_B=%q\n' \
+  "$RED_HEX" "$RED_R" "$RED_G" "$RED_B" > "$HOME/.config/gnome-noir/palette.env"
+say "Rojo muestreado del wallpaper: $RED_HEX (RGB $RED_R, $RED_G, $RED_B)"
 
 gset org.gnome.desktop.interface color-scheme prefer-dark
 gset org.gnome.desktop.interface gtk-theme adw-gtk3-dark
-gset org.gnome.desktop.interface accent-color purple
+gset org.gnome.desktop.interface accent-color red
 gset org.gnome.desktop.interface icon-theme Papirus-Dark
 gset org.gnome.desktop.interface font-name 'Inter 10'
 gset org.gnome.desktop.interface document-font-name 'Inter 10'
 gset org.gnome.desktop.interface monospace-font-name 'GeistMono Nerd Font Mono 11'
 gset org.gnome.desktop.interface enable-hot-corners false
 gset org.gnome.desktop.wm.preferences button-layout ':minimize,maximize,close'
-gset org.gnome.desktop.background picture-uri "file://$WALL"
-gset org.gnome.desktop.background picture-uri-dark "file://$WALL"
-gset org.gnome.desktop.screensaver picture-uri "file://$WALL"
+if [[ -s "$WALL" ]]; then
+  gset org.gnome.desktop.background picture-uri "file://$WALL"
+  gset org.gnome.desktop.background picture-uri-dark "file://$WALL"
+  gset org.gnome.desktop.background picture-options zoom
+  gset org.gnome.desktop.screensaver picture-uri "file://$WALL"
+fi
 gset org.gnome.shell disable-user-extensions false
 gset org.gnome.shell enabled-extensions "['dash-to-panel@jderose9.github.com', 'arcmenu@arcmenu.com', 'appindicatorsupport@rgcjonas.gmail.com']"
 # Favoritos minimalistas; instalar apps no obliga a fijar todas.
@@ -333,21 +391,21 @@ gset "$dtp" panel-top-bottom-padding 2
 gset "$dtp" appicon-padding 7
 gset "$dtp" appicon-margin 5
 gset "$dtp" trans-use-custom-bg true
-gset "$dtp" trans-bg-color '#171923'
+gset "$dtp" trans-bg-color '#191215'
 gset "$dtp" trans-use-custom-opacity true
 gset "$dtp" trans-use-dynamic-opacity false
 gset "$dtp" trans-panel-opacity 1.0
 gset "$dtp" trans-use-border true
 gset "$dtp" trans-border-width 1
 gset "$dtp" trans-border-use-custom-color true
-gset "$dtp" trans-border-custom-color 'rgba(165,180,252,0.16)'
+gset "$dtp" trans-border-custom-color "rgba($RED_R,$RED_G,$RED_B,0.24)"
 gset "$dtp" dot-color-override true
 gset "$dtp" dot-size 3
-for i in 1 2 3 4; do gset "$dtp" "dot-color-$i" '#A5B4FC'; done
+for i in 1 2 3 4; do gset "$dtp" "dot-color-$i" "$RED_HEX"; done
 gset "$dtp" highlight-appicon-hover true
 gset "$dtp" highlight-appicon-hover-border-radius 12
-gset "$dtp" highlight-appicon-hover-background-color 'rgba(174,188,255,0.12)'
-gset "$dtp" highlight-appicon-pressed-background-color 'rgba(174,188,255,0.20)'
+gset "$dtp" highlight-appicon-hover-background-color "rgba($RED_R,$RED_G,$RED_B,0.12)"
+gset "$dtp" highlight-appicon-pressed-background-color "rgba($RED_R,$RED_G,$RED_B,0.20)"
 gset "$dtp" group-apps-underline-unfocused true
 
 # Ajustes JSON por monitor; los índices actúan como fallback si el ID es otro.
@@ -434,6 +492,15 @@ window_padding_width 12
 confirm_os_window_close 0
 enable_audio_bell no
 EOF
+# Aplicar también el rojo exacto al cursor, las selecciones y la paleta Kitty.
+python3 - "$HOME/.config/kitty/kitty.conf" "$RED_HEX" <<'PY'
+import sys, pathlib
+p=pathlib.Path(sys.argv[1])
+s=p.read_text()
+for old in ("#a5b4fc","#89b4fa","#b4a0ff"):
+    s=s.replace(old,sys.argv[2])
+p.write_text(s)
+PY
 printf 'kitty.desktop\n' > "$HOME/.config/xdg-terminals.list"
 mkdir -p "$HOME/.config"
 cat > "$HOME/.config/starship.toml" <<'EOF'
@@ -458,6 +525,15 @@ format = "[󱦟 $duration]($style) "
 success_symbol = "[❯](bold #A5B4FC)"
 error_symbol = "[❯](bold #F38BA8)"
 EOF
+# El tema Starship comparte la misma muestra RGB del fondo.
+python3 - "$HOME/.config/starship.toml" "$RED_HEX" <<'PY'
+import sys, pathlib
+p=pathlib.Path(sys.argv[1])
+s=p.read_text()
+for old in ("#A5B4FC","#89B4FA"):
+    s=s.replace(old,sys.argv[2])
+p.write_text(s)
+PY
 if ! grep -Fq 'starship init bash' "$HOME/.bashrc" 2>/dev/null; then
   printf '\n# GNOME Noir\ncommand -v starship >/dev/null && eval "$(starship init bash)"\n' >> "$HOME/.bashrc"
 fi
@@ -645,6 +721,53 @@ PY
       warn 'No se pudo obtener el SVG oficial; Plymouth no ha cambiado el arranque.'
     fi
     rm -rf -- "$work"
+  fi
+fi
+
+
+# OpenBar (si ya está instalado): tema Islands oscuro y rojo elegido del fondo.
+# No forzamos una extensión sin soporte oficial en GNOME 50/51.
+openbar_dir="$HOME/.local/share/gnome-shell/extensions/openbar@neuromorph"
+if [[ -f "$openbar_dir/schemas/org.gnome.shell.extensions.openbar.gschema.xml" ]]; then
+  say 'Adaptar OpenBar al rojo del fondo'
+  if [[ ! -f "$openbar_dir/schemas/gschemas.compiled" ]]; then
+    glib-compile-schemas "$openbar_dir/schemas" || warn 'No se pudieron compilar los esquemas de OpenBar.'
+  fi
+  if [[ -f "$openbar_dir/schemas/gschemas.compiled" ]]; then
+    ob_schema='org.gnome.shell.extensions.openbar'
+    obset(){
+      GSETTINGS_SCHEMA_DIR="$openbar_dir/schemas" gsettings set "$ob_schema" "$1" "$2" \
+        || warn "Ajuste OpenBar no disponible: $1"
+    }
+    obrgb="$(python3 - "$RED_R" "$RED_G" "$RED_B" <<'PY'
+import sys
+vals=[str(round(int(c)/255,4)) for c in sys.argv[1:]]
+print("['"+"','".join(vals)+"']")
+PY
+)"
+    obset bartype Islands
+    obset position Bottom
+    obset monitors all
+    obset accent-color "$obrgb"
+    obset bgcolor "['0.098','0.071','0.078']"
+    obset iscolor "['0.14','0.09','0.11']"
+    obset bcolor "$obrgb"
+    obset hcolor "$obrgb"
+    obset mhcolor "$obrgb"
+    obset mscolor "$obrgb"
+    obset menustyle true
+    obset bradius 14.0
+    obset bwidth 1.0
+    obset neon false
+    obset shadow false
+    obset autotheme-refresh false
+    # No se habilita automáticamente: GNOME 50+ aún tiene incidencias de compatibilidad.
+    gnome_major="$(gnome-shell --version 2>/dev/null | grep -oE '[0-9]+' | head -1 || true)"
+    if [[ -n "$gnome_major" && "$gnome_major" -le 49 ]]; then
+      say 'OpenBar es compatible según su metadata; actívalo desde Extensiones de GNOME.'
+    else
+      warn 'OpenBar configurado pero no habilitado; comprueba su compatibilidad con tu versión de GNOME.'
+    fi
   fi
 fi
 
