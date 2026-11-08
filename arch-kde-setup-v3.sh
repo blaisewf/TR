@@ -168,12 +168,17 @@ else
       mkdir -p "$HOME/.local/opt/helium" "$HOME/.local/share/applications"
       if curl -fL --retry 3 "$helium_url" -o "$HOME/.local/opt/helium/Helium.AppImage"; then
         chmod +x "$HOME/.local/opt/helium/Helium.AppImage"
+        mkdir -p "$HOME/.local/share/icons/hicolor/scalable/apps"
+        curl -fL --retry 3 'https://raw.githubusercontent.com/imputnet/helium/main/resources/branding/product_logo.svg' \
+          -o "$HOME/.local/share/icons/hicolor/scalable/apps/helium.svg" \
+          || warn 'No se pudo descargar el icono oficial de Helium.'
         cat > "$HOME/.local/share/applications/helium-official.desktop" <<DESKTOP
 [Desktop Entry]
 Name=Helium
 Comment=Navegador Helium oficial
 Exec=$HOME/.local/opt/helium/Helium.AppImage %U
-Icon=web-browser
+Icon=helium
+StartupWMClass=helium
 Terminal=false
 Type=Application
 Categories=Network;WebBrowser;
