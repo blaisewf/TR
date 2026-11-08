@@ -258,6 +258,17 @@ EOF
   done
   sudo systemctl enable --force gdm.service
 
+  # Kitty sustituye a GNOME Terminal y Konsole si estaban instalados.
+  old_terminals=()
+  for terminal in gnome-terminal konsole; do
+    if pacman -Qq "$terminal" >/dev/null 2>&1; then
+      old_terminals+=("$terminal")
+    fi
+  done
+  if (("${#old_terminals[@]}" > 0)); then
+    sudo pacman -Rns "${old_terminals[@]}" || warn 'No se pudieron retirar los terminales anteriores por dependencias; no se forzará.'
+  fi
+
   # Desde una TTY, iniciar un D-Bus temporal evita perder configuraciones GSettings.
   if [[ -z "${DBUS_SESSION_BUS_ADDRESS:-}" ]]; then
     say 'Iniciando bus de sesión temporal para guardar los ajustes de GNOME'
