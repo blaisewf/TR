@@ -5,6 +5,7 @@
 # desarrollo, juegos/apps, Helium, Wolow, SignalRGB y splash Arch.
 # No instala KDE. Cada ejecución es repetible; no usa otros scripts del repo.
 # Opciones: --theme-only | --skip-boot | --skip-extras | --skip-aur | --help
+# Atajos: Alt+Shift+S para capturas, Super+Shift+V para historial del portapapeles.
 set -Eeuo pipefail
 
 say(){ printf '\n\033[1;35m==> %s\033[0m\n' "$*"; }
@@ -365,10 +366,93 @@ if [[ -s "$WALL" ]]; then
   gset org.gnome.desktop.background picture-uri "file://$WALL"
   gset org.gnome.desktop.background picture-uri-dark "file://$WALL"
   gset org.gnome.desktop.background picture-options zoom
-  gset org.gnome.desktop.screensaver picture-uri "file://$WALL"
+  # En GNOME 51 la pantalla de bloqueo toma el wallpaper actual y lo desenfoca.
+# Restablecer la antigua imagen de screensaver evita que apunte al PNG negro 64x64 de scripts anteriores.
+gsettings reset org.gnome.desktop.screensaver picture-uri 2>/dev/null || true
 fi
 gset org.gnome.shell disable-user-extensions false
-gset org.gnome.shell enabled-extensions "['dash-to-panel@jderose9.github.com', 'arcmenu@arcmenu.com', 'appindicatorsupport@rgcjonas.gmail.com']"
+# Capturas nativas de GNOME 51: Alt+Shift+S abre selector interactivo.
+# Conservamos Print para no perder el atajo predeterminado.
+gset org.gnome.shell.keybindings show-screenshot-ui "['<Shift><Alt>s', 'Print']"
+
+# Historial del portapapeles: versión 52 oficial, compatible con GNOME 51.
+# Se instala desde extensions.gnome.org, sin modificar metadatos de compatibilidad.
+clipboard_uuid='clipboard-history@alexsaveau.dev'
+clipboard_dir="$HOME/.local/share/gnome-shell/extensions/$clipboard_uuid"
+if [[ ! -f "$clipboard_dir/metadata.json" ]]; then
+  say 'Instalando Clipboard History (GNOME 51 compatible)'
+  clipboard_zip="$(mktemp)"
+  clipboard_extract="$(mktemp -d)"
+  if curl --proto '=https' --tlsv1.2 -fL --retry 3 \
+    'https://extensions.gnome.org/download-extension/clipboard-history@alexsaveau.dev.shell-extension.zip?version_tag=52' \
+    -o "$clipboard_zip" && \
+    python3 - "$clipboard_zip" "$clipboard_extract" "$clipboard_uuid" <<'PY'
+import json, pathlib, sys, zipfile
+archive, dest, expected = sys.argv[1:]
+with zipfile.ZipFile(archive) as z:
+    files = z.namelist()
+    if "metadata.json" not in files:
+        raise RuntimeError("La extensión no trae metadata.json")
+    metadata=json.loads(z.read("metadata.json"))
+    if metadata.get("uuid") != expected:
+        raise RuntimeError("La extensión descargada tiene un UUID inesperado")
+    if "51" not in metadata.get("shell-version", []):
+        raise RuntimeError("La extensión descargada no soporta GNOME 51")
+    for name in files:
+        path=pathlib.PurePosixPath(name)
+        if path.is_absolute() or ".." in path.parts:
+            raise RuntimeError("Ruta insegura en el archivo ZIP")
+    z.extractall(dest)
+PY
+  then
+    mkdir -p "$HOME/.local/share/gnome-shell/extensions"
+    mv "$clipboard_extract" "$clipboard_dir"
+    chmod -R u+rwX,go+rX "$clipboard_dir"
+    if [[ -d "$clipboard_dir/schemas" ]]; then
+      glib-compile-schemas "$clipboard_dir/schemas" \
+        || warn 'No se pudieron compilar los esquemas de Clipboard History.'
+    fi
+  else
+    warn 'No se pudo instalar Clipboard History. Puedes instalarlo desde extensions.gnome.org/extension/4839/clipboard-history/.'
+    rm -rf -- "$clipboard_extract"
+  fi
+  rm -f -- "$clipboard_zip"
+fi
+
+# Registrar extensión en la lista sin borrar las extensiones del usuario.
+# Aunque GNOME no la descubra hasta reiniciar sesión, la activará después.
+python3 - <<'PY'
+import ast, pathlib, subprocess
+schema="org.gnome.shell"
+key="enabled-extensions"
+wanted=["dash-to-panel@jderose9.github.com",
+        "arcmenu@arcmenu.com",
+        "appindicatorsupport@rgcjonas.gmail.com"]
+if (pathlib.Path.home()/".local/share/gnome-shell/extensions/clipboard-history@alexsaveau.dev/metadata.json").exists():
+    wanted.append("clipboard-history@alexsaveau.dev")
+try:
+    val=subprocess.check_output(["gsettings","get",schema,key],text=True).strip()
+    if val.startswith("@as "): val=val[4:]
+    existing=ast.literal_eval(val)
+    if not isinstance(existing,list): existing=[]
+    for uuid in wanted:
+        if uuid not in existing: existing.append(uuid)
+    subprocess.run(["gsettings","set",schema,key,repr(existing)],check=True)
+except (OSError,ValueError,SyntaxError,subprocess.CalledProcessError) as exc:
+    print("AVISO: No pude activar las extensiones:",exc)
+PY
+# El atajo Super+Shift+V es configurable directamente en el esquema de la extensión.
+clipboard_schema_dir="$clipboard_dir/schemas"
+if [[ -f "$clipboard_schema_dir/gschemas.compiled" ]]; then
+  if GSETTINGS_SCHEMA_DIR="$clipboard_schema_dir" gsettings list-keys \
+    org.gnome.shell.extensions.clipboard-history 2>/dev/null | grep -qx toggle-menu; then
+    GSETTINGS_SCHEMA_DIR="$clipboard_schema_dir" gsettings set \
+      org.gnome.shell.extensions.clipboard-history toggle-menu "['<Super><Shift>v']"
+  else
+    warn 'El esquema del atajo Clipboard History no coincide con esta versión; usa sus Preferencias.'
+  fi
+fi
+
 # Favoritos minimalistas; instalar apps no obliga a fijar todas.
 gset org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop','kitty.desktop','helium-official.desktop']"
 
