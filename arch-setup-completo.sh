@@ -554,6 +554,41 @@ gset org.gnome.desktop.interface color-scheme prefer-dark
 gset org.gnome.desktop.interface gtk-theme adw-gtk3-dark
 gset org.gnome.desktop.interface accent-color red
 gset org.gnome.desktop.interface icon-theme Papirus-Dark
+
+# Iconos de carpetas rojas sobre Papirus sin modificar /usr/share/icons.
+noir_icons="$HOME/.local/share/icons/GNOME-Noir"
+papirus_icons="/usr/share/icons/Papirus-Dark"
+if [[ -f "$papirus_icons/index.theme" ]]; then
+  mkdir -p "$noir_icons"
+  {
+    printf '[Icon Theme]\nName=GNOME Noir (red folders)\nInherits=Papirus-Dark,Adwaita\nDirectories='
+    printf '%s' '22x22/places,24x24/places,32x32/places,48x48/places,64x64/places'
+    printf '\n'
+    for size in 22 24 32 48 64; do
+      printf '\n[%dx%d/places]\nSize=%d\nContext=Places\nType=Fixed\n' "$size" "$size" "$size"
+    done
+  } > "$noir_icons/index.theme"
+  red_folder_count=0
+  for size in 22 24 32 48 64; do
+    icon_size="$size"x"$size"
+    src_dir="$papirus_icons/$icon_size/places"
+    dest_dir="$noir_icons/$icon_size/places"
+    mkdir -p "$dest_dir"
+    for colored_icon in "$src_dir"/folder-red*.svg "$src_dir"/user-red*.svg; do
+      [[ -f "$colored_icon" ]] || continue
+      dest_name="$(basename "$colored_icon" | sed 's/-red//')"
+      ln -sfn "$colored_icon" "$dest_dir/$dest_name"
+      red_folder_count=$((red_folder_count + 1))
+    done
+  done
+  if (( red_folder_count > 0 )); then
+    gset org.gnome.desktop.interface icon-theme GNOME-Noir
+    say 'Carpetas de Nautilus: rojo Papirus, con iconos de aplicaciones intactos'
+  else
+    warn 'Esta versión de Papirus no trae variantes rojas de carpetas.'
+  fi
+fi
+
 gset org.gnome.desktop.interface font-name 'Inter 10'
 gset org.gnome.desktop.interface document-font-name 'Inter 10'
 gset org.gnome.desktop.interface monospace-font-name 'GeistMono Nerd Font Mono 11'
