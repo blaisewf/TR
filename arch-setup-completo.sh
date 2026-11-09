@@ -661,6 +661,39 @@ if [[ -s "$WALL" ]]; then
 # Restablecer la antigua imagen de screensaver evita que apunte al PNG negro 64x64 de scripts anteriores.
 gsettings reset org.gnome.desktop.screensaver picture-uri 2>/dev/null || true
 fi
+# GDM: sincronizar preferencias visuales sin tocar la disposición de monitores.
+# Este bloque ajusta dconf y proporciona un fondo legible para el usuario gdm;
+# GNOME Shell 51 puede ignorar picture-uri en el greeter (no altera recursos
+# internos de gnome-shell ni reinicia GDM durante la instalación).
+if [[ -s "$WALL" ]]; then
+  say 'GDM: modo oscuro y fondo GNOME Noir'
+  sudo install -Dm644 "$WALL" /usr/local/share/backgrounds/gnome-noir-login.png
+  sudo install -d /etc/dconf/profile /etc/dconf/db/gdm.d
+
+  # Respetar perfiles GDM previamente personalizados.
+  if ! sudo test -e /etc/dconf/profile/gdm; then
+    printf 'user-db:user\nsystem-db:gdm\nfile-db:/usr/share/gdm/greeter-dconf-defaults\n' \
+      | sudo tee /etc/dconf/profile/gdm >/dev/null
+  fi
+  if sudo grep -qx 'system-db:gdm' /etc/dconf/profile/gdm; then
+    sudo tee /etc/dconf/db/gdm.d/90-gnome-noir >/dev/null <<'GDM_DCONF'
+[org/gnome/desktop/interface]
+color-scheme='prefer-dark'
+gtk-theme='adw-gtk3-dark'
+
+[org/gnome/desktop/background]
+picture-uri='file:///usr/local/share/backgrounds/gnome-noir-login.png'
+picture-uri-dark='file:///usr/local/share/backgrounds/gnome-noir-login.png'
+picture-options='zoom'
+GDM_DCONF
+    sudo dconf update
+  else
+    warn 'El perfil GDM existente no carga system-db:gdm; no se ha sobrescrito.'
+  fi
+else
+  warn 'No existe el wallpaper GNOME Noir: omitidos los ajustes de fondo de GDM.'
+fi
+
 gset org.gnome.shell disable-user-extensions false
 # Capturas nativas de GNOME 51: Super+Shift+S abre selector interactivo.
 # Conservamos Print para no perder el atajo predeterminado.
