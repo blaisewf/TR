@@ -769,6 +769,9 @@ printf 'RED_HEX=%q\nRED_R=%q\nRED_G=%q\nRED_B=%q\n' \
 say "Rojo muestreado del wallpaper: $RED_HEX (RGB $RED_R, $RED_G, $RED_B)"
 
 gset org.gnome.desktop.interface color-scheme prefer-dark
+# Snap nativo GNOME: arrastrar al borde superior maximiza la ventana.
+# GNOME 51 vincula este comportamiento al ajuste lateral de media pantalla.
+gset org.gnome.mutter edge-tiling true
 gset org.gnome.desktop.interface gtk-theme adw-gtk3-dark
 gset org.gnome.desktop.interface accent-color red
 gset org.gnome.desktop.interface icon-theme Papirus-Dark
