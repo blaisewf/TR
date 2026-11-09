@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # ARCH GNOME NOIR — INSTALADOR ÚNICO, noviembre de 2026
 # Para Arch Linux x86_64 ya instalado con archinstall (NO ejecutar desde archiso).
-# Instala GNOME + GDM, GNOME Noir, Dash to Panel, ArcMenu, Kitty,
+# Instala GNOME + GDM, GNOME Noir, Simple Taskbar, ArcMenu, Kitty,
 # desarrollo, juegos/apps, Helium, Wolow, SignalRGB y splash Arch.
 # No instala KDE. Cada ejecución es repetible; no usa otros scripts del repo.
-# Opciones: --theme-only | --lock-only | --screenshot-only | --avatar-only | --skip-boot | --skip-extras | --skip-aur | --help
+# Opciones: --theme-only | --lock-only | --screenshot-only | --avatar-only | --taskbar-only | --skip-boot | --skip-extras | --skip-aur | --help
 # Atajos: Super+Shift+S para capturas, Super+Shift+V para historial del portapapeles.
 set -Eeuo pipefail
 
@@ -13,7 +13,7 @@ warn(){ printf '\n\033[1;33mAVISO: %s\033[0m\n' "$*" >&2; }
 fail(){ printf '\nERROR: %s\n' "$*" >&2; exit 1; }
 trap 'printf "\nERROR en línea %s. Revisa el mensaje anterior.\n" "$LINENO" >&2' ERR
 
-SKIP_BOOT=0; SKIP_EXTRAS=0; SKIP_AUR=0; THEME_ONLY=0; LOCK_ONLY=0; SCREENSHOT_ONLY=0; AVATAR_ONLY=0
+SKIP_BOOT=0; SKIP_EXTRAS=0; SKIP_AUR=0; THEME_ONLY=0; LOCK_ONLY=0; SCREENSHOT_ONLY=0; AVATAR_ONLY=0; TASKBAR_ONLY=0
 for arg in "$@"; do
   case "$arg" in
     --skip-boot) SKIP_BOOT=1;;
@@ -21,10 +21,11 @@ for arg in "$@"; do
     --lock-only) LOCK_ONLY=1; SKIP_BOOT=1;;
     --screenshot-only) SCREENSHOT_ONLY=1; SKIP_BOOT=1;;
     --avatar-only) AVATAR_ONLY=1; SKIP_BOOT=1;;
+    --taskbar-only) TASKBAR_ONLY=1; SKIP_BOOT=1;;
     --skip-extras) SKIP_EXTRAS=1;;
     --skip-aur) SKIP_AUR=1;;
     --help)
-      echo 'Uso: bash arch-setup-completo.sh [--theme-only|--lock-only|--screenshot-only|--avatar-only] [--skip-boot] [--skip-extras] [--skip-aur]'
+      echo 'Uso: bash arch-setup-completo.sh [--theme-only|--lock-only|--screenshot-only|--avatar-only|--taskbar-only] [--skip-boot] [--skip-extras] [--skip-aur]'
       echo 'Se ejecuta desde TTY o desde GNOME, después de archinstall.'
       exit 0;;
     *) fail "Opción desconocida: $arg";;
@@ -255,6 +256,151 @@ SCREENSHOT_ENABLE
   echo 'Revertir: gnome-extensions disable screenshot-at-pointer@gnome-noir.local'
 }
 
+
+# Simple Taskbar, extensión oficial compatible con GNOME 51.
+# Sustituye Dash to Panel, pero conserva ArcMenu y su tecla Super.
+install_simple_taskbar() {
+  local uuid='simple-taskbar@sultech'
+  local extdir="$HOME/.local/share/gnome-shell/extensions/$uuid"
+  local schema='org.gnome.shell.extensions.simple-taskbar'
+  local cmd tmp link key value
+  say 'Simple Taskbar: GNOME 51, barra completa inferior y dos monitores'
+  for cmd in curl jq python3 glib-compile-schemas gsettings; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+      warn "Falta $cmd: no se modificará la barra actual."
+      return 1
+    fi
+  done
+
+  if [[ ! -f "$extdir/metadata.json" ]]; then
+    tmp="$(mktemp -d)"
+    if ! curl --proto '=https' --tlsv1.2 -fLsS --retry 3 \
+      'https://extensions.gnome.org/extension-info/?pk=10448&shell_version=51' \
+      -o "$tmp/info.json"; then
+      warn 'GNOME Extensions no respondió; se conserva la barra existente.'
+      rm -rf -- "$tmp"
+      return 1
+    fi
+    link="$(jq -r '.download_url // empty' "$tmp/info.json")"
+    case "$link" in
+      /download-extension/*|/extension-data/*) link="https://extensions.gnome.org$link";;
+      *) warn 'No se encontró una descarga oficial compatible con GNOME 51.'
+         rm -rf -- "$tmp"; return 1;;
+    esac
+    if ! curl --proto '=https' --tlsv1.2 -fLsS --retry 3 "$link" -o "$tmp/extension.zip"; then
+      warn 'No se pudo descargar Simple Taskbar. Dash to Panel no se modifica.'
+      rm -rf -- "$tmp"; return 1
+    fi
+    if ! python3 - "$tmp/extension.zip" "$tmp/unpacked" "$uuid" <<'ST_ZIP'
+import json, pathlib, sys, zipfile
+archive, target, uuid = sys.argv[1:]
+with zipfile.ZipFile(archive) as z:
+    names = z.namelist()
+    if 'metadata.json' not in names:
+        raise ValueError('metadata.json ausente')
+    metadata = json.loads(z.read('metadata.json'))
+    if metadata.get('uuid') != uuid or '51' not in map(str, metadata.get('shell-version', [])):
+        raise ValueError('UUID o versión GNOME incompatible')
+    for name in names:
+        p = pathlib.PurePosixPath(name)
+        if p.is_absolute() or '..' in p.parts:
+            raise ValueError('Ruta insegura en ZIP')
+    z.extractall(target)
+ST_ZIP
+    then
+      warn 'Descarga inválida: no se cambia la barra.'
+      rm -rf -- "$tmp"; return 1
+    fi
+    if ! glib-compile-schemas --strict "$tmp/unpacked/schemas"; then
+      warn 'Esquemas de extensión inválidos: no se cambia la barra.'
+      rm -rf -- "$tmp"; return 1
+    fi
+    mkdir -p "$(dirname "$extdir")"
+    if [[ -e "$extdir" ]]; then
+      mv "$extdir" "$extdir".incomplete."$(date +%s)"
+    fi
+    mv "$tmp/unpacked" "$extdir"
+    rm -rf -- "$tmp"
+  fi
+
+  if ! python3 - "$extdir/metadata.json" "$uuid" <<'ST_META'
+import json, sys
+with open(sys.argv[1], encoding='utf-8') as f:
+    m = json.load(f)
+if m.get('uuid') != sys.argv[2] or '51' not in map(str, m.get('shell-version', [])):
+    raise SystemExit('Versión GNOME incompatible')
+ST_META
+  then
+    warn 'La extensión local no es compatible con GNOME 51.'
+    return 1
+  fi
+  if ! glib-compile-schemas --strict "$extdir/schemas"; then
+    warn 'No se pudieron compilar los esquemas.'
+    return 1
+  fi
+
+  # Barra completa sin flotación, sin ocultación y sin animación al pasar el ratón.
+  while read -r key value; do
+    [[ -n "$key" ]] || continue
+    if GSETTINGS_SCHEMA_DIR="$extdir/schemas" \
+      gsettings writable "$schema" "$key" 2>/dev/null | grep -qx true; then
+      GSETTINGS_SCHEMA_DIR="$extdir/schemas" gsettings set "$schema" "$key" "$value" \
+        || warn "No se pudo configurar Simple Taskbar: $key"
+    else
+      warn "Opción no disponible en Simple Taskbar: $key"
+    fi
+  done <<'ST_PREFS'
+active-panel-mode taskbar
+panel-position bottom
+panel-height 46
+taskbar-dynamic false
+taskbar-floating false
+taskbar-full-width-side-padding 0
+panel-autohide-enabled false
+panel-dodge-windows-enabled false
+multi-monitor-panels true
+hide-pinned-secondary-monitors false
+isolate-monitors false
+app-alignment left
+combine-app-buttons-mode always
+animate-appicon-hover-animation-type none
+custom-panel-color-enabled true
+custom-panel-color #191215
+panel-theme-follow-system true
+windows-start-menu-enabled false
+gnome-start-button-visible false
+start-menu-super-key false
+ST_PREFS
+
+  # Sólo después de validar la nueva extensión se desactiva Dash to Panel.
+  # No tocamos el paquete ni los archivos de configuración de los monitores.
+  python3 - <<'ST_ENABLE'
+import ast, subprocess
+schema, key = 'org.gnome.shell', 'enabled-extensions'
+old, new = 'dash-to-panel@jderose9.github.com', 'simple-taskbar@sultech'
+try:
+    raw = subprocess.check_output(['gsettings','get',schema,key],text=True).strip()
+    if raw.startswith('@as '):
+        raw = raw[4:]
+    items = ast.literal_eval(raw)
+    if not isinstance(items, list):
+        raise ValueError('enabled-extensions no es una lista')
+    items = [x for x in items if x != old]
+    if new not in items:
+        items.append(new)
+    subprocess.run(['gsettings','set',schema,key,repr(items)],check=True)
+except (OSError, ValueError, SyntaxError, subprocess.CalledProcessError) as e:
+    print('AVISO: no se pudieron cambiar las extensiones:', e)
+ST_ENABLE
+  echo 'Barra instalada. Cierra sesión y vuelve a entrar para que GNOME la cargue.'
+  echo 'Reversión: gnome-extensions disable simple-taskbar@sultech'
+}
+
+if ((TASKBAR_ONLY)); then
+  install_simple_taskbar
+  exit 0
+fi
+
 if ((SCREENSHOT_ONLY)); then
   install_screenshot_cursor
   exit 0
@@ -281,7 +427,7 @@ if [[ "${GNOME_NOIR_RESUME:-0}" != 1 && "$THEME_ONLY" == 0 ]]; then
     gdm gnome-shell gnome-session gnome-control-center gnome-settings-daemon \
     gnome-keyring gnome-extensions-app gnome-tweaks gnome-menus nautilus gvfs \
     xdg-desktop-portal-gnome xdg-user-dirs-gtk dconf \
-    gnome-shell-extension-dash-to-panel gnome-shell-extension-arc-menu \
+    gnome-shell-extension-arc-menu \
     gnome-shell-extension-appindicator \
     adw-gtk-theme inter-font otf-geist-mono-nerd papirus-icon-theme \
     kitty starship xdg-terminal-exec \
@@ -764,11 +910,12 @@ python3 - <<'PY'
 import ast, pathlib, subprocess
 schema="org.gnome.shell"
 key="enabled-extensions"
-wanted=["dash-to-panel@jderose9.github.com",
-        "arcmenu@arcmenu.com",
+wanted=["arcmenu@arcmenu.com",
         "appindicatorsupport@rgcjonas.gmail.com"]
 if (pathlib.Path.home()/".local/share/gnome-shell/extensions/clipboard-history@alexsaveau.dev/metadata.json").exists():
     wanted.append("clipboard-history@alexsaveau.dev")
+if (pathlib.Path.home()/".local/share/gnome-shell/extensions/simple-taskbar@sultech/metadata.json").exists():
+    wanted.append("simple-taskbar@sultech")
 try:
     val=subprocess.check_output(["gsettings","get",schema,key],text=True).strip()
     if val.startswith("@as "): val=val[4:]
@@ -796,74 +943,8 @@ fi
 # Archivos, Kitty, Spotify (spotify-launcher de Arch), Helium, Discord, VS Code.
 gset org.gnome.shell favorite-apps "['org.gnome.Nautilus.desktop','kitty.desktop','spotify-launcher.desktop','helium-official.desktop','discord.desktop','code.desktop']"
 
-dtp='org.gnome.shell.extensions.dash-to-panel'
-for setting in 'multi-monitors true' 'show-favorites-all-monitors true' 'panel-element-positions-monitors-sync true' \
-  'show-running-apps true' 'show-favorites true' 'group-apps true'; do
-  key="${setting%% *}"; value="${setting#* }"; gset "$dtp" "$key" "$value"
-done
-for setting in 'isolate-monitors false' 'isolate-monitors-with-single-panel false' \
-  'intellihide false' 'hide-overview-on-startup true' 'animate-appicon-hover false' \
-  'show-activities-button false' 'stockgs-force-hotcorner false'; do
-  key="${setting%% *}"; value="${setting#* }"; gset "$dtp" "$key" "$value"
-done
-gset "$dtp" panel-position BOTTOM
-gset "$dtp" panel-size 46
-gset "$dtp" panel-side-margins 0
-gset "$dtp" panel-top-bottom-margins 0
-gset "$dtp" panel-side-padding 4
-gset "$dtp" panel-top-bottom-padding 2
-gset "$dtp" appicon-padding 5
-gset "$dtp" appicon-margin 3
-gset "$dtp" trans-use-custom-bg true
-gset "$dtp" trans-bg-color '#191215'
-gset "$dtp" trans-use-custom-opacity true
-gset "$dtp" trans-use-dynamic-opacity false
-gset "$dtp" trans-panel-opacity 1.0
-gset "$dtp" trans-use-border true
-gset "$dtp" trans-border-width 1
-gset "$dtp" trans-border-use-custom-color true
-gset "$dtp" trans-border-custom-color "rgba($RED_R,$RED_G,$RED_B,0.24)"
-gset "$dtp" dot-color-override true
-gset "$dtp" dot-size 3
-for i in 1 2 3 4; do gset "$dtp" "dot-color-$i" "$RED_HEX"; done
-gset "$dtp" highlight-appicon-hover true
-gset "$dtp" highlight-appicon-hover-border-radius 12
-gset "$dtp" highlight-appicon-hover-background-color "rgba($RED_R,$RED_G,$RED_B,0.12)"
-gset "$dtp" highlight-appicon-pressed-background-color "rgba($RED_R,$RED_G,$RED_B,0.20)"
-gset "$dtp" group-apps-underline-unfocused true
-
-# Ajustes JSON por monitor; los índices actúan como fallback si el ID es otro.
-json_panels="$(python3 - <<'PY'
-import json
-print(json.dumps({str(i):"BOTTOM" for i in range(8)},separators=(",",":")))
-PY
-)"
-json_lengths="$(python3 - <<'PY'
-import json
-print(json.dumps({str(i):100 for i in range(8)},separators=(",",":")))
-PY
-)"
-json_sizes="$(python3 - <<'PY'
-import json
-print(json.dumps({str(i):46 for i in range(8)},separators=(",",":")))
-PY
-)"
-json_items="$(python3 - <<'PY'
-import json
-base=[
-    ("showAppsButton",False,"stackedTL"),("activitiesButton",False,"stackedTL"),
-    ("leftBox",True,"stackedTL"),("taskbar",True,"stackedTL"),
-    ("centerBox",False,"stackedBR"),("rightBox",True,"stackedBR"),
-    ("dateMenu",True,"stackedBR"),("systemMenu",True,"stackedBR"),
-    ("desktopButton",False,"stackedBR")]
-items=[dict(element=n,visible=v,position=p) for n,v,p in base]
-print(json.dumps({str(i):items for i in range(8)},separators=(",",":")))
-PY
-)"
-gset "$dtp" panel-positions "$json_panels"
-gset "$dtp" panel-lengths "$json_lengths"
-gset "$dtp" panel-sizes "$json_sizes"
-gset "$dtp" panel-element-positions "$json_items"
+# Sustitución de Dash to Panel por Simple Taskbar: una sola barra activa.
+install_simple_taskbar || warn 'Simple Taskbar quedó pendiente; revisa el aviso anterior.'
 
 arc='org.gnome.shell.extensions.arcmenu'
 gset "$arc" arcmenu-hotkey "['Super_L','Super_R']"
