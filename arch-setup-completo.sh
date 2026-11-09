@@ -258,6 +258,7 @@ SCREENSHOT_ENABLE
 
 
 # Simple Taskbar, extensión oficial compatible con GNOME 51.
+# Usa el panel único de GNOME en la parte inferior, no una barra superior + dock.
 # Sustituye Dash to Panel, pero conserva ArcMenu y su tecla Super.
 install_simple_taskbar() {
   local uuid='simple-taskbar@sultech'
@@ -339,6 +340,14 @@ ST_META
     return 1
   fi
 
+  # Una única barra de GNOME recolocada abajo; SIN barra superior ni Dock.
+  # El Dock independiente de Simple Taskbar usa su esquema legacy.
+  if GSETTINGS_SCHEMA_DIR="$extdir/schemas" \
+      gsettings writable "$schema.legacy" dock-mode 2>/dev/null | grep -qx true; then
+    GSETTINGS_SCHEMA_DIR="$extdir/schemas" \
+      gsettings set "$schema.legacy" dock-mode false
+  fi
+
   # Barra completa sin flotación, sin ocultación y sin animación al pasar el ratón.
   while read -r key value; do
     [[ -n "$key" ]] || continue
@@ -351,6 +360,10 @@ ST_META
     fi
   done <<'ST_PREFS'
 active-panel-mode taskbar
+default-gnome-panel false
+windows-xp-theme-enabled false
+windows-10-theme-enabled false
+macos-dock-theme-enabled false
 panel-position bottom
 panel-height 46
 taskbar-dynamic false
