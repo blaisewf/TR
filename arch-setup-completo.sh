@@ -439,7 +439,7 @@ if [[ "${GNOME_NOIR_RESUME:-0}" != 1 && "$THEME_ONLY" == 0 ]]; then
   sudo pacman -S --needed \
     gdm gnome-shell gnome-session gnome-control-center gnome-settings-daemon \
     gnome-keyring gnome-extensions-app gnome-tweaks gnome-menus nautilus gvfs \
-    xdg-desktop-portal-gnome xdg-user-dirs-gtk dconf \
+    xdg-desktop-portal-gnome xdg-user-dirs-gtk xdg-utils dconf \
     gnome-shell-extension-arc-menu \
     gnome-shell-extension-appindicator \
     adw-gtk-theme inter-font otf-geist-mono-nerd papirus-icon-theme \
@@ -589,6 +589,7 @@ Exec=$HELIUM %U
 Icon=helium
 StartupWMClass=helium
 Categories=Network;WebBrowser;
+MimeType=text/html;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;
 Terminal=false
 StartupNotify=true
 EOF
@@ -1293,6 +1294,26 @@ fi
 install_screenshot_cursor
 
 install_github_avatar
+
+
+# Helium es el navegador predeterminado del usuario (también tras reinstalar).
+# No cambiar el navegador si la AppImage o su lanzador aún no existen.
+if [[ -s "$HOME/.local/opt/helium/Helium.AppImage" &&
+      -f "$HOME/.local/share/applications/helium-official.desktop" ]]; then
+  say 'Configurando Helium como navegador predeterminado'
+  if command -v xdg-mime >/dev/null 2>&1; then
+    for mimetype in text/html application/xhtml+xml x-scheme-handler/http x-scheme-handler/https; do
+      xdg-mime default helium-official.desktop "$mimetype" \
+        || warn "No se pudo registrar Helium para $mimetype"
+    done
+  fi
+  if command -v xdg-settings >/dev/null 2>&1; then
+    xdg-settings set default-web-browser helium-official.desktop \
+      || warn 'No se pudo establecer Helium como navegador mediante xdg-settings.'
+  fi
+else
+  warn 'Helium aún no está instalado; el navegador predeterminado permanece sin cambios.'
+fi
 
 say 'Configuración GNOME Noir completada'
 echo 'Instalación única finalizada: no se ha instalado KDE ni otro terminal.'
